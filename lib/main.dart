@@ -5,13 +5,14 @@ import 'package:skintelligent/cubit/splash_cubit/splash_cubit.dart';
 import 'package:skintelligent/screens/splash_and_onboarding/splash_screen.dart';
 import 'package:get/get.dart';
 
+import 'authentication/auth_Screens/auth_loginScreen.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+   MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,9 @@ class MyApp extends StatelessWidget {
           create: (context) => OnboardingCubit(),
         ),
       ],
-      child: GetMaterialApp(
+      child:  const GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: SplashScreen()
       ),
     );
   }

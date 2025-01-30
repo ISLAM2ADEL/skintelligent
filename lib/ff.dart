@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:skintelligent/screens/Screens_loginScreen.dart';
+
+import 'authentication/auth_Screens/auth_loginScreen.dart';
 
 void main() {
-  runApp( SkintelligenApp());
+  runApp( const SkintelligenApp());
 }
 class SkintelligenApp extends StatelessWidget {
   const SkintelligenApp({super.key });
@@ -12,7 +13,7 @@ class SkintelligenApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        LoginScreen.id : (context) => LoginScreen()
+        LoginScreen.id : (context) => const LoginScreen()
       },
       initialRoute:LoginScreen.id,
 
