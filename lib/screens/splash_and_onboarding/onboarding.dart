@@ -121,7 +121,8 @@ class Onboarding extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      cubit.nextPage();
+
+                      page== '3' ? cubit.loginPage(): cubit.nextPage();
                     },
                   ),
                 ],

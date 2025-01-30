@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-
+import 'package:get/get.dart';
+import 'package:skintelligent/authentication/auth_Screens/auth_loginScreen.dart';
 part 'onboarding_state.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {
@@ -18,5 +19,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   void previousPage() {
     pageNum--;
     emit(OnboardingPrevious());
+  }
+  void loginPage() {
+    Get.off(const LoginScreen());
   }
 }
