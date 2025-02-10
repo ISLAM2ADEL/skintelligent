@@ -8,3 +8,5 @@ final class OnboardingInitial extends OnboardingState {}
 final class OnboardingNext extends OnboardingState {}
 
 final class OnboardingPrevious extends OnboardingState {}
+
+final class OnboardingUpdate extends OnboardingState {}

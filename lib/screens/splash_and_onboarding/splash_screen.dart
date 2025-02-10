@@ -23,7 +23,7 @@ class SplashScreen extends StatelessWidget {
                 const Text(
                   "Welcome to",
                   style: TextStyle(
-                    color: font1,
+                    color: color1,
                     fontSize: 38,
                   ),
                 ),
