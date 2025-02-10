@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skintelligent/cubit/appointment_cubit/appointment_cubit.dart';
 import 'package:skintelligent/cubit/onboarding_cubit/onboarding_cubit.dart';
 import 'package:skintelligent/cubit/splash_cubit/splash_cubit.dart';
 import 'package:skintelligent/screens/splash_and_onboarding/splash_screen.dart';
@@ -8,11 +9,11 @@ import 'package:get/get.dart';
 import 'authentication/auth_Screens/auth_loginScreen.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+  MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => OnboardingCubit(),
         ),
+        BlocProvider(
+          create: (context) => AppointmentCubit(),
+        ),
       ],
-      child:  const GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen()
-      ),
+      child: const GetMaterialApp(
+          debugShowCheckedModeBanner: false, home: SplashScreen()),
     );
   }
 }
