@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
+import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
 import 'package:skintelligent/screens/qr_code/qr_code.dart';
 import '../../const/const.dart';
@@ -130,7 +131,7 @@ class HomePage extends StatelessWidget {
             ? Navigator.pushNamed(context, Appointment.id)
             : containerText == "QR Code"
                 ? Navigator.pushNamed(context, Qrcode.id)
-                : null;
+                : Navigator.pushNamed(context, Chatbotscreen.id);
       },
     );
   }
