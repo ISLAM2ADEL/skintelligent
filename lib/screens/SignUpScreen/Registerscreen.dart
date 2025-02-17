@@ -4,6 +4,7 @@ import 'package:skintelligent/screens/ChatbotScrean/cubit/chatbotcubit_cubit.dar
 import 'package:skintelligent/screens/SignUpScreen/RegisterWidgets.dart';
 
 class Registerscreen extends StatelessWidget {
+  static const String id = 'Registerscreen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

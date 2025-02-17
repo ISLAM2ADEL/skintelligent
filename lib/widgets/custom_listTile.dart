@@ -2,10 +2,13 @@ import 'package:skintelligent/commons.dart';
 
 class CustomListTile extends StatelessWidget {
   const CustomListTile(
-      {super.key, required this.listTileColor, required this.primaryIcon , required this.title});
+      {super.key,
+      required this.listTileColor,
+      required this.primaryIcon,
+      required this.title});
   final Color listTileColor;
   final IconData primaryIcon;
-  final String ? title ;
+  final String? title;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,7 +17,8 @@ class CustomListTile extends StatelessWidget {
         height: 70,
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(13), bottomRight: Radius.circular(13)),
+                topRight: Radius.circular(13),
+                bottomRight: Radius.circular(13)),
             color: Colors.white54,
             border: Border(
                 bottom: BorderSide(color: Colors.black12),
@@ -25,7 +29,6 @@ class CustomListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             VerticalDivider(
-
               width: 0,
               thickness: 4,
               color: listTileColor,
@@ -39,13 +42,12 @@ class CustomListTile extends StatelessWidget {
             const SizedBox(
               width: 20,
             ),
-             SizedBox(
+            SizedBox(
               height: 50,
               child: VerticalDivider(
-                width: 0,
-                thickness: 2.7,
-                color: listTileColor.withValues(alpha: 0.3)
-              ),
+                  width: 0,
+                  thickness: 2.7,
+                  color: listTileColor.withValues(alpha: 0.3)),
             ),
             const SizedBox(
               width: 24,
@@ -57,13 +59,10 @@ class CustomListTile extends StatelessWidget {
             const SizedBox(
               width: 30,
             ),
-            GestureDetector(
-              onTap: (){},
-              child: Icon(
-                Icons.arrow_forward_ios_sharp,
-                color: listTileColor,
-                size: 20,
-              ),
+            Icon(
+              Icons.arrow_forward_ios_sharp,
+              color: listTileColor,
+              size: 20,
             )
           ],
         ),

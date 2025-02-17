@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/home_screen/home_page.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/screens/qr_code/qr_code.dart';
@@ -45,7 +46,7 @@ class CustomBottomBar extends StatelessWidget {
                   icons: Icons.chat,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, HomePage.id);
+                  Navigator.pushNamed(context, Chatbotscreen.id);
                 },
               ),
               InkWell(

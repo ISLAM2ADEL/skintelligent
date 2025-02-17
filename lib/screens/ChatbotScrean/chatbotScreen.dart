@@ -4,15 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:skintelligent/const/const.dart';
 import 'package:skintelligent/screens/ChatbotScrean/chatbotWidgets.dart';
 import 'package:skintelligent/screens/ChatbotScrean/cubit/chatbotcubit_cubit.dart';
+import 'package:skintelligent/screens/home_screen/home_page.dart';
 
 class Chatbotscreen extends StatelessWidget {
+  static const String id = 'Chatbotscreen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 217, 237, 253),
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, HomePage.id);
+          },
           icon: Icon(Icons.arrow_back_ios),
         ),
         title: Text(
@@ -70,10 +74,9 @@ class Chatbotscreen extends StatelessWidget {
                         "Which type of pain signals a heart attack?"),
                   ],
                 ),
-                
+
                 SizedBox(height: 20),
 
-                
                 BlocBuilder<ChatbotcubitCubit, ChatbotcubitState>(
                   builder: (context, state) {
                     if (state is ChatbotcubitImagePicked) {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/screens/qr_code/qr_code.dart';
 
+import '../SignUpScreen/Registerscreen.dart';
+
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
@@ -91,10 +93,15 @@ class ProfileScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: iconPalitte.length,
               itemBuilder: (context, index) {
-                return CustomListTile(
-                  title: title[index],
-                  listTileColor: colorPalitte[index],
-                  primaryIcon: iconPalitte[index],
+                return GestureDetector(
+                  child: CustomListTile(
+                    title: title[index],
+                    listTileColor: colorPalitte[index],
+                    primaryIcon: iconPalitte[index],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, Registerscreen.id);
+                  },
                 );
               },
             ),
