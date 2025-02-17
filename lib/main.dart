@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skintelligent/cubit/onboarding_cubit/onboarding_cubit.dart';
 import 'package:skintelligent/cubit/splash_cubit/splash_cubit.dart';
+import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
+import 'package:skintelligent/screens/ChatbotScrean/cubit/chatbotcubit_cubit.dart';
+import 'package:skintelligent/screens/SignUpScreen/Cubit/cubit/signup_cubit.dart';
+import 'package:skintelligent/screens/SignUpScreen/Registerscreen.dart';
 import 'package:skintelligent/screens/splash_and_onboarding/splash_screen.dart';
 import 'package:get/get.dart';
 
@@ -23,11 +27,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => OnboardingCubit(),
         ),
+        BlocProvider(
+          create: (context) => ChatbotcubitCubit(),
+        ),
+        BlocProvider(
+          create: (context) => SignupCubit(),
+        ),
       ],
       child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
-      ),
+          debugShowCheckedModeBanner: false, home: Registerscreen()),
     );
   }
 }
