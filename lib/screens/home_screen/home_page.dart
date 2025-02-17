@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
+import 'package:skintelligent/screens/qr_code/qr_code.dart';
 import '../../const/const.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+  static const String id = 'HomePage';
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: height * .037),
             buildContainer(
+                context: context,
                 containerText: "Chat AI",
                 containerImage: "chat image.png",
                 containerColor: color1,
@@ -35,6 +38,7 @@ class HomePage extends StatelessWidget {
                 height: height),
             SizedBox(height: height * .037),
             buildContainer(
+                context: context,
                 containerText: "QR Code",
                 containerImage: "QR code.png",
                 containerColor: color7,
@@ -42,6 +46,7 @@ class HomePage extends StatelessWidget {
                 height: height),
             SizedBox(height: height * .037),
             buildContainer(
+                context: context,
                 containerText: "Appointment",
                 containerImage: "annotation.png",
                 containerColor: color3,
@@ -88,6 +93,7 @@ class HomePage extends StatelessWidget {
   Widget buildContainer(
       {required String containerText,
       required String containerImage,
+      required BuildContext context,
       required Color containerColor,
       required double width,
       required double height}) {
@@ -120,7 +126,11 @@ class HomePage extends StatelessWidget {
         ),
       ),
       onTap: () {
-        containerText == "Appointment" ? Get.to(Appointment()) : containerText;
+        containerText == "Appointment"
+            ? Navigator.pushNamed(context, Appointment.id)
+            : containerText == "QR Code"
+                ? Navigator.pushNamed(context, Qrcode.id)
+                : null;
       },
     );
   }

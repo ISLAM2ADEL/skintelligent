@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:skintelligent/screens/home_screen/home_page.dart';
+import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/screens/qr_code/qr_code.dart';
 import 'const.dart';
 
 class CustomBottomBar extends StatelessWidget {
@@ -22,10 +24,38 @@ class CustomBottomBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildIcon(icons: Icons.home),
-              buildIcon(icons: Icons.document_scanner),
-              buildIcon(icons: Icons.chat),
-              buildIcon(icons: Icons.person),
+              InkWell(
+                child: buildIcon(
+                  icons: Icons.home,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, HomePage.id);
+                },
+              ),
+              InkWell(
+                child: buildIcon(
+                  icons: Icons.document_scanner,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, Qrcode.id);
+                },
+              ),
+              InkWell(
+                child: buildIcon(
+                  icons: Icons.chat,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, HomePage.id);
+                },
+              ),
+              InkWell(
+                child: buildIcon(
+                  icons: Icons.person,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, ProfileScreen.id);
+                },
+              ),
             ],
           ),
         ),

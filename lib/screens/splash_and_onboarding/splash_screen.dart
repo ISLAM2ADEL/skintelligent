@@ -1,8 +1,10 @@
 import 'package:skintelligent/commons.dart';
 
+import '../../const/const.dart';
+
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
+  static const String id = 'SplashScreen';
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;

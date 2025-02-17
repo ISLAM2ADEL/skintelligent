@@ -7,6 +7,7 @@ import 'confirm_appointment.dart';
 
 class Appointment extends StatelessWidget {
   const Appointment({super.key});
+  static const String id = 'Appointment';
 
   @override
   Widget build(BuildContext context) {
