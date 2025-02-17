@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skintelligent/const/const.dart';
-import 'package:skintelligent/cubit/onboarding_cubit/onboarding_cubit.dart';
-
+import 'package:skintelligent/commons.dart';
 class Onboarding extends StatelessWidget {
   const Onboarding({super.key});
 

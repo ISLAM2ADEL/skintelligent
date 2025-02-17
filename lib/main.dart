@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skintelligent/cubit/onboarding_cubit/onboarding_cubit.dart';
-import 'package:skintelligent/cubit/splash_cubit/splash_cubit.dart';
-import 'package:skintelligent/screens/splash_and_onboarding/splash_screen.dart';
-import 'package:get/get.dart';
 
-import 'authentication/auth_Screens/auth_loginScreen.dart';
+
+import 'package:skintelligent/screens/qr_code/qr_code.dart';
+
+import 'commons.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() {
   runApp( MyApp());
@@ -16,6 +14,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -25,9 +24,15 @@ class MyApp extends StatelessWidget {
           create: (context) => OnboardingCubit(),
         ),
       ],
-      child:  const GetMaterialApp(
+      child:   GetMaterialApp(
+        routes: {
+          LoginScreen.id :(context) => const LoginScreen() ,
+          Qrcode.id : (context) => const  Qrcode() ,
+          ProfileScreen.id : (context) =>  ProfileScreen()
+        },
         debugShowCheckedModeBanner: false,
-        home: SplashScreen()
+         // home: SplashScreen()
+        initialRoute:LoginScreen.id,
       ),
     );
   }
