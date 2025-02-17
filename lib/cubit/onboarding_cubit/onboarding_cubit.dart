@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:get/get.dart';
-import 'package:skintelligent/authentication/auth_Screens/auth_loginScreen.dart';
+import '../../screens/login_and_register/login.dart';
 part 'onboarding_state.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {

@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:skintelligent/commons.dart';
 
 // ignore: must_be_immutable
 class Customtextfield extends StatelessWidget {

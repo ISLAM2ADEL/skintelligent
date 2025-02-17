@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skintelligent/cubit/splash_cubit/splash_cubit.dart';
-
-import '../../const/const.dart';
+import 'package:skintelligent/commons.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

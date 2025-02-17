@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:skintelligent/commons.dart';
 
 class DividerWithText extends StatelessWidget {
   const DividerWithText({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const  Column(
       children: [
         const SizedBox(height: 20),
 

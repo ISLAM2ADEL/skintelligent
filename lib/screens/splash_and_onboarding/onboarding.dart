@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skintelligent/authentication/auth_Screens/auth_loginScreen.dart';
-import 'package:skintelligent/const/const.dart';
-import 'package:skintelligent/cubit/onboarding_cubit/onboarding_cubit.dart';
-import 'package:get/get.dart';
-
+import 'package:skintelligent/commons.dart';
 class Onboarding extends StatelessWidget {
   const Onboarding({super.key});
 
@@ -13,7 +7,6 @@ class Onboarding extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final cubit = context.read<OnboardingCubit>();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -22,36 +15,62 @@ class Onboarding extends StatelessWidget {
         actions: [
           Padding(
             padding: EdgeInsets.all(width * .065),
-            child: InkWell(
-              child: const Text(
-                "Skip",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            child: const Text(
+              "Skip",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-              onTap: () {
-                Get.offAll(const LoginScreen());
-              },
             ),
           ),
         ],
       ),
-      body: BlocBuilder<OnboardingCubit, OnboardingState>(
-        builder: (context, state) {
-          return PageView(
-            controller: cubit.pageController,
-            onPageChanged: (index) {
-              cubit.updatePage(index + 1); // Update the page in the cubit
-            },
-            children: [
-              _buildOnboardingPage(context, '1', boldText1, normalText1),
-              _buildOnboardingPage(context, '2', boldText2, normalText2),
-              _buildOnboardingPage(context, '3', boldText3, normalText3),
-            ],
-          );
-        },
+      body: Center(
+        child: BlocBuilder<OnboardingCubit, OnboardingState>(
+          builder: (context, state) {
+            String page = cubit.getPage();
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("${path}photo($page).png"),
+                SizedBox(
+                  height: height * .025,
+                ),
+                Text(
+                  page == '1'
+                      ? boldText1
+                      : page == '2'
+                          ? boldText2
+                          : boldText3,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: height * .02,
+                ),
+                SizedBox(
+                  width: width * .85,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    page == '1'
+                        ? normalText1
+                        : page == '2'
+                            ? normalText2
+                            : normalText3,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         height: height * .08,
@@ -74,18 +93,18 @@ class Onboarding extends StatelessWidget {
                     ),
                     onTap: () {
                       cubit.previousPage();
-                      cubit.pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
                     },
                   ),
                   Row(
                     children: [
                       page == '1' ? chosenPage() : unchosenPage(),
-                      SizedBox(width: width * .02),
+                      SizedBox(
+                        width: width * .02,
+                      ),
                       page == '2' ? chosenPage() : unchosenPage(),
-                      SizedBox(width: width * .02),
+                      SizedBox(
+                        width: width * .02,
+                      ),
                       page == '3' ? chosenPage() : unchosenPage(),
                     ],
                   ),
@@ -98,15 +117,8 @@ class Onboarding extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      if (page == '3') {
-                        cubit.loginPage();
-                      } else {
-                        cubit.nextPage();
-                        cubit.pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
+
+                      page== '3' ? cubit.loginPage(): cubit.nextPage();
                     },
                   ),
                 ],
@@ -115,42 +127,6 @@ class Onboarding extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildOnboardingPage(
-    BuildContext context,
-    String page,
-    String boldText,
-    String normalText,
-  ) {
-    final height = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset("${path}photo($page).png"),
-        SizedBox(height: height * .025),
-        Text(
-          boldText,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: height * .02),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * .85,
-          child: Text(
-            textAlign: TextAlign.center,
-            normalText,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-            ),
-          ),
-        ),
-      ],
     );
   }
 

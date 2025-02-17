@@ -1,5 +1,5 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:skintelligent/commons.dart';
+
 class TermsAndPrivacy extends StatelessWidget {
   const TermsAndPrivacy({super.key});
 

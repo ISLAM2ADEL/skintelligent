@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "594013010959",
+    "project_id": "chat-app-984ad",
+    "storage_bucket": "chat-app-984ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594013010959:android:4994461b6ae93941f0777a",
+        "android_client_info": {
+          "package_name": "com.example.chat_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594013010959-e6chnhrev579l4q7o6sn12hk35bm5i65.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chat_application",
+            "certificate_hash": "214a2ef569b8b42c1e95ccee44f522886f3d8d0f"
+          }
+        },
+        {
+          "client_id": "594013010959-0sl78fpomlcvlcg3ituo4vvn0312pk1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYDPtgGwgf330N4wXls-j3FkPrrJMJPtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594013010959-0sl78fpomlcvlcg3ituo4vvn0312pk1n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "594013010959-4fe2q5p841bhqlvra4pc18kauuf68j2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatApplication"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594013010959:android:e5bb71e646bd2b96f0777a",
+        "android_client_info": {
+          "package_name": "com.example.skintelligent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594013010959-0sl78fpomlcvlcg3ituo4vvn0312pk1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYDPtgGwgf330N4wXls-j3FkPrrJMJPtM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594013010959-0sl78fpomlcvlcg3ituo4vvn0312pk1n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "594013010959-4fe2q5p841bhqlvra4pc18kauuf68j2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatApplication"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import '../../const/constants_color.dart';
+import 'package:skintelligent/commons.dart';
+
 
 class Customtextbutton extends StatelessWidget {
    Customtextbutton({super.key , required this.position , required this.text});
