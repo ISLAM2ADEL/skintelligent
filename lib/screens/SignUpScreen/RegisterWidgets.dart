@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget buildInputField(IconData icon, String label, String texthint) {
+Widget buildInputField(IconData icon, String label, String texthint,
+    {TextEditingController? controller}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: SingleChildScrollView(

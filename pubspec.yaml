@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
-environment:
+environment: 
   sdk: ^3.5.3
 
 # Dependencies specify other packages that your package needs in order to work.
@@ -49,6 +49,7 @@ dependencies:
   dio: ^5.8.0+1
   image_picker: ^1.1.2
   google_fonts: ^6.2.1
+  hive: ^2.2.3
 
 
 dev_dependencies:
@@ -60,7 +61,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

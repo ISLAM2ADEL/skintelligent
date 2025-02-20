@@ -1,0 +1,2 @@
+C:/Users/walaa/Desktop/GP/skintelligent/android/app/.cxx/Debug/3w6g2q5n/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/walaa/Desktop/GP/skintelligent/android/app/.cxx/Debug/3w6g2q5n/armeabi-v7a/CMakeFiles/rebuild_cache.dir
