@@ -5,7 +5,7 @@ class Customtextfield extends StatelessWidget {
   Customtextfield(
       {required this.hintM,
       required this.MyController,
-      required this.validate,
+      @required this.validate,
       required this.myIcon,
       this.sufIcon});
   // Attributes
@@ -21,10 +21,13 @@ class Customtextfield extends StatelessWidget {
       controller: MyController,
       validator: validate,
       decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20)  ,
-        ),
-          prefixIcon: Icon(myIcon , color: Colors.grey,),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          prefixIcon: Icon(
+            myIcon,
+            color: Colors.grey,
+          ),
           hintText: hintM,
           hintStyle: const TextStyle(fontSize: 14, color: Colors.grey)),
     );

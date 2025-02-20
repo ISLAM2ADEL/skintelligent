@@ -5,7 +5,6 @@ import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
 import 'package:skintelligent/screens/qr_code/qr_code.dart';
 import '../../const/const.dart';
-import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
