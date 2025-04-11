@@ -7,3 +7,4 @@ String kSkintelligenPath = 'assets/images/skintelligen-logo.png' ;
 String kFacebookImagePath = 'assets/images/facebook-icon.png' ;
 String kArabFlagImagePath = 'assets/images/arab-flag.png' ;
 String kUkFlagImagePath = 'assets/images/uk-flag.png' ;
+String kotpImagePath = 'assets/images/otp.png' ;

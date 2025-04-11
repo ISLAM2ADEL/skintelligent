@@ -1,4 +1,6 @@
 import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+
 class LogoutButton extends StatelessWidget {
   const LogoutButton({
     super.key,
@@ -7,7 +9,11 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushReplacementNamed(context, LoginScreen.id),
+      onTap: () {
+        context.read<UserCubit>().signInEmail.clear();
+        context.read<UserCubit>().signInPassword.clear();
+        Navigator.pushReplacementNamed(context, LoginScreen.id);
+      },
       child: Container(
           height: 180,
           color: Colors.white,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skintelligent/const/const.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
+import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
 import 'confirm_appointment.dart';
 
@@ -284,11 +285,12 @@ class Appointment extends StatelessWidget {
                             ),
                           ),
                           onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return ConfirmAppointment();
-                                });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AppointmentScreen(),
+                              ),
+                            );
                           },
                         ),
                         const Spacer(),

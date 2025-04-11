@@ -9,7 +9,7 @@ abstract class ApiConsumer {
       {Object? data,
       Map<String, dynamic>? queryParameters,
       bool isFormData = false});
-  Future<dynamic> put(String path,
+  Future<dynamic> patch(String path,
       {Object? data,
       Map<String, dynamic>? queryParameters,
       bool isFormData = false});

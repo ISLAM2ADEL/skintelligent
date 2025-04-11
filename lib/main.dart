@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:skintelligent/controllers/api/dio_consumer.dart';
-import 'package:skintelligent/controllers/cubit/user_cubit.dart';
+import 'package:skintelligent/controllers/repositories/user_repository.dart';
+import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/screens/otp/otp_screen.dart';
+import 'package:skintelligent/test_space/appoinment.dart';
+import 'package:skintelligent/test_space/login_screen.dart';
 
 import 'commons.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,10 +15,7 @@ void main() async {
   await getIt<CacheHelper>().init();
 
   runApp(
-    BlocProvider(
-      create: (context) => UserCubit(DioConsumer(dio: Dio())),
-      child: MyApp(),
-    ),
+    MyApp(),
   );
 }
 
@@ -40,6 +41,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SignupCubit(),
         ),
+        BlocProvider(
+          create: (context) =>
+              UserCubit(UserRepository(api: DioConsumer(dio: Dio()))),
+        ),
       ],
       child: GetMaterialApp(
         routes: {
@@ -51,10 +56,13 @@ class MyApp extends StatelessWidget {
           Appointment.id: (context) => const Appointment(),
           Chatbotscreen.id: (context) => Chatbotscreen(),
           Registerscreen.id: (context) => Registerscreen(),
+          OtpScreen.id: (context) => const OtpScreen(),
+          LoginScreenTest.id: (context) => LoginScreenTest(),
+          AppointmentScreen.id: (context) => const AppointmentScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
-        initialRoute: SplashScreen.id,
+        initialRoute: LoginScreen.id,
       ),
     );
   }
