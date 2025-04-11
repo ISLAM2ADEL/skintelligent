@@ -15,7 +15,7 @@ class UserModel {
   factory UserModel.fromJson(json) {
     return UserModel(
       location: json['user'][ApiKey.location],
-      profilePic: json['user'][ApiKey.profilePic] ?? "",
+      profilePic: json['user'][ApiKey.profilePic],
       name: json['user'][ApiKey.name],
       email: json['user'][ApiKey.email],
       phone: json['user'][ApiKey.phone],

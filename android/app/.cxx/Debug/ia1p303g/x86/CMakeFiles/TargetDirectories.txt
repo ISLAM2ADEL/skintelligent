@@ -1,0 +1,2 @@
+E:/root/Programming/Work/skintelligent/android/app/.cxx/Debug/ia1p303g/x86/CMakeFiles/edit_cache.dir
+E:/root/Programming/Work/skintelligent/android/app/.cxx/Debug/ia1p303g/x86/CMakeFiles/rebuild_cache.dir

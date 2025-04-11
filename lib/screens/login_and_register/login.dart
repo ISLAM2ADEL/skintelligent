@@ -1,5 +1,6 @@
 import 'package:skintelligent/commons.dart';
-import 'package:skintelligent/controllers/cubit/user_cubit.dart';
+import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/screens/otp/otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,22 +13,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-//---------------------------------------------------
+  GlobalKey<FormState> signInFormKey = GlobalKey();
+
+//------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
-        if (state is SigninSuccess) {
+        if (state is SignInSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.successMessage),
+            const SnackBar(
+              content: Text('success'),
             ),
           );
-          Navigator.pushReplacementNamed(context, HomePage.id);
-        } else if (state is SigninFailure) {
+          Navigator.pushNamed(context, OtpScreen.id);
+        } else if (state is SignInFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.errorMessage),
+              content: Text(state.errMessage),
             ),
           );
         }
@@ -36,13 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
         return Scaffold(
           backgroundColor: kBackgroundColor,
           body: Form(
-            key: context.read<UserCubit>().signInFormKey,
+            key: signInFormKey,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: ListView(
                 children: [
                   const LanguagesDropDown(),
-                  const SizedBox(height: 45),
                   Image.asset(
                     kSkintelligenPath,
                     height: 172,
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Customtextfield(
                     myIcon: Icons.mail_outline,
-                    validate: ConstantsMethods.validateEmail,
+                    validate: MethodsHelper.validateEmail,
                     MyController: context.read<UserCubit>().signInEmail,
                     hintM: "Enter your email",
                   ),
@@ -58,16 +60,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   Customtextfield(
                     myIcon: Icons.lock_open,
                     sufIcon: FontAwesomeIcons.eyeSlash,
-                    validate: ConstantsMethods.validatePassword,
+                    validate: MethodsHelper.validatePassword,
                     MyController: context.read<UserCubit>().signInPassword,
                     hintM: "Password",
                   ),
                   Customtextbutton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      LoginScreen.id,
+                    ),
                     text: "Forget Password?",
                     position: MainAxisAlignment.end,
                   ),
                   const SizedBox(height: 20),
-                  state is SigninLoading
+                  state is SignInLoading
                       ? const Center(child: CircularProgressIndicator())
                       : Custombutton(
                           hight: 70,
@@ -83,7 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             //     .currentState!
                             //     .validate()) {
                             // }
-                            context.read<UserCubit>().signin();
+                            context.read<UserCubit>().signIn().then((value) {
+                              MethodsHelper.signInTextFormHelper(context);
+                            });
                           },
                           text: "Login",
                         ),
@@ -114,9 +122,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: "Sign in with facebook",
                   ),
                   const SizedBox(
-                    height: 125,
+                    height: 20,
                   ),
-                  TermsAndPrivacy(),
+                  TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, Registerscreen.id),
+                      child: const Text('Create new account')),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const TermsAndPrivacy(),
                   const SizedBox(
                     height: 20,
                   ),
