@@ -5,15 +5,16 @@ class Endpoint {
   // static final String checkEmail = 'user/check-email';
   // static final String updateUser = 'user/update';
   static final String logout = 'logout';
+  static final String forgetPassword = 'forget-password';
   static String getUserDataEndPoint(id) {
     return 'user/get-user/$id';
   }
 }
 
 class ApiKey {
-  static String image = 'image'; 
-  static String points = 'points'; 
-  static String credit = 'credit'; 
+  static String image = 'image';
+  static String points = 'points';
+  static String credit = 'credit';
   static String data = 'data';
   static String status = 'status';
   static String errorMessage = 'message';
