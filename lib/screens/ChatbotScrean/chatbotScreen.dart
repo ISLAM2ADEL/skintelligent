@@ -75,7 +75,7 @@ class Chatbotscreen extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 20),
+                SizedBox(height: 80),
 
                 BlocBuilder<ChatbotcubitCubit, ChatbotcubitState>(
                   builder: (context, state) {

@@ -4,6 +4,7 @@ import 'package:skintelligent/screens/ChatbotScrean/cubit/chatbotcubit_cubit.dar
 import 'package:skintelligent/screens/SignUpScreen/Cubit/cubit/signup_cubit.dart';
 import 'package:skintelligent/screens/SignUpScreen/Registerscreen.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
+import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/home_screen/home_page.dart';
 import 'package:skintelligent/screens/qr_code/qr_code.dart';
 
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
           Appointment.id: (context) => const Appointment(),
           Chatbotscreen.id: (context) => Chatbotscreen(),
           Registerscreen.id: (context) => Registerscreen(),
+          ForgetScreen.id: (context) => const ForgetScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
