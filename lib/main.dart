@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:skintelligent/controllers/api/dio_consumer.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
+import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
 import 'package:skintelligent/test_space/appoinment.dart';
@@ -45,6 +46,11 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               UserCubit(UserRepository(api: DioConsumer(dio: Dio()))),
         ),
+        BlocProvider(
+          create: (context) => DoctorCubit(
+            UserRepository(api: DioConsumer(dio: Dio())),
+          ),
+        )
       ],
       child: GetMaterialApp(
         routes: {
