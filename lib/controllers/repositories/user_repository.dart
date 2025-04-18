@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
 
@@ -83,6 +84,27 @@ class UserRepository {
       );
 
       return Right(DoctorModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+  // In your UserRepository
+
+  Future<Either<String, AvailableBookingModel>> getAvailableBookings({
+    required String date,
+    required int clinicId,
+    required int doctorId,
+  }) async {
+    try {
+      final response = await api.get(
+        Endpoint.appointmentByWeek,
+        queryParameters: {
+          'date': date,
+          'clinicId': clinicId,
+          'doctorId': doctorId,
+        },
+      );
+      return Right(AvailableBookingModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }

@@ -4,6 +4,7 @@ class Endpoint {
   // static String signIn = "user/signin";
   static String signIn = "/api/auth/login";
   static String signUp = "user/signup";
+  static String appointmentByWeek = '/api/appointments/week' ; 
   static String doctorById(num id) => "/api/doctors/$id";
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
@@ -42,4 +43,12 @@ class ApiKey {
 
   // Location (if used later)
   static const String location = "location";
+  // Available booking
+  static const String startTime = "startTime"; 
+  static const String endTime = "endTime";
+  static const String isCanceled = "isCanceled";
+  static const String isRepeating = "isRepeating";
+  static const String repeatDay = "repeatDay";
+  static const String repeatUntil = "repeatUntil";
+
 }
