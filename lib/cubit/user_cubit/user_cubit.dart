@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,9 +17,10 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController signInPassword = TextEditingController();
   //Sign Up Form key
   //Profile Pic
-  XFile? profilePic;
+  File? profilePic;
   //Sign up name
-  TextEditingController signUpName = TextEditingController();
+  TextEditingController signUpFirstName = TextEditingController();
+  TextEditingController signUpLastName = TextEditingController();
   //Sign up phone number
   TextEditingController signUpPhoneNumber = TextEditingController();
   //Sign up email
@@ -26,26 +29,33 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController signUpPassword = TextEditingController();
   //Sign up confirm password
   TextEditingController confirmPassword = TextEditingController();
+  TextEditingController dateOfBirth = TextEditingController();
+  TextEditingController gender = TextEditingController();
+  TextEditingController address = TextEditingController();
   SigninModel? user;
 
-  uploadProfilePic(XFile image) {
-    profilePic = image;
-    emit(UploadProfilePic());
+  void uploadProfilePic(File profilePic) {
+    emit(UploadProfilePic(profilePic: profilePic));
   }
 
   signUp() async {
     emit(SignUpLoading());
     final response = await userRepository.signUp(
-      name: signUpName.text,
+      firstName: signUpFirstName.text,
+      lastName: signUpLastName.text,
       phone: signUpPhoneNumber.text,
       email: signUpEmail.text,
       password: signUpPassword.text,
       confirmPassword: confirmPassword.text,
+      dateOfBirth: dateOfBirth.text,
+      gender: gender.text,
+      address: address.text,
       profilePic: profilePic!,
     );
     response.fold(
       (errMessage) => emit(SignUpFailure(errMessage: errMessage)),
-      (signUpModel) => emit(SignUpSuccess(message: signUpModel.message)),
+      (signUpModel) => emit(SignUpSuccess(message: "Signup Successful"))
+
     );
   }
 

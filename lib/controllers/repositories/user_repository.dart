@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
@@ -77,35 +79,43 @@ class UserRepository {
   }
 
   Future<Either<String, SignupModel>> signUp({
-    required String name,
+    required String firstName,
+    required String lastName,
     required String phone,
     required String email,
     required String password,
     required String confirmPassword,
-    required XFile profilePic,
+    required String dateOfBirth, // yyyy-MM-dd format
+    required String gender,
+    required String address,
+    required File profilePic,
   }) async {
     try {
+      final profilePicUrl = await uploadImageToApi(profilePic);
       final response = await api.post(
         Endpoint.signUp,
         isFormData: true,
         data: {
-          ApiKey.name: name,
-          ApiKey.phone: phone,
-          ApiKey.email: email,
-          ApiKey.password: password,
-          ApiKey.confirmPassword: confirmPassword,
-          ApiKey.location:
-              '{"name":"methalfa","address":"meet halfa","coordinates":[30.1572709,31.224779]}',
-          ApiKey.profilePic: await uploadImageToApi(profilePic)
+          "email": email,
+          "password": password,
+          "confirmPassword": confirmPassword,
+          "firstName": firstName,
+          "lastName": lastName,
+          "dateOfBirth": dateOfBirth,
+          "gender": gender,
+          "address": address,
+          "profilePicture": profilePicUrl,
         },
       );
+
       print(response);
-      final signUPModel = SignupModel.fromJson(response);
-      return Right(signUPModel);
+      final signUpModel = SignupModel.fromJson(response);
+      return Right(signUpModel);
     } on ServerException catch (e) {
-      return Left(e.errorModel.errorMessage);
+      return Left(e.errorModel.errorMessage); // 👈 مهم تحتفظ بالرسالة زي ما هي
     }
   }
+
 
   Future<Either<String, UserModel>> getUserProfile() async {
     try {
@@ -119,19 +129,14 @@ class UserRepository {
       return Left(e.errorModel.errorMessage);
     }
   }
-
   Future<Either<String, AppointmentModel>> getAllDoctors() async {
     try {
-      final response = await api.get(
-        Endpoint.getDoctors,
-        queryParameters: {},
-      );
-      print(response);
-
-      final appointmentModel = AppointmentModel.fromJson(response);
-      return Right(appointmentModel);
+      final response = await api.get(Endpoint.getDoctors);
+      final model = AppointmentModel.fromJson(response);
+      return Right(model);
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
   }
+
 }

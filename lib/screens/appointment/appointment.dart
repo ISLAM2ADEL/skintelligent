@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skintelligent/const/const.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
@@ -14,62 +15,82 @@ class Appointment extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: const CustomBottomBar(),
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          CustomContainer(
-            height: height,
-            widget: CustomContainer(
+
+    return BlocProvider(
+      create: (context) {
+        final cubit = context.read<AppointmentCubit>();
+        cubit.getAllDoctors(); // Fetch doctors on init
+        return cubit;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: const CustomBottomBar(),
+        body: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            CustomContainer(
               height: height,
-              widget: Padding(
-                padding: EdgeInsets.only(left: width * .08, right: width * .08),
-                child: buildWidget(),
+              widget: CustomContainer(
+                height: height,
+                widget: Padding(
+                  padding: EdgeInsets.only(left: width * .08, right: width * .08),
+                  child: buildWidget(),
+                ),
               ),
             ),
-          ),
-          BlocConsumer<AppointmentCubit, AppointmentState>(
-            listener: (context, state) {
-              context.read<AppointmentCubit>().getAllDoctors();
-            },
-            builder: (context, state) {
-              return state is AppointmentLoading
-                  ? const CircularProgressIndicator()
-                  : ListView.separated(
-                      physics:
-                          NeverScrollableScrollPhysics(), // avoid nested scrolling
-                      shrinkWrap: true,
-                      itemCount: 7,
-                      itemBuilder: (context, index) => doctorContainer(
-                        height,
-                        width,
-                        clinicName: "SkinCo",
-                        clinicAddress: "Helwan",
-                        doctorName: "Mohammed Hanafy",
-                        experience: "7",
-                        context: context,
-                      ),
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: height * .025),
-                    );
-            },
-          ),
-        ],
+            BlocBuilder<AppointmentCubit, AppointmentState>(
+              builder: (context, state) {
+                if (state is AppointmentLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is AppointmentFailure) {
+                  return Center(child: Text(state.errorMessage));
+                } else if (state is AppointmentSuccess) {
+                  return ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(horizontal: width * .025),
+                    itemCount: state.doctors.length,
+                    itemBuilder: (context, index) {
+                      final doctor = state.doctors[index];
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: height*.02),
+                        child: doctorContainer(
+                          height,
+                          width,
+                          doctorID: doctor.id.toString(),
+                          clinicName:  "SkinCo",
+                          doctorName: "${doctor.firstName} ${doctor.lastName}",
+                          experience: doctor.experienceYears.toString(),
+                          doctorPhone: doctor.phoneNumber,
+                          profilePicture: doctor.profilePicture,
+                          context: context,
+                        ),
+                      );
+                    },
+                    separatorBuilder: (_, __) => SizedBox(height: height * .025),
+                  );
+                } else {
+                  return const Center(child: Text("No data available"));
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Container doctorContainer(
-    double height,
-    double width, {
-    required String clinicName,
-    required String doctorName,
-    required String experience,
-    required String clinicAddress,
-    required BuildContext context,
-  }) {
+      double height,
+      double width, {
+        required String clinicName,
+        required String doctorName,
+        required String experience,
+        required String doctorPhone,
+        required String profilePicture,
+        required String doctorID,
+        required BuildContext context,
+      }) {
     return Container(
       height: height * .17,
       width: width * .95,
@@ -81,13 +102,11 @@ class Appointment extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: width * .025),
         child: Row(
           children: [
-            const CircleAvatar(
-              backgroundImage: AssetImage("${path}skin doctor.png"),
+            CircleAvatar(
+              backgroundImage: NetworkImage(profilePicture),
               radius: 45,
             ),
-            const SizedBox(
-              width: 7,
-            ),
+            const SizedBox(width: 7),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: height * .02),
@@ -108,17 +127,13 @@ class Appointment extends StatelessWidget {
                           child: Text(
                             doctorName,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 16,
-                            ),
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ),
                         const Spacer(),
                         Text(
                           "$experience Years",
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -126,12 +141,22 @@ class Appointment extends StatelessWidget {
                     Row(
                       children: [
                         InkWell(
+                          onTap: () {
+                            print(doctorID);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AppointmentScreen(),
+                              ),
+                            );
+                          },
                           child: Container(
                             width: 85,
                             height: 25,
                             decoration: BoxDecoration(
-                                color: color7,
-                                borderRadius: BorderRadius.circular(20.0)),
+                              color: color7,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
                             child: const Center(
                               child: Text(
                                 "Appointment",
@@ -143,24 +168,14 @@ class Appointment extends StatelessWidget {
                               ),
                             ),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AppointmentScreen(),
-                              ),
-                            );
-                          },
                         ),
                         const Spacer(),
                         Text(
-                          clinicAddress,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
+                          doctorPhone,
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),

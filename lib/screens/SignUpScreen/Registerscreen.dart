@@ -10,6 +10,8 @@ class Registerscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final height=MediaQuery.of(context).size.height;
+    final width=MediaQuery.of(context).size.width;
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is SignUpSuccess) {
@@ -44,7 +46,7 @@ class Registerscreen extends StatelessWidget {
               key: signUpFormKey,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  EdgeInsets.symmetric(horizontal: width*.05, vertical: height*.02),
                 child: Column(
                   children: [
                     Stack(
@@ -52,8 +54,8 @@ class Registerscreen extends StatelessWidget {
                       children: [
                         Container(
                           margin: const EdgeInsets.only(top: 50),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
+                          padding:  EdgeInsets.symmetric(
+                              vertical: height*.065, horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -61,13 +63,21 @@ class Registerscreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 30),
                               CustomInputField(
-                                labelText: 'Name',
-                                hintText: 'Your name',
+                                labelText: 'First Name',
+                                hintText: 'EX : Ahmed',
                                 isDense: true,
                                 controller:
-                                    context.read<UserCubit>().signUpName,
+                                    context.read<UserCubit>().signUpFirstName,
+                              ),
+                              const SizedBox(height: 16),
+                              CustomInputField(
+                                labelText: 'Last Name',
+                                hintText: 'EX : Mohammed',
+                                isDense: true,
+                                controller:
+                                context.read<UserCubit>().signUpLastName,
                               ),
                               const SizedBox(height: 16),
                               //!Email
@@ -82,7 +92,7 @@ class Registerscreen extends StatelessWidget {
                               //! Phone Number
                               CustomInputField(
                                 labelText: 'Phone number',
-                                hintText: 'Your phone number ex:01234567890',
+                                hintText: 'ex:01234567890',
                                 isDense: true,
                                 controller:
                                     context.read<UserCubit>().signUpPhoneNumber,
@@ -98,6 +108,7 @@ class Registerscreen extends StatelessWidget {
                                 controller:
                                     context.read<UserCubit>().signUpPassword,
                               ),
+                              const SizedBox(height: 16),
                               CustomInputField(
                                 labelText: 'Confirm Password',
                                 hintText: 'Confirm Your password',
@@ -107,7 +118,28 @@ class Registerscreen extends StatelessWidget {
                                 controller:
                                     context.read<UserCubit>().confirmPassword,
                               ),
-
+                              const SizedBox(height: 16),
+                              CustomInputField(
+                                labelText: 'Date of Birth',
+                                hintText: 'Your date of birth',
+                                isDense: true,
+                                controller:
+                                    context.read<UserCubit>().dateOfBirth,
+                              ),
+                              const SizedBox(height: 16),
+                              CustomInputField(
+                                labelText: 'Gender',
+                                hintText: 'Your gender',
+                                isDense: true,
+                                controller: context.read<UserCubit>().gender,
+                              ),
+                              const SizedBox(height: 16),
+                              CustomInputField(
+                                labelText: 'Address',
+                                hintText: 'Your address',
+                                isDense: true,
+                                controller: context.read<UserCubit>().address,
+                              ),
                               const SizedBox(height: 10),
                               state is SignUpLoading
                                   ? const Center(
@@ -115,12 +147,15 @@ class Registerscreen extends StatelessWidget {
                                   : CustomFormButton(
                                       innerText: 'Signup',
                                       onPressed: () {
-                                        context
-                                            .read<UserCubit>()
-                                            .signUp()
-                                            .then((value) {
-                                          MethodsHelper.signUpTextFormHelper(
-                                              context);
+                                        // context
+                                        //     .read<UserCubit>()
+                                        //     .signUp()
+                                        //     .then((value) {
+                                        //   MethodsHelper.signUpTextFormHelper(
+                                        //       context);
+                                        // });
+                                        context.read<UserCubit>().signUp().then((value) {
+                                          MethodsHelper.signUpTextFormHelper(context);
                                         });
                                       },
                                     ),

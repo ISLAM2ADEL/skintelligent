@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
               content: Text('success'),
             ),
           );
-          Navigator.pushNamed(context, OtpScreen.id);
+          Navigator.pushNamed(context, HomePage.id);
         } else if (state is SignInFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

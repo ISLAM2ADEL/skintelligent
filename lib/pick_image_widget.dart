@@ -1,75 +1,71 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit_state.dart';
 
 class PickImageWidget extends StatelessWidget {
+  final File? uploadedImage;
+
   const PickImageWidget({
-    super.key,
-  });
+    Key? key,
+    this.uploadedImage,
+  }) : super(key: key);
 
   @override
-
-  /// A widget for picking an image.
-  ///
-  /// This widget contains a [CircleAvatar] for showing the current user's avatar
-  /// and a [Stack] for positioning a camera icon at the bottom right of the
-  /// avatar. When the icon is tapped, it opens the gallery for the user to
-  /// pick an image.
   Widget build(BuildContext context) {
+    final userCubit = context.read<UserCubit>();
+    final currentProfilePic = uploadedImage ?? userCubit.profilePic;
+
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {},
       builder: (context, state) {
+        final updatedProfilePic = state is UploadProfilePic
+            ? state.profilePic
+            : currentProfilePic;
+
         return SizedBox(
           width: 130,
           height: 130,
-          child: context.read<UserCubit>().profilePic == null
-              ? CircleAvatar(
-                  backgroundColor: Colors.grey.shade200,
-                  backgroundImage: const AssetImage("assets/images/avatar.png"),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        bottom: 5,
-                        right: 5,
-                        child: GestureDetector(
-                          onTap: () async {},
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade400,
-                              border: Border.all(color: Colors.white, width: 3),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                ImagePicker()
-                                    .pickImage(source: ImageSource.gallery)
-                                    .then((value) => context
-                                        .read<UserCubit>()
-                                        .uploadProfilePic(value!));
-                              },
-                              child: const Icon(
-                                Icons.camera_alt_sharp,
-                                color: Colors.white,
-                                size: 25,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+          child: Stack(
+            children: [
+              CircleAvatar(
+                radius: 65,
+                backgroundColor: Colors.grey.shade200,
+                backgroundImage: updatedProfilePic != null
+                    ? FileImage(updatedProfilePic) as ImageProvider
+                    : const AssetImage("assets/images/skin doctor.png"),
+              ),
+              Positioned(
+                bottom: 5,
+                right: 5,
+                child: GestureDetector(
+                  onTap: () async {
+                    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                    if (pickedFile != null) {
+                      final file = File(pickedFile.path); // Convert XFile to File
+                      userCubit.uploadProfilePic(file);   // Update profile picture in cubit
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade400,
+                      border: Border.all(color: Colors.white, width: 3),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt_sharp,
+                      color: Colors.white,
+                      size: 25,
+                    ),
                   ),
-                )
-              : CircleAvatar(
-                  backgroundImage: FileImage(
-                      File(context.read<UserCubit>().profilePic!.path)),
                 ),
+              ),
+            ],
+          ),
         );
       },
     );

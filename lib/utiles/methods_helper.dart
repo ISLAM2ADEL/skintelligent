@@ -28,13 +28,20 @@ class MethodsHelper {
   }
 
   static void signUpTextFormHelper(BuildContext context) {
-    context.read<UserCubit>().signUpName.clear();
-    context.read<UserCubit>().signUpPhoneNumber.clear();
-    context.read<UserCubit>().profilePic = null;
-    context.read<UserCubit>().signUpEmail.clear();
-    context.read<UserCubit>().signInPassword.clear();
-    context.read<UserCubit>().signUpPassword.clear();
-    context.read<UserCubit>().confirmPassword.clear();
+    final cubit = context.read<UserCubit>();
+
+    cubit.signUpFirstName.clear();
+    cubit.signUpLastName.clear();
+    cubit.signUpPhoneNumber.clear();
+    cubit.signUpEmail.clear();
+    cubit.signUpPassword.clear();
+    cubit.confirmPassword.clear();
+    cubit.signInPassword.clear();
+    cubit.address.clear();
+
+    cubit.profilePic;
+    cubit.gender.clear();
+    cubit.dateOfBirth.clear();
   }
 
   static void signInTextFormHelper(BuildContext context) {

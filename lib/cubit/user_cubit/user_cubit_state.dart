@@ -1,4 +1,6 @@
-import 'package:skintelligent/models/user_model.dart';
+import 'dart:io';
+
+import '../../models/user_model.dart'; // Make sure to import dart:io for File
 
 class UserState {}
 
@@ -10,7 +12,11 @@ final class SignInSuccess extends UserState {
   SignInSuccess({required this.message});
 }
 
-final class UploadProfilePic extends UserState {}
+final class UploadProfilePic extends UserState {
+  final File? profilePic;  // Use File? instead of dynamic
+
+  UploadProfilePic({required this.profilePic});
+}
 
 final class SignInLoading extends UserState {}
 

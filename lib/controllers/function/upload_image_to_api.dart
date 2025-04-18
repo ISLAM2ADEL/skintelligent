@@ -1,6 +1,7 @@
-import 'package:dio/dio.dart';
-import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-Future uploadImageToApi(XFile image) async {
+import 'package:dio/dio.dart';
+
+Future uploadImageToApi(File image) async {
   return MultipartFile.fromFile(image.path , filename: image.path.split('/').last);
 }

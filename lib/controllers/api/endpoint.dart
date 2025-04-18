@@ -6,7 +6,7 @@ class Endpoint {
   static String forgetPassword = "/api/auth/forgot-password";
   static String resetPassword = "/api/auth/reset-password";
   static String getDoctors = "/api/doctors";
-  static String signUp = "user/signup";
+  static String signUp = "/api/auth/register";
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
   }
