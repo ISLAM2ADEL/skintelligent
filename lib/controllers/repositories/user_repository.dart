@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skintelligent/commons.dart';
-import 'package:skintelligent/controllers/api/api_consumer.dart';
+import 'package:skintelligent/models/doctor_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
 
 class UserRepository {
@@ -74,4 +73,18 @@ class UserRepository {
       return Left(e.errorModel.errorMessage);
     }
   }
+  Future<Either<String, DoctorModel>> getDoctorProfile() async {
+  try {
+    final String doctorId = await getIt<CacheHelper>().getData(key: ApiKey.id);
+
+    final response = await api.get(
+      Endpoint.doctorById(doctorId),
+    );
+
+    return Right(DoctorModel.fromJson(response));
+  } on ServerException catch (e) {
+    return Left(e.errorModel.errorMessage);
+  }
+}
+
 }
