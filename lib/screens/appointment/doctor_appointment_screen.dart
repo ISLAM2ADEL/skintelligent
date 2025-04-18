@@ -125,6 +125,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     // Fetch available bookings for the week
     context.read<AvailableBookingCubit>().getAvailableBookings(
           date: DateTime.now().toIso8601String().split('T').first,
+          // date: "2025-04-20",
           clinicId: 7,
           doctorId: 7,
         );
@@ -168,7 +169,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
