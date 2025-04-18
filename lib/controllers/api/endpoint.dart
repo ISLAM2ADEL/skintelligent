@@ -4,7 +4,7 @@ class Endpoint {
   // static String signIn = "user/signin";
   static String signIn = "/api/auth/login";
   static String signUp = "user/signup";
-static String doctorById(String id) => "/api/doctors/$id";
+  static String doctorById(num id) => "/api/doctors/$id";
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
   }
@@ -13,6 +13,7 @@ static String doctorById(String id) => "/api/doctors/$id";
 class ApiKey {
   static const String status = "statusCode";
   static const String errorMessage = "message";
+  static String message = "message";
 
   // Auth-related
   static const String email = "email";
@@ -42,4 +43,3 @@ class ApiKey {
   // Location (if used later)
   static const String location = "location";
 }
-

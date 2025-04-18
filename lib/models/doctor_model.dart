@@ -1,5 +1,7 @@
 // lib/features/doctor/data/models/doctor_model.dart
 
+import 'package:skintelligent/controllers/api/endpoint.dart';
+
 class DoctorModel {
   final int id;
   final String firstName;
@@ -41,25 +43,25 @@ class DoctorModel {
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
     return DoctorModel(
-      id: json['id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      dateOfBirth: DateTime.parse(json['dateOfBirth']),
-      gender: json['gender'],
-      licenseNumber: json['licenseNumber'],
-      experienceYears: json['experienceYears'],
-      phoneNumber: json['phoneNumber'],
-      defaultExaminationFee: json['defaultExaminationFee'],
-      defaultConsultationFee: json['defaultConsultationFee'],
-      profilePicture: json['profilePicture'],
-      aboutMe: json['aboutMe'],
-      qualification: json['qualification'],
-      isApproved: json['isApproved'],
-      createdDate: DateTime.parse(json['createdDate']),
-      updatedDate: DateTime.parse(json['updatedDate']),
-      email: json['email'],
+      id: json[ApiKey.id],
+      firstName: json[ApiKey.firstName],
+      lastName: json[ApiKey.lastName],
+      dateOfBirth: DateTime.parse(json[ApiKey.dateOfBirth]),
+      gender: json[ApiKey.gender],
+      licenseNumber: json[ApiKey.licenseNumber],
+      experienceYears: (json[ApiKey.experienceYears] as num).toInt(),
+      phoneNumber: json[ApiKey.phone],
+      defaultExaminationFee:
+          (json[ApiKey.defaultExaminationFee] as num).toInt(),
+      defaultConsultationFee:
+          (json[ApiKey.defaultConsultationFee] as num).toInt(),
+      profilePicture: json[ApiKey.profilePic],
+      aboutMe: json[ApiKey.aboutMe],
+      qualification: json[ApiKey.qualification],
+      isApproved: json[ApiKey.isApproved],
+      createdDate: DateTime.parse(json[ApiKey.createdDate]),
+      updatedDate: DateTime.parse(json[ApiKey.updatedDate]),
+      email: json[ApiKey.email],
     );
   }
-
-
 }
