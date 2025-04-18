@@ -22,7 +22,7 @@ class UserRepository {
       );
       final user = SigninModel.fromJson(response);
       // final decodedToken = JwtDecoder.decode(user.token);
-     await  getIt<CacheHelper>().saveData(key: ApiKey.token, value: user.token);
+      await getIt<CacheHelper>().saveData(key: ApiKey.token, value: user.token);
       // await getIt<CacheHelper>().saveData(key: ApiKey.id, value: decodedToken[ApiKey.id]);
       return Right(user);
     } on ServerException catch (e) {
@@ -73,18 +73,18 @@ class UserRepository {
       return Left(e.errorModel.errorMessage);
     }
   }
+
   Future<Either<String, DoctorModel>> getDoctorProfile() async {
-  try {
-    final String doctorId = await getIt<CacheHelper>().getData(key: ApiKey.id);
+    try {
+      // final String doctorId = await getIt<CacheHelper>().getData(key: ApiKey.id);
 
-    final response = await api.get(
-      Endpoint.doctorById(doctorId),
-    );
+      final response = await api.get(
+        Endpoint.doctorById(7),
+      );
 
-    return Right(DoctorModel.fromJson(response));
-  } on ServerException catch (e) {
-    return Left(e.errorModel.errorMessage);
+      return Right(DoctorModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
   }
-}
-
 }
