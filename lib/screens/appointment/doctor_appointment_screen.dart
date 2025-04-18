@@ -597,7 +597,7 @@ import 'package:skintelligent/widgets/doctor_card.dart';
 import 'package:skintelligent/widgets/stats_row.dart';
 import 'package:skintelligent/widgets/about_me_section.dart';
 import 'package:skintelligent/widgets/available_booking.dart';
-import 'package:skintelligent/widgets/voice_call_button.dart';
+// import 'package:skintelligent/widgets/voice_call_button.dart';
 
 class AppointmentScreen extends StatefulWidget {
   const AppointmentScreen({super.key});
@@ -676,7 +676,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   const SizedBox(height: 30),
                   const AvailableBooking(),
                   const SizedBox(height: 30),
-                  const VoiceCallButton(),
+                  // const VoiceCallButton(),
                 ],
               ),
             );
