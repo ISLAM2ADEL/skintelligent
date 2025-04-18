@@ -4,7 +4,7 @@ import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
 import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
-import 'confirm_appointment.dart';
+import '../../commons.dart';
 
 class Appointment extends StatelessWidget {
   const Appointment({super.key});
@@ -17,187 +17,46 @@ class Appointment extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: const CustomBottomBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomContainer(
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          CustomContainer(
+            height: height,
+            widget: CustomContainer(
               height: height,
-              widget: CustomContainer(
-                height: height,
-                widget: Padding(
-                  padding:
-                      EdgeInsets.only(left: width * .08, right: width * .08),
-                  child: buildWidget(),
-                ),
+              widget: Padding(
+                padding: EdgeInsets.only(left: width * .08, right: width * .08),
+                child: buildWidget(),
               ),
             ),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-          ],
-        ),
+          ),
+          BlocConsumer<AppointmentCubit, AppointmentState>(
+            listener: (context, state) {
+              context.read<AppointmentCubit>().getAllDoctors();
+            },
+            builder: (context, state) {
+              return state is AppointmentLoading
+                  ? const CircularProgressIndicator()
+                  : ListView.separated(
+                      physics:
+                          NeverScrollableScrollPhysics(), // avoid nested scrolling
+                      shrinkWrap: true,
+                      itemCount: 7,
+                      itemBuilder: (context, index) => doctorContainer(
+                        height,
+                        width,
+                        clinicName: "SkinCo",
+                        clinicAddress: "Helwan",
+                        doctorName: "Mohammed Hanafy",
+                        experience: "7",
+                        context: context,
+                      ),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: height * .025),
+                    );
+            },
+          ),
+        ],
       ),
     );
   }

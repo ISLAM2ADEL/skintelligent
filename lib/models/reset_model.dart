@@ -1,13 +1,13 @@
-class ForgetModel {
+class ResetModel {
   final String message;
   final int? statusCode; // Nullable to prevent crash
-  ForgetModel({
+  ResetModel({
     required this.message,
     this.statusCode, // Make it nullable
   });
 
-  factory ForgetModel.fromJson(Map<String, dynamic> json) {
-    return ForgetModel(
+  factory ResetModel.fromJson(Map<String, dynamic> json) {
+    return ResetModel(
         statusCode: json["statusCode"],
         message: json["message"] ?? "No message");
   }

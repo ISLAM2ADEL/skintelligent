@@ -2,7 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:skintelligent/controllers/api/dio_consumer.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
+import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
+import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
 import 'package:skintelligent/test_space/appoinment.dart';
 import 'package:skintelligent/test_space/login_screen.dart';
@@ -33,10 +36,15 @@ class MyApp extends StatelessWidget {
           create: (context) => OnboardingCubit(),
         ),
         BlocProvider(
-          create: (context) => AppointmentCubit(),
+          create: (context) =>
+              AppointmentCubit(UserRepository(api: DioConsumer(dio: Dio()))),
         ),
         BlocProvider(
           create: (context) => ChatbotcubitCubit(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ForgetCubit(UserRepository(api: DioConsumer(dio: Dio()))),
         ),
         BlocProvider(
           create: (context) => SignupCubit(),
@@ -59,6 +67,8 @@ class MyApp extends StatelessWidget {
           OtpScreen.id: (context) => const OtpScreen(),
           LoginScreenTest.id: (context) => LoginScreenTest(),
           AppointmentScreen.id: (context) => const AppointmentScreen(),
+          ForgetScreen.id: (context) => const ForgetScreen(),
+          ResetPassword.id: (context) => const ResetPassword(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()

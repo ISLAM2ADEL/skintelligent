@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
+import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 
 class ForgetScreen extends StatelessWidget {
   const ForgetScreen({super.key});
@@ -15,7 +16,9 @@ class ForgetScreen extends StatelessWidget {
               content: Text(state.successMessage),
             ),
           );
-          Navigator.pushReplacementNamed(context, HomePage.id);
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.pushReplacementNamed(context, ResetPassword.id);
+          });
         } else if (state is ForgetFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -42,7 +45,7 @@ class ForgetScreen extends StatelessWidget {
                   ),
                   Customtextfield(
                     myIcon: Icons.mail_outline,
-                    validate: ConstantsMethods.validateEmail,
+                    validate: MethodsHelper.validateEmail,
                     MyController: context.read<ForgetCubit>().forgetEmail,
                     hintM: "Enter your email to reset password",
                   ),

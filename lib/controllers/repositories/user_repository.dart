@@ -1,9 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/controllers/api/api_consumer.dart';
+import 'package:skintelligent/models/forget_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
+
+import '../../models/appointment_model.dart';
+import '../../models/reset_model.dart';
 
 class UserRepository {
   final ApiConsumer api;
@@ -23,9 +26,51 @@ class UserRepository {
       );
       final user = SigninModel.fromJson(response);
       // final decodedToken = JwtDecoder.decode(user.token);
-     await  getIt<CacheHelper>().saveData(key: ApiKey.token, value: user.token);
+      await getIt<CacheHelper>().saveData(key: ApiKey.token, value: user.token);
       // await getIt<CacheHelper>().saveData(key: ApiKey.id, value: decodedToken[ApiKey.id]);
       return Right(user);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, ForgetModel>> forgetPassword({
+    required String email,
+  }) async {
+    try {
+      final response = await api.post(
+        Endpoint.forgetPassword,
+        isFormData: false,
+        data: {
+          ApiKey.email: email,
+        },
+      );
+      print(response);
+      final forgetModel = ForgetModel.fromJson(response);
+      return Right(forgetModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, ResetModel>> resetPassword({
+    required String email,
+    required String password,
+    required String resetOTP,
+  }) async {
+    try {
+      final response = await api.post(
+        Endpoint.resetPassword,
+        isFormData: false,
+        data: {
+          ApiKey.email: email,
+          ApiKey.password: password,
+          ApiKey.resetOTP: resetOTP,
+        },
+      );
+      print(response);
+      final resetModel = ResetModel.fromJson(response);
+      return Right(resetModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
@@ -70,6 +115,21 @@ class UserRepository {
         ),
       );
       return Right(UserModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, AppointmentModel>> getAllDoctors() async {
+    try {
+      final response = await api.get(
+        Endpoint.getDoctors,
+        queryParameters: {},
+      );
+      print(response);
+
+      final appointmentModel = AppointmentModel.fromJson(response);
+      return Right(appointmentModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }

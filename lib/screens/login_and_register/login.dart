@@ -1,5 +1,6 @@
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Customtextbutton(
                     onPressed: () => Navigator.pushNamed(
                       context,
-                      LoginScreen.id,
+                      ForgetScreen.id,
                     ),
                     text: "Forget Password?",
                     position: MainAxisAlignment.end,

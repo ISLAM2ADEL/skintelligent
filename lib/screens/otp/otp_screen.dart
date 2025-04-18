@@ -70,6 +70,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                         const SizedBox(height: 20),
                         OtpTextField(
+                          numberOfFields: 6,
                           fillColor: Colors.black.withValues(alpha: 0.1),
                           filled: true,
                           keyboardType: TextInputType.number,
@@ -81,7 +82,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {
-                            if (otpNumber == '1234') {
+                            if (otpNumber == '123456') {
                               print("The OTP is correct");
                               Navigator.pushReplacementNamed(
                                   context, HomePage.id);

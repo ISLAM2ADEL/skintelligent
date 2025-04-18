@@ -17,3 +17,16 @@ final class ForgetFailure extends ForgetState {
   final String errorMessage;
   ForgetFailure({required this.errorMessage});
 }
+
+final class ForgetResetSuccess extends ForgetState {
+  final String successMessage;
+
+  ForgetResetSuccess({required this.successMessage});
+}
+
+final class ForgetResetLoading extends ForgetState {}
+
+final class ForgetResetFailure extends ForgetState {
+  final String errorMessage;
+  ForgetResetFailure({required this.errorMessage});
+}
