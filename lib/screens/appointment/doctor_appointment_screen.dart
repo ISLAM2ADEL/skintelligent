@@ -25,22 +25,17 @@
 //   void initState() {
 //     super.initState();
 //     context.read<DoctorCubit>().getDoctorProfile();
-
-//     final bookingCubit = context.read<AvailableBookingCubit>();
-//     final currentState = bookingCubit.state;
-
-//     // if (currentState is! AvailableBookingSuccess) {
-//     //   bookingCubit.getAvailableBookings(
-//     //     date: DateFormat('yyyy-MM-dd').format(selectedDate),
-//     //     clinicId: 8,
-//     //     doctorId: 9,
-//     //   );
-//     // }
 //   }
 
-//   List<DateTime> getWeekDates() {
-//     final today = selectedDate;
-//     return List.generate(7, (index) => today.add(Duration(days: index)));
+//   List<DateTime> getWeekDates() =>
+//       List.generate(7, (index) => selectedDate.add(Duration(days: index)));
+
+//   void updateBooking(DateTime date, {int clinicId = 8, int doctorId = 10}) {
+//     context.read<AvailableBookingCubit>().getAvailableBookings(
+//           date: DateFormat('yyyy-MM-dd').format(date),
+//           clinicId: clinicId,
+//           doctorId: doctorId,
+//         );
 //   }
 
 //   @override
@@ -102,9 +97,10 @@
 //                   const SizedBox(height: 30),
 //                   AboutMeSection(about: doctor.aboutMe),
 //                   const SizedBox(height: 30),
-//                   const Text("Today's Schedule",
-//                       style:
-//                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+//                   const Text(
+//                     "Today's Schedule",
+//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                   ),
 //                   const SizedBox(height: 10),
 //                   Row(
 //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,14 +112,7 @@
 //                             selectedDate =
 //                                 selectedDate.subtract(const Duration(days: 1));
 //                           });
-//                           context
-//                               .read<AvailableBookingCubit>()
-//                               .getAvailableBookings(
-//                                 date: DateFormat('yyyy-MM-dd')
-//                                     .format(selectedDate),
-//                                 clinicId: 8,
-//                                 doctorId: 9,
-//                               );
+//                           updateBooking(selectedDate);
 //                         },
 //                       ),
 //                       Expanded(
@@ -137,19 +126,13 @@
 //                               final isSelected = DateFormat('yyyy-MM-dd')
 //                                       .format(date) ==
 //                                   DateFormat('yyyy-MM-dd').format(selectedDate);
+
 //                               return GestureDetector(
 //                                 onTap: () {
 //                                   setState(() {
 //                                     selectedDate = date;
 //                                   });
-//                                   context
-//                                       .read<AvailableBookingCubit>()
-//                                       .getAvailableBookings(
-//                                         date: DateFormat('yyyy-MM-dd')
-//                                             .format(date),
-//                                         clinicId: 8,
-//                                         doctorId: 9,
-//                                       );
+//                                   updateBooking(date);
 //                                 },
 //                                 child: Container(
 //                                   margin:
@@ -197,14 +180,7 @@
 //                             selectedDate =
 //                                 selectedDate.add(const Duration(days: 1));
 //                           });
-//                           context
-//                               .read<AvailableBookingCubit>()
-//                               .getAvailableBookings(
-//                                 date: DateFormat('yyyy-MM-dd')
-//                                     .format(selectedDate),
-//                                 clinicId: 7,
-//                                 doctorId: 7,
-//                               );
+//                           updateBooking(selectedDate, clinicId: 7, doctorId: 7);
 //                         },
 //                       ),
 //                     ],
@@ -217,9 +193,7 @@
 //                       } else if (bookingState is AvailableBookingFailure) {
 //                         return Text("Failed to load: ${bookingState.message}");
 //                       } else if (bookingState is AvailableBookingSuccess) {
-//                         return AvailableBooking(
-//                           allSlots: bookingState.data,
-//                         );
+//                         return AvailableBooking(allSlots: bookingState.data);
 //                       }
 //                       return const SizedBox.shrink();
 //                     },
@@ -236,6 +210,7 @@
 //     );
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -257,29 +232,46 @@ class DoctorAppointmentScreen extends StatefulWidget {
 }
 
 class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
-  DateTime selectedDate = DateTime.now();
+  late DateTime selectedWeekStart;
+  late List<DateTime> visibleWeekStartDates;
+  late List<DateTime> weekDates;
+
+  int weekOffset = 0;
+  int numberOfVisibleWeeks = 4;
 
   @override
   void initState() {
     super.initState();
     context.read<DoctorCubit>().getDoctorProfile();
+    selectedWeekStart = _getStartOfWeek(DateTime.now());
+    weekDates = updateBooking(selectedWeekStart);
+    visibleWeekStartDates =
+        generateWeekStartDates(weekOffset, numberOfVisibleWeeks);
   }
 
-  List<DateTime> getWeekDates() =>
-      List.generate(7, (index) => selectedDate.add(Duration(days: index)));
+  DateTime _getStartOfWeek(DateTime date) {
+    return date.subtract(Duration(days: date.weekday % 7));
+  }
 
-  void updateBooking(DateTime date, {int clinicId = 8, int doctorId = 10}) {
+  List<DateTime> updateBooking(DateTime startOfWeek,
+      {int clinicId = 8, int doctorId = 10}) {
     context.read<AvailableBookingCubit>().getAvailableBookings(
-          date: DateFormat('yyyy-MM-dd').format(date),
+          date: DateFormat('yyyy-MM-dd').format(startOfWeek),
           clinicId: clinicId,
           doctorId: doctorId,
         );
+
+    return [startOfWeek];
+  }
+
+  List<DateTime> generateWeekStartDates(int startOffset, int count) {
+    final baseDate =
+        _getStartOfWeek(DateTime.now().add(Duration(days: startOffset * 7)));
+    return List.generate(count, (i) => baseDate.add(Duration(days: i * 7)));
   }
 
   @override
   Widget build(BuildContext context) {
-    final weekDates = getWeekDates();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -313,7 +305,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black.withValues(alpha: 0.7),
+                    color: Colors.black.withOpacity(0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -335,10 +327,9 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   const SizedBox(height: 30),
                   AboutMeSection(about: doctor.aboutMe),
                   const SizedBox(height: 30),
-                  const Text(
-                    "Today's Schedule",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  const Text("Today's Schedule",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,10 +338,10 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                         icon: const Icon(Icons.arrow_back_ios),
                         onPressed: () {
                           setState(() {
-                            selectedDate =
-                                selectedDate.subtract(const Duration(days: 1));
+                            weekOffset -= numberOfVisibleWeeks;
+                            visibleWeekStartDates = generateWeekStartDates(
+                                weekOffset, numberOfVisibleWeeks);
                           });
-                          updateBooking(selectedDate);
                         },
                       ),
                       Expanded(
@@ -358,19 +349,20 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                           height: 70,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: weekDates.length,
+                            itemCount: visibleWeekStartDates.length,
                             itemBuilder: (context, index) {
-                              final date = weekDates[index];
-                              final isSelected = DateFormat('yyyy-MM-dd')
-                                      .format(date) ==
-                                  DateFormat('yyyy-MM-dd').format(selectedDate);
+                              final date = visibleWeekStartDates[index];
+                              final isSelected =
+                                  DateFormat('yyyy-MM-dd').format(date) ==
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(selectedWeekStart);
 
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    selectedDate = date;
+                                    selectedWeekStart = date;
+                                    weekDates = updateBooking(date);
                                   });
-                                  updateBooking(date);
                                 },
                                 child: Container(
                                   margin:
@@ -415,10 +407,10 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                         icon: const Icon(Icons.arrow_forward_ios),
                         onPressed: () {
                           setState(() {
-                            selectedDate =
-                                selectedDate.add(const Duration(days: 1));
+                            weekOffset += numberOfVisibleWeeks;
+                            visibleWeekStartDates = generateWeekStartDates(
+                                weekOffset, numberOfVisibleWeeks);
                           });
-                          updateBooking(selectedDate, clinicId: 7, doctorId: 7);
                         },
                       ),
                     ],
