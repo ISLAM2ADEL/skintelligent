@@ -80,7 +80,7 @@ class UserRepository {
       // final String doctorId = await getIt<CacheHelper>().getData(key: ApiKey.id);
 
       final response = await api.get(
-        Endpoint.doctorById(7),
+        Endpoint.doctorById(10),
       );
 
       return Right(DoctorModel.fromJson(response));
