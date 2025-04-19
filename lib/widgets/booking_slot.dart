@@ -37,33 +37,95 @@ import 'package:flutter/material.dart';
 //   }
 // }
 
+// class BookingSlot extends StatelessWidget {
+//   final String time;
+
+//   const BookingSlot({
+//     super.key,
+//     required this.time,
+
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: Container(
+//         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//         decoration: BoxDecoration(
+//           color:  Colors.grey[200],
+//           borderRadius: BorderRadius.circular(10),
+//           border: Border.all(color: Colors.black12),
+//         ),
+//         child: Text(
+//           time,
+//           style: const TextStyle(
+//             color:  Colors.black,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+import 'package:skintelligent/models/available_booking_model.dart';
+import 'package:skintelligent/utiles/booking_store.dart';
+
 class BookingSlot extends StatelessWidget {
   final String time;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final DateTime slotDateTime; // لتحديد وقت الحجز بدقة
 
   const BookingSlot({
     super.key,
     required this.time,
-    required this.isSelected,
-    required this.onTap,
+    required this.slotDateTime,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        final isAlreadyBooked = BookingStore().selectedSlots.any(
+              (slot) => slot.startTime == slotDateTime,
+            );
+
+        final message =
+            isAlreadyBooked ? "Booked before" : "Booking successfully";
+
+        if (!isAlreadyBooked) {
+          BookingStore().selectedSlots.add(
+                AppointmentSlot(
+                  id: 0,
+                  startTime: slotDateTime,
+                  endTime: slotDateTime.add(const Duration(minutes: 20)),
+                  isCanceled: false,
+                  isRepeating: false,
+                  repeatDay: 0,
+                  repeatUntil: slotDateTime,
+                ),
+              );
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: isAlreadyBooked ? Colors.orange : Colors.green,
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.green : Colors.grey[200],
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.black12),
         ),
         child: Text(
           time,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black,
+          style: const TextStyle(
+            color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -47,26 +47,22 @@ import 'booking_slot.dart';
 //   }
 // }
 
-class AvailableBooking extends StatefulWidget {
+// تأكد أنك تستخدم نسخة BookingSlot المعدلة
+
+class AvailableBooking extends StatelessWidget {
   final Map<String, List<AppointmentSlot>> allSlots;
-
+  
   const AvailableBooking({super.key, required this.allSlots});
-
-  @override
-  State<AvailableBooking> createState() => _AvailableBookingState();
-}
-
-class _AvailableBookingState extends State<AvailableBooking> {
-  final Set<AppointmentSlot> selectedSlots = BookingStore().selectedSlots;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: widget.allSlots.entries.map((entry) {
+      children: allSlots.entries.map((entry) {
         final String day = entry.key;
-        final List<AppointmentSlot> slots = entry.value;
-
+        final List<AppointmentSlot> slots = {
+          for (var slot in entry.value) slot.startTime.toIso8601String(): slot
+        }.values.toList();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -85,20 +81,10 @@ class _AvailableBookingState extends State<AvailableBooking> {
                 children: slots.map((slot) {
                   final time =
                       TimeOfDay.fromDateTime(slot.startTime).format(context);
-                  final isSelected = selectedSlots.contains(slot);
 
                   return BookingSlot(
                     time: time,
-                    isSelected: isSelected,
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedSlots.remove(slot);
-                        } else {
-                          selectedSlots.add(slot);
-                        }
-                      });
-                    },
+                    slotDateTime: slot.startTime,
                   );
                 }).toList(),
               ),
