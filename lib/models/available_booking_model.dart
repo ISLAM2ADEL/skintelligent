@@ -48,6 +48,4 @@ class AvailableBookingModel {
 
     return AvailableBookingModel(bookings: parsed);
   }
-
-
 }

@@ -6,6 +6,7 @@ import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cu
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
+import 'package:skintelligent/screens/user_booking/user_booking.dart';
 import 'package:skintelligent/test_space/appoinment.dart';
 import 'package:skintelligent/test_space/login_screen.dart';
 
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.id: (context) => const LoginScreen(),
           Qrcode.id: (context) => const Qrcode(),
           ProfileScreen.id: (context) => ProfileScreen(),
+          UserBookingScreen.id: (context) => const UserBookingScreen(),
           SplashScreen.id: (context) => const SplashScreen(),
           HomePage.id: (context) => const HomePage(),
           Appointment.id: (context) => const Appointment(),

@@ -37,12 +37,4 @@ class AvailableBookingCubit extends Cubit<AvailableBookingState> {
       },
     );
   }
-
-  void changeDay(String day, Map<String, List<AppointmentSlot>> allBookings) {
-    emit(AvailableBookingSuccess(
-      data: allBookings,
-      currentDay: day,
-      currentSlots: allBookings[day] ?? [],
-    ));
-  }
 }

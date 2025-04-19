@@ -288,7 +288,8 @@ class Appointment extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const  AppointmentScreen(),
+                                builder: (context) =>
+                                    const DoctorAppointmentScreen(),
                               ),
                             );
                           },
