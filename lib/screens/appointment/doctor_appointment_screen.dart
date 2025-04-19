@@ -313,7 +313,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
