@@ -223,8 +223,17 @@ import 'package:skintelligent/cubit/available_booking_cubit/available_booking_st
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
 
+
+
 class DoctorAppointmentScreen extends StatefulWidget {
-  const DoctorAppointmentScreen({super.key});
+  const DoctorAppointmentScreen({
+    super.key,
+    required this.doctorId,
+    required this.clinicId,
+  });
+
+  final int doctorId;
+  final int clinicId;
 
   @override
   State<DoctorAppointmentScreen> createState() =>
@@ -253,14 +262,12 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
     return date.subtract(Duration(days: date.weekday % 7));
   }
 
-  List<DateTime> updateBooking(DateTime startOfWeek,
-      {int clinicId = 8, int doctorId = 10}) {
+  List<DateTime> updateBooking(DateTime startOfWeek) {
     context.read<AvailableBookingCubit>().getAvailableBookings(
           date: DateFormat('yyyy-MM-dd').format(startOfWeek),
-          clinicId: clinicId,
-          doctorId: doctorId,
+          clinicId: widget.clinicId,
+          doctorId: widget.doctorId,
         );
-
     return [startOfWeek];
   }
 
@@ -327,9 +334,10 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   const SizedBox(height: 30),
                   AboutMeSection(about: doctor.aboutMe),
                   const SizedBox(height: 30),
-                  const Text("Today's Schedule",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Text(
+                    "Today's Schedule",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -365,8 +373,8 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                                   });
                                 },
                                 child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 5),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 11, vertical: 10),
                                   decoration: BoxDecoration(

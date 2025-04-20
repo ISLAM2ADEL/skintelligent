@@ -289,7 +289,7 @@ class Appointment extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const DoctorAppointmentScreen(),
+                                     DoctorAppointmentScreen(clinicId : 8 , doctorId : 11 ),
                               ),
                             );
                           },
