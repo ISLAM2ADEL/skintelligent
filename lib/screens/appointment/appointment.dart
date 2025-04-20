@@ -58,16 +58,17 @@ class Appointment extends StatelessWidget {
                           height,
                           width,
                           doctorID: doctor.id.toString(),
-                          clinicName:  "SkinCo",
+                          clinicName:  doctor.clinics.first.clinicName,
                           doctorName: "${doctor.firstName} ${doctor.lastName}",
                           experience: doctor.experienceYears.toString(),
-                          doctorPhone: doctor.phoneNumber,
+                          fees: doctor.defaultExaminationFee.toInt(),
                           profilePicture: doctor.profilePicture,
+                          clinicID:doctor.clinics.first.id.toString(),
                           context: context,
                         ),
                       );
                     },
-                    separatorBuilder: (_, __) => SizedBox(height: height * .025),
+                    separatorBuilder: (_, __) => SizedBox(height: height * .01),
                   );
                 } else {
                   return const Center(child: Text("No data available"));
@@ -86,13 +87,14 @@ class Appointment extends StatelessWidget {
         required String clinicName,
         required String doctorName,
         required String experience,
-        required String doctorPhone,
+        required int fees,
         required String profilePicture,
         required String doctorID,
+        required String clinicID,
         required BuildContext context,
       }) {
     return Container(
-      height: height * .17,
+      height: height * .22,
       width: width * .95,
       decoration: BoxDecoration(
         color: Colors.grey.shade300,
@@ -103,82 +105,66 @@ class Appointment extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              //backgroundImage: NetworkImage(profilePicture),
-              backgroundImage: NetworkImage("https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D "),
-              radius: 45,
+              backgroundImage: NetworkImage(profilePicture),
+              radius: 46,
             ),
-            const SizedBox(width: 7),
+            const SizedBox(width: 15),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: height * .02),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      clinicName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    clinicName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    doctorName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Experience Years : $experience Years",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Examination Fee : $fees EGP",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print(doctorID);
+                      print(clinicID);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppointmentScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: width,
+                      height: height*.035,
+                      decoration: BoxDecoration(
+                        color: color7,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Make Appointment",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.deepPurple,
+                          ),
+                        ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: width * .45,
-                          child: Text(
-                            doctorName,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "$experience Years",
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            print(doctorID);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AppointmentScreen(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 85,
-                            height: 25,
-                            decoration: BoxDecoration(
-                              color: color7,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "Appointment",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.deepPurple,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          doctorPhone,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
