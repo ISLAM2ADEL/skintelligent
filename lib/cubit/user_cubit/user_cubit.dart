@@ -41,16 +41,12 @@ class UserCubit extends Cubit<UserState> {
   signUp() async {
     emit(SignUpLoading());
     final response = await userRepository.signUp(
-      firstName: signUpFirstName.text,
-      lastName: signUpLastName.text,
+      name: signUpFirstName.text,
       phone: signUpPhoneNumber.text,
       email: signUpEmail.text,
       password: signUpPassword.text,
       confirmPassword: confirmPassword.text,
-      dateOfBirth: dateOfBirth.text,
-      gender: gender.text,
-      address: address.text,
-      profilePic: profilePic!,
+      profilePic :profilePic as XFile,
     );
     response.fold(
       (errMessage) => emit(SignUpFailure(errMessage: errMessage)),

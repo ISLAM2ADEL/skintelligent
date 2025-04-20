@@ -251,7 +251,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<DoctorCubit>().getDoctorProfile();
+    context.read<DoctorCubit>().getDoctorProfile(widget.doctorId);
     selectedWeekStart = _getStartOfWeek(DateTime.now());
     weekDates = updateBooking(selectedWeekStart);
     visibleWeekStartDates =

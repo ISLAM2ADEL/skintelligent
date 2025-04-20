@@ -12,10 +12,10 @@ class DoctorCubit extends Cubit<DoctorState> {
 
   DoctorModel? doctor;
 
-  Future<void> getDoctorProfile() async {
+  Future<void> getDoctorProfile(int doctorID) async {
     emit(GetDoctorLoading());
 
-    final response = await userRepository.getDoctorProfile(); // assuming this exists
+    final response = await userRepository.getDoctorProfile(doctorID); // assuming this exists
 
     response.fold(
       (err) => emit(GetDoctorFailure(errMessage: err)),

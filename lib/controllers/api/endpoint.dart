@@ -3,8 +3,11 @@ class Endpoint {
   static String baseUrl = "http://skintelligent.runasp.net";
   // static String signIn = "user/signin";
   static String signIn = "/api/auth/login";
-  static String signUp = "user/signup";
-  static String appointmentByWeek = '/api/appointments/week' ; 
+  static String forgetPassword = "/api/auth/forgot-password";
+  static String resetPassword = "/api/auth/reset-password";
+  static String getDoctors = "/api/doctors";
+  static String signUp = "/api/auth/register";
+  static String appointmentByWeek = '/api/appointments/week' ;
   static String doctorById(num id) => "/api/doctors/$id";
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
@@ -21,6 +24,7 @@ class ApiKey {
   static const String password = "password";
   static const String confirmPassword = "confirmPassword";
   static const String token = "token";
+  static const String resetOTP = "resetOTP";
 
   // Doctor/User info
   static const String id = "id";

@@ -6,6 +6,7 @@ import 'package:skintelligent/const/custom_container.dart';
 import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
 import '../../commons.dart';
+import '../../test_space/appoinment.dart';
 
 class Appointment extends StatelessWidget {
   const Appointment({super.key});
@@ -57,13 +58,13 @@ class Appointment extends StatelessWidget {
                         child: doctorContainer(
                           height,
                           width,
-                          doctorID: doctor.id.toString(),
+                          doctorID: doctor.id,
                           clinicName:  doctor.clinics.first.clinicName,
                           doctorName: "${doctor.firstName} ${doctor.lastName}",
                           experience: doctor.experienceYears.toString(),
-                          fees: doctor.defaultExaminationFee.toInt(),
+                          fees: doctor.defaultExaminationFee,
                           profilePicture: doctor.profilePicture,
-                          clinicID:doctor.clinics.first.id.toString(),
+                          clinicID:doctor.clinics.first.id,
                           context: context,
                         ),
                       );
@@ -89,8 +90,8 @@ class Appointment extends StatelessWidget {
         required String experience,
         required int fees,
         required String profilePicture,
-        required String doctorID,
-        required String clinicID,
+        required int doctorID,
+        required int clinicID,
         required BuildContext context,
       }) {
     return Container(
@@ -136,12 +137,10 @@ class Appointment extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      print(doctorID);
-                      print(clinicID);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AppointmentScreen(),
+                          builder: (context) => DoctorAppointmentScreen(doctorId: doctorID, clinicId: clinicID),
                         ),
                       );
                     },

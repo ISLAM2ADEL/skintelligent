@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
+
+import '../../models/appointment_model.dart';
+import '../../models/forget_model.dart';
+import '../../models/reset_model.dart';
 
 class UserRepository {
   final ApiConsumer api;
@@ -51,7 +57,7 @@ class UserRepository {
           ApiKey.confirmPassword: confirmPassword,
           ApiKey.location:
               '{"name":"methalfa","address":"meet halfa","coordinates":[30.1572709,31.224779]}',
-          ApiKey.profilePic: await uploadImageToApi(profilePic)
+          ApiKey.profilePic: await uploadImageToApi(profilePic as File)
         },
       );
       print(response);
@@ -74,13 +80,22 @@ class UserRepository {
       return Left(e.errorModel.errorMessage);
     }
   }
+  Future<Either<String, AppointmentModel>> getAllDoctors() async {
+    try {
+      final response = await api.get(Endpoint.getDoctors);
+      final model = AppointmentModel.fromJson(response);
+      return Right(model);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
 
-  Future<Either<String, DoctorModel>> getDoctorProfile() async {
+  Future<Either<String, DoctorModel>> getDoctorProfile(int doctorID) async {
     try {
       // final String doctorId = await getIt<CacheHelper>().getData(key: ApiKey.id);
 
       final response = await api.get(
-        Endpoint.doctorById(10),
+        Endpoint.doctorById(doctorID),
       );
 
       return Right(DoctorModel.fromJson(response));
@@ -88,7 +103,48 @@ class UserRepository {
       return Left(e.errorModel.errorMessage);
     }
   }
-  // In your UserRepository
+
+  Future<Either<String, ForgetModel>> forgetPassword({
+    required String email,
+  }) async {
+    try {
+      final response = await api.post(
+        Endpoint.forgetPassword,
+        isFormData: false,
+        data: {
+          ApiKey.email: email,
+        },
+      );
+      print(response);
+      final forgetModel = ForgetModel.fromJson(response);
+      return Right(forgetModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, ResetModel>> resetPassword({
+    required String email,
+    required String password,
+    required String resetOTP,
+  }) async {
+    try {
+      final response = await api.post(
+        Endpoint.resetPassword,
+        isFormData: false,
+        data: {
+          ApiKey.email: email,
+          ApiKey.password: password,
+          ApiKey.resetOTP: resetOTP,
+        },
+      );
+      print(response);
+      final resetModel = ResetModel.fromJson(response);
+      return Right(resetModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
 
   Future<Either<String, AvailableBookingModel>> getAvailableBookings({
     required String date,

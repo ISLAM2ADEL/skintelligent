@@ -1,18 +1,25 @@
+import '../controllers/api/endpoint.dart';
 import 'clinic_model.dart';
 
 class DoctorModel {
   final int id;
   final String firstName;
   final String lastName;
-  final String dateOfBirth;
   final int experienceYears;
-  final double defaultExaminationFee;
-  final double defaultConsultationFee;
   final String profilePicture;
   final bool isApproved;
-  final String createdDate;
-  final String updatedDate;
   final List<ClinicModel> clinics;
+  final DateTime dateOfBirth;
+  final String gender;
+  final String licenseNumber;
+  final String phoneNumber;
+  final int defaultExaminationFee;
+  final int defaultConsultationFee;
+  final String aboutMe;
+  final String qualification;
+  final DateTime createdDate;
+  final DateTime updatedDate;
+  final String email;
 
   DoctorModel({
     required this.id,
@@ -27,6 +34,12 @@ class DoctorModel {
     required this.createdDate,
     required this.updatedDate,
     required this.clinics,
+    required this.gender,
+    required this.licenseNumber,
+    required this.phoneNumber,
+    required this.aboutMe,
+    required this.qualification,
+    required this.email,
   });
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
@@ -34,14 +47,22 @@ class DoctorModel {
       id: json['id'] ?? 0,
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
-      dateOfBirth: json['dateOfBirth'] ?? '',
-      experienceYears: json['experienceYears'] ?? 0,
-      defaultExaminationFee: (json['defaultExaminationFee'] as num?)?.toDouble() ?? 0.0,
-      defaultConsultationFee: (json['defaultConsultationFee'] as num?)?.toDouble() ?? 0.0,
-      profilePicture: json['profilePicture'] ?? '',
-      isApproved: json['isApproved'] ?? false,
-      createdDate: json['createdDate'] ?? '',
-      updatedDate: json['updatedDate'] ?? '',
+      gender: json[ApiKey.gender] ?? '',
+        licenseNumber : json[ApiKey.licenseNumber] ?? '',
+        dateOfBirth : DateTime.parse(json[ApiKey.dateOfBirth]),
+        experienceYears : (json[ApiKey.experienceYears] as num?)?.toInt() ?? 0,
+        phoneNumber : json[ApiKey.phone] ?? '',
+        defaultExaminationFee :
+            (json[ApiKey.defaultExaminationFee] as num?)?.toInt() ?? 0,
+        defaultConsultationFee :
+            (json[ApiKey.defaultConsultationFee] as num?)?.toInt() ?? 0,
+        profilePicture : json[ApiKey.profilePic] ?? '',
+        aboutMe : json[ApiKey.aboutMe] ?? '',
+        qualification : json[ApiKey.qualification] ?? '',
+        isApproved : json[ApiKey.isApproved] ?? false,
+        createdDate : DateTime.parse(json[ApiKey.createdDate]),
+        updatedDate : DateTime.parse(json[ApiKey.updatedDate]),
+        email : json[ApiKey.email] ?? '',
       clinics: (json['clinics'] as List<dynamic>?)
           ?.map((e) => ClinicModel.fromJson(e))
           .toList() ??
