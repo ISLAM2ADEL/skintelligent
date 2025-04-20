@@ -1,318 +1,449 @@
 // import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:intl/intl.dart';
+// import 'package:skintelligent/widgets/doctor_card.dart';
+// import 'package:skintelligent/widgets/stats_row.dart';
+// import 'package:skintelligent/widgets/about_me_section.dart';
+// import 'package:skintelligent/widgets/available_booking.dart';
+// import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
+// import 'package:skintelligent/cubit/available_booking_cubit/available_booking_state.dart';
+// import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
+// import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
 
-// class MedicalAppointmentScreen extends StatelessWidget {
-//   const MedicalAppointmentScreen({super.key});
+// class DoctorAppointmentScreen extends StatefulWidget {
+//   const DoctorAppointmentScreen({super.key});
+
+//   @override
+//   State<DoctorAppointmentScreen> createState() =>
+//       _DoctorAppointmentScreenState();
+// }
+
+// class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
+//   DateTime selectedDate = DateTime.now();
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     context.read<DoctorCubit>().getDoctorProfile();
+//   }
+
+//   List<DateTime> getWeekDates() =>
+//       List.generate(7, (index) => selectedDate.add(Duration(days: index)));
+
+//   void updateBooking(DateTime date, {int clinicId = 8, int doctorId = 10}) {
+//     context.read<AvailableBookingCubit>().getAvailableBookings(
+//           date: DateFormat('yyyy-MM-dd').format(date),
+//           clinicId: clinicId,
+//           doctorId: doctorId,
+//         );
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final Size size = MediaQuery.of(context).size;
+//     final weekDates = getWeekDates();
 
 //     return Scaffold(
+//       backgroundColor: Colors.white,
 //       appBar: AppBar(
-//         backgroundColor:
-//             const Color(0xFF5555eb), // Background matching the top gradient
+//         title: const Text('Doctor Info', style: TextStyle(color: Colors.black)),
+//         backgroundColor: Colors.white,
 //         elevation: 0,
+//         leading: const BackButton(color: Colors.black),
 //       ),
-//       backgroundColor:
-//           const Color(0xFF5555eb), // Background matching the top gradient
-//       body: Stack(
-//         children: [
-//           // Doctor Image
-//           Positioned(
-//             top: 0,
-//             left: 0,
-//             right: 0,
-//             child: Center(
-//               child: Image.asset(
-//                 'assets/images/removed doctor.png', // replace with your asset path
-//                 height: size.height * 0.5,
-//               ),
-//             ),
-//           ),
+//       body: BlocBuilder<DoctorCubit, DoctorState>(
+//         builder: (context, state) {
+//           if (state is GetDoctorLoading) {
+//             return const Center(child: CircularProgressIndicator());
+//           }
 
-//           // Bottom Container
-//           Positioned(
-//             bottom: 0,
-//             left: 0,
-//             right: 0,
-//             child: Container(
-//               height: size.height * 0.45,
-//               padding: const EdgeInsets.all(24),
-//               decoration: const BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+//           if (state is GetDoctorFailure) {
+//             return Center(
+//               child: Text(
+//                 'Error: ${state.errMessage}',
+//                 style: const TextStyle(color: Colors.red),
 //               ),
+//             );
+//           }
+
+//           if (state is GetDoctorSuccess) {
+//             final doctor = state.doctor;
+
+//             if (!doctor.isApproved) {
+//               return Center(
+//                 child: Text(
+//                   "The doctor is still not approved 😔",
+//                   style: TextStyle(
+//                     fontSize: 18,
+//                     fontWeight: FontWeight.w500,
+//                     color: Colors.black.withValues(alpha: 0.7),
+//                   ),
+//                   textAlign: TextAlign.center,
+//                 ),
+//               );
+//             }
+
+//             return SingleChildScrollView(
+//               padding: const EdgeInsets.all(20),
 //               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
 //                 children: [
-//                   const SizedBox(height: 16),
+//                   DoctorCard(doctor: doctor),
+//                   const SizedBox(height: 24),
+//                   StatsRow(
+//                     experienceYears: doctor.experienceYears,
+//                     gender: doctor.gender,
+//                     email: doctor.email,
+//                   ),
+//                   const SizedBox(height: 30),
+//                   AboutMeSection(about: doctor.aboutMe),
+//                   const SizedBox(height: 30),
 //                   const Text(
-//                     'More Comfortable Chat\nWith the Doctor',
-//                     textAlign: TextAlign.center,
-//                     style: TextStyle(
-//                       fontSize: 22,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.black,
-//                     ),
+//                     "Today's Schedule",
+//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
 //                   ),
-//                   const SizedBox(height: 12),
-//                   Text(
-//                     'Book an appointment with doctor. Chat with doctor via appointment letter and get consultation.',
-//                     textAlign: TextAlign.center,
-//                     style: TextStyle(
-//                       fontSize: 14,
-//                       color: Colors.grey[600],
-//                     ),
-//                   ),
-//                   const SizedBox(height: 20),
+//                   const SizedBox(height: 10),
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       IconButton(
+//                         icon: const Icon(Icons.arrow_back_ios),
+//                         onPressed: () {
+//                           setState(() {
+//                             selectedDate =
+//                                 selectedDate.subtract(const Duration(days: 1));
+//                           });
+//                           updateBooking(selectedDate);
+//                         },
+//                       ),
+//                       Expanded(
+//                         child: SizedBox(
+//                           height: 70,
+//                           child: ListView.builder(
+//                             scrollDirection: Axis.horizontal,
+//                             itemCount: weekDates.length,
+//                             itemBuilder: (context, index) {
+//                               final date = weekDates[index];
+//                               final isSelected = DateFormat('yyyy-MM-dd')
+//                                       .format(date) ==
+//                                   DateFormat('yyyy-MM-dd').format(selectedDate);
 
-//                   // Page Indicator
-
-//                   const SizedBox(height: 25),
-
-//                   // Get Started Button
-//                   SizedBox(
-//                     width: double.infinity,
-//                     height: 50,
-//                     child: ElevatedButton(
-//                       onPressed: () {
-//                         // Navigate to next screen
-//                       },
-//                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: const Color(0xFF5A46FF),
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(12),
+//                               return GestureDetector(
+//                                 onTap: () {
+//                                   setState(() {
+//                                     selectedDate = date;
+//                                   });
+//                                   updateBooking(date);
+//                                 },
+//                                 child: Container(
+//                                   margin:
+//                                       const EdgeInsets.symmetric(horizontal: 5),
+//                                   padding: const EdgeInsets.symmetric(
+//                                       horizontal: 11, vertical: 10),
+//                                   decoration: BoxDecoration(
+//                                     color: isSelected
+//                                         ? Colors.blue
+//                                         : Colors.grey[200],
+//                                     borderRadius: BorderRadius.circular(12),
+//                                   ),
+//                                   child: Column(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Text(
+//                                         DateFormat('E').format(date),
+//                                         style: TextStyle(
+//                                           color: isSelected
+//                                               ? Colors.white
+//                                               : Colors.black,
+//                                         ),
+//                                       ),
+//                                       const SizedBox(height: 5),
+//                                       Text(
+//                                         DateFormat('d').format(date),
+//                                         style: TextStyle(
+//                                           color: isSelected
+//                                               ? Colors.white
+//                                               : Colors.black,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ),
+//                               );
+//                             },
+//                           ),
 //                         ),
 //                       ),
-//                       child: const Text(
-//                         'Get Started',
-//                         style: TextStyle(fontSize: 16, color: Colors.white),
+//                       IconButton(
+//                         icon: const Icon(Icons.arrow_forward_ios),
+//                         onPressed: () {
+//                           setState(() {
+//                             selectedDate =
+//                                 selectedDate.add(const Duration(days: 1));
+//                           });
+//                           updateBooking(selectedDate, clinicId: 7, doctorId: 7);
+//                         },
 //                       ),
-//                     ),
+//                     ],
 //                   ),
+//                   const SizedBox(height: 10),
+//                   BlocBuilder<AvailableBookingCubit, AvailableBookingState>(
+//                     builder: (context, bookingState) {
+//                       if (bookingState is AvailableBookingLoading) {
+//                         return const Center(child: CircularProgressIndicator());
+//                       } else if (bookingState is AvailableBookingFailure) {
+//                         return Text("Failed to load: ${bookingState.message}");
+//                       } else if (bookingState is AvailableBookingSuccess) {
+//                         return AvailableBooking(allSlots: bookingState.data);
+//                       }
+//                       return const SizedBox.shrink();
+//                     },
+//                   ),
+//                   const SizedBox(height: 30),
 //                 ],
 //               ),
-//             ),
-//           ),
-//         ],
+//             );
+//           }
+
+//           return const SizedBox.shrink();
+//         },
 //       ),
 //     );
 //   }
 // }
-import 'package:flutter/material.dart';
 
-class AppointmentScreen extends StatelessWidget {
-  const AppointmentScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:skintelligent/widgets/doctor_card.dart';
+import 'package:skintelligent/widgets/stats_row.dart';
+import 'package:skintelligent/widgets/about_me_section.dart';
+import 'package:skintelligent/widgets/available_booking.dart';
+import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
+import 'package:skintelligent/cubit/available_booking_cubit/available_booking_state.dart';
+import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
+import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
+
+
+
+class DoctorAppointmentScreen extends StatefulWidget {
+  const DoctorAppointmentScreen({
+    super.key,
+    required this.doctorId,
+    required this.clinicId,
+  });
+
+  final int doctorId;
+  final int clinicId;
+
+  @override
+  State<DoctorAppointmentScreen> createState() =>
+      _DoctorAppointmentScreenState();
+}
+
+class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
+  late DateTime selectedWeekStart;
+  late List<DateTime> visibleWeekStartDates;
+  late List<DateTime> weekDates;
+
+  int weekOffset = 0;
+  int numberOfVisibleWeeks = 4;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<DoctorCubit>().getDoctorProfile();
+    selectedWeekStart = _getStartOfWeek(DateTime.now());
+    weekDates = updateBooking(selectedWeekStart);
+    visibleWeekStartDates =
+        generateWeekStartDates(weekOffset, numberOfVisibleWeeks);
+  }
+
+  DateTime _getStartOfWeek(DateTime date) {
+    return date.subtract(Duration(days: date.weekday % 7));
+  }
+
+  List<DateTime> updateBooking(DateTime startOfWeek) {
+    context.read<AvailableBookingCubit>().getAvailableBookings(
+          date: DateFormat('yyyy-MM-dd').format(startOfWeek),
+          clinicId: widget.clinicId,
+          doctorId: widget.doctorId,
+        );
+    return [startOfWeek];
+  }
+
+  List<DateTime> generateWeekStartDates(int startOffset, int count) {
+    final baseDate =
+        _getStartOfWeek(DateTime.now().add(Duration(days: startOffset * 7)));
+    return List.generate(count, (i) => baseDate.add(Duration(days: i * 7)));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title:
-            const Text('My Appointment', style: TextStyle(color: Colors.black)),
+        title: const Text('Doctor Info', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // Doctor Card
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 10,
-                    color: Colors.grey.withOpacity(0.1),
-                    offset: const Offset(0, 5),
-                  )
-                ],
-              ),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(20)),
-                    child: Image.asset(
-                      'assets/images/removed doctor.png', // Replace with your image
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                      height: 200,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Dr. Jenny Wilson",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 4),
-                        Text("Neurologist | Vcare Clinic",
-                            style: TextStyle(color: Colors.grey)),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.star, color: Colors.amber, size: 20),
-                            SizedBox(width: 4),
-                            Text("5.0",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            SizedBox(width: 4),
-                            Text("(332 reviews)",
-                                style: TextStyle(color: Colors.grey)),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
+      body: BlocBuilder<DoctorCubit, DoctorState>(
+        builder: (context, state) {
+          if (state is GetDoctorLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            // Stats Row
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _StatItem(
-                    icon: Icons.people, label: "120+", sublabel: "Patients"),
-                _StatItem(
-                    icon: Icons.calendar_today,
-                    label: "7+",
-                    sublabel: "Years Exp"),
-                _StatItem(
-                    icon: Icons.star_border, label: "4.9", sublabel: "Rating"),
-                _StatItem(
-                    icon: Icons.reviews, label: "100+", sublabel: "Reviews"),
-              ],
-            ),
-            const SizedBox(height: 30),
-
-            // About Me
-            const Align(
-              alignment: Alignment.centerLeft,
+          if (state is GetDoctorFailure) {
+            return Center(
               child: Text(
-                "About Me",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                'Error: ${state.errMessage}',
+                style: const TextStyle(color: Colors.red),
               ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Dr. Carly Angel is the top most immunologists specialist in Crist Hospital in London, UK.",
-              style: TextStyle(color: Colors.grey),
-              textAlign: TextAlign.justify,
-            ),
-            const SizedBox(height: 30),
+            );
+          }
 
-            // Available Booking
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Available Booking",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: const [
-                BookingSlot(time: "10:00 AM"),
-                BookingSlot(time: "11:30 AM"),
-                BookingSlot(time: "1:00 PM"),
-                BookingSlot(time: "2:30 PM"),
-                BookingSlot(time: "4:00 PM"),
-                BookingSlot(time: "5:30 PM"),
-              ],
-            ),
-            const SizedBox(height: 30),
+          if (state is GetDoctorSuccess) {
+            final doctor = state.doctor;
 
-            // Voice Call Button
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  // Add call action here
-                },
-                icon: const Icon(Icons.call, color: Colors.white),
-                label: const Text("Voice Call (14.30 - 15.00 PM)",
-                    style: TextStyle(fontSize: 16, color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF5A46FF),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+            if (!doctor.isApproved) {
+              return Center(
+                child: Text(
+                  "The doctor is still not approved 😔",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black.withOpacity(0.7),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
+              );
+            }
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DoctorCard(doctor: doctor),
+                  const SizedBox(height: 24),
+                  StatsRow(
+                    experienceYears: doctor.experienceYears,
+                    gender: doctor.gender,
+                    email: doctor.email,
+                  ),
+                  const SizedBox(height: 30),
+                  AboutMeSection(about: doctor.aboutMe),
+                  const SizedBox(height: 30),
+                  const Text(
+                    "Today's Schedule",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios),
+                        onPressed: () {
+                          setState(() {
+                            weekOffset -= numberOfVisibleWeeks;
+                            visibleWeekStartDates = generateWeekStartDates(
+                                weekOffset, numberOfVisibleWeeks);
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 70,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: visibleWeekStartDates.length,
+                            itemBuilder: (context, index) {
+                              final date = visibleWeekStartDates[index];
+                              final isSelected =
+                                  DateFormat('yyyy-MM-dd').format(date) ==
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(selectedWeekStart);
+
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedWeekStart = date;
+                                    weekDates = updateBooking(date);
+                                  });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 11, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.blue
+                                        : Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        DateFormat('E').format(date),
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        DateFormat('d').format(date),
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        onPressed: () {
+                          setState(() {
+                            weekOffset += numberOfVisibleWeeks;
+                            visibleWeekStartDates = generateWeekStartDates(
+                                weekOffset, numberOfVisibleWeeks);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  BlocBuilder<AvailableBookingCubit, AvailableBookingState>(
+                    builder: (context, bookingState) {
+                      if (bookingState is AvailableBookingLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (bookingState is AvailableBookingFailure) {
+                        return Text("Failed to load: ${bookingState.message}");
+                      } else if (bookingState is AvailableBookingSuccess) {
+                        return AvailableBooking(allSlots: bookingState.data);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
+            );
+          }
 
-class _StatItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String sublabel;
-
-  const _StatItem(
-      {required this.icon, required this.label, required this.sublabel});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, color: Color(0xFF5A46FF)),
-        const SizedBox(height: 8),
-        Text(label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        Text(sublabel, style: const TextStyle(color: Colors.grey)),
-      ],
-    );
-  }
-}
-
-class BookingSlot extends StatelessWidget {
-  final String time;
-
-  const BookingSlot({super.key, required this.time});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // Handle booking tap
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Selected: $time")),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.05),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: Text(
-          time,
-          style: const TextStyle(fontWeight: FontWeight.w500),
-        ),
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

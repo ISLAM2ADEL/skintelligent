@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
-import 'package:skintelligent/screens/qr_code/qr_code.dart';
-
-import '../SignUpScreen/Registerscreen.dart';
+import 'package:skintelligent/screens/user_booking/user_booking.dart';
+import 'package:skintelligent/widgets/logout_button.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
@@ -16,6 +14,7 @@ class ProfileScreen extends StatelessWidget {
     Colors.lightBlue,
     Colors.blue,
     Colors.grey,
+    Colors.orange, // لون جديد للحجوزات
   ];
 
   final List<IconData> iconPalitte = [
@@ -23,13 +22,15 @@ class ProfileScreen extends StatelessWidget {
     Icons.notifications,
     Icons.language,
     CupertinoIcons.trash_fill,
+    Icons.calendar_today, // أيقونة للحجوزات
   ];
 
   final List<String> title = [
     "Personal Information",
     "Notification",
     "Change Language",
-    "Delete Account "
+    "Delete Account",
+    "My Bookings",
   ];
 
   @override
@@ -104,7 +105,12 @@ class ProfileScreen extends StatelessWidget {
                         primaryIcon: iconPalitte[index],
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, Registerscreen.id);
+                        if (index == 4) {
+                          // انتقل إلى صفحة الحجوزات
+                          Navigator.pushNamed(context, UserBookingScreen.id);
+                        } else {
+                          Navigator.pushNamed(context, Registerscreen.id);
+                        }
                       },
                     );
                   },
