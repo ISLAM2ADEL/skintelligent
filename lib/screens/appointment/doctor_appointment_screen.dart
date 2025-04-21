@@ -223,8 +223,6 @@ import 'package:skintelligent/cubit/available_booking_cubit/available_booking_st
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
 
-
-
 class DoctorAppointmentScreen extends StatefulWidget {
   const DoctorAppointmentScreen({
     super.key,
@@ -335,7 +333,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   AboutMeSection(about: doctor.aboutMe),
                   const SizedBox(height: 30),
                   const Text(
-                    "Today's Schedule",
+                    "Weekly's Schedule",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -373,8 +371,8 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                                   });
                                 },
                                 child: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 5),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 11, vertical: 10),
                                   decoration: BoxDecoration(
