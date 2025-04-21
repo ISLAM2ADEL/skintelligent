@@ -1,5 +1,6 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:skintelligent/test_space/screens/test_otp_verification_screen.dart';
 // import '../cubit/user_cubit.dart';
 // import '../repositories/user_repository.dart';
 // import 'package:dio/dio.dart';
@@ -59,7 +60,8 @@
 //               children: [
 //                 TextFormField(
 //                     controller: _emailController,
-//                     decoration: const InputDecoration(labelText: 'Email')),
+//                     decoration: const InputDecoration(labelText: 'Email'),
+//                     keyboardType: TextInputType.emailAddress),
 //                 TextFormField(
 //                     controller: _passwordController,
 //                     decoration: const InputDecoration(labelText: 'Password'),
@@ -92,6 +94,14 @@
 //                       ScaffoldMessenger.of(context).showSnackBar(
 //                         SnackBar(content: Text(state.model.message)),
 //                       );
+//                       Navigator.push(
+//                         context,
+//                         MaterialPageRoute(
+//                           builder: (context) => TestOtpVerificationScreen(
+//                             email: _emailController.text.trim(),
+//                           ),
+//                         ),
+//                       );
 //                     } else if (state is UserFailure) {
 //                       ScaffoldMessenger.of(context).showSnackBar(
 //                         SnackBar(content: Text('Error: ${state.error}')),
@@ -116,9 +126,11 @@
 //     );
 //   }
 // }
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/test_space/screens/test_otp_verification_screen.dart';
 import '../cubit/user_cubit.dart';
 import '../repositories/user_repository.dart';
@@ -143,6 +155,19 @@ class _TestSignUpScreenState extends State<TestSignUpScreen> {
   final _genderController = TextEditingController();
   final _addressController = TextEditingController();
 
+  String? _selectedImagePath;
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        
+        _selectedImagePath = pickedFile.path;
+      });
+    }
+  }
+
   void _submit(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       final data = {
@@ -156,7 +181,7 @@ class _TestSignUpScreenState extends State<TestSignUpScreen> {
                 DateTime.now().toIso8601String(),
         "gender": _genderController.text.trim(),
         "address": _addressController.text.trim(),
-        "profilePicture":
+        "profilePicture": _selectedImagePath ??
             "http://skintelligent.runasp.net/image/doctorProfilePictures/default.jpg",
       };
 
@@ -177,6 +202,22 @@ class _TestSignUpScreenState extends State<TestSignUpScreen> {
             key: _formKey,
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: _pickImageFromGallery,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: _selectedImagePath != null
+                        ? FileImage(File(_selectedImagePath!))
+                        : const NetworkImage(
+                            "http://skintelligent.runasp.net/image/doctorProfilePictures/default.jpg",
+                          ) as ImageProvider,
+                    child: _selectedImagePath == null
+                        ? const Icon(Icons.camera_alt,
+                            size: 30, color: Colors.white)
+                        : null,
+                  ),
+                ),
+                const SizedBox(height: 16),
                 TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(labelText: 'Email'),
