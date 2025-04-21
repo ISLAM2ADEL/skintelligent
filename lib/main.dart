@@ -12,6 +12,7 @@ import 'package:skintelligent/screens/user_booking/user_booking.dart';
 import 'package:skintelligent/test_space/appoinment.dart';
 import 'package:skintelligent/test_space/login_screen.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
+import 'package:skintelligent/test_space/screens/test_sign_up_screen.dart';
 import 'commons.dart';
 
 void main() async {
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
           create: (context) => OnboardingCubit(),
         ),
         BlocProvider(
-          create: (context) => AppointmentCubit(UserRepository(api: DioConsumer(dio: Dio()))),
+          create: (context) =>
+              AppointmentCubit(UserRepository(api: DioConsumer(dio: Dio()))),
         ),
         BlocProvider(
           create: (context) => ChatbotcubitCubit(),
@@ -80,13 +82,13 @@ class MyApp extends StatelessWidget {
           LoginScreenTest.id: (context) => LoginScreenTest(),
           AppointmentScreen.id: (context) => const AppointmentScreen(),
           ResetPassword.id: (context) => const ResetPassword(),
-          ForgetScreen.id:(context)=>const ForgetScreen()
+          ForgetScreen.id: (context) => const ForgetScreen(),
+          TestSignUpScreen.id: (context) => TestSignUpScreen()
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
-        initialRoute: LoginScreen.id,
+        initialRoute: TestSignUpScreen.id,
       ),
     );
   }
 }
-
