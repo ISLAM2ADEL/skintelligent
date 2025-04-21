@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
-        initialRoute: TestSignUpScreen.id,
+        initialRoute: LoginScreen.id,
       ),
     );
   }
