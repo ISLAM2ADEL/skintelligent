@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skintelligent/cubit/splash_cubit/splash_cubit.dart';
+import 'package:skintelligent/commons.dart';
 
 import '../../const/const.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
+  static const String id = 'SplashScreen';
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -23,7 +21,7 @@ class SplashScreen extends StatelessWidget {
                 const Text(
                   "Welcome to",
                   style: TextStyle(
-                    color: font1,
+                    color: color1,
                     fontSize: 38,
                   ),
                 ),

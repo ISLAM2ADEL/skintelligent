@@ -18,8 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
-environment:
-  sdk: ^3.5.0
+environment: 
+  sdk: ^3.5.3
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -40,11 +40,20 @@ dependencies:
   animated_text_kit: ^4.2.2
   modal_progress_hud_nsn: ^0.5.1
   smooth_page_indicator: ^1.2.0+3
-  google_fonts: ^6.2.1
-  country_picker: ^2.0.27
-  flutter_datetime_picker: ^1.5.1
+  font_awesome_flutter: ^10.8.0
+  permission_handler: ^11.3.1
+  camera: ^0.11.1
+  path_provider: ^2.1.5
+  path: ^1.9.0
+  mobile_scanner: ^6.0.6
+  dio: ^5.8.0+1
   image_picker: ^1.1.2
-  intl: ^0.17.0
+  google_fonts: ^6.2.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  http: ^1.3.0
+  provider: ^6.1.4
+
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +64,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

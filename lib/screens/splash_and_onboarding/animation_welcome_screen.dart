@@ -8,31 +8,39 @@ class AnimationWelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AnimatedTextKit(
-          animatedTexts: [
-            TyperAnimatedText(
-              'Skintelligent',
-              textStyle: const TextStyle(
-                color: Colors.cyan,
-                fontSize: 50,
-              ),
+        child: SizedBox(
+          width: width * .9,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: AnimatedTextKit(
+              animatedTexts: [
+                TyperAnimatedText(
+                  'Skintelligent',
+                  textStyle: const TextStyle(
+                    color: Colors.cyan,
+                    fontSize: 50,
+                  ),
+                ),
+                TyperAnimatedText(
+                  'Your Health, One Scan Away!',
+                  textStyle: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+              onFinished: () {
+                // Navigate to another screen after the animation ends
+                Get.off(const Onboarding());
+              },
+              isRepeatingAnimation:
+                  false, // Ensure the animation runs only once
             ),
-            TyperAnimatedText(
-              'Your Health, One Scan Away!',
-              textStyle: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-          onFinished: () {
-            // Navigate to another screen after the animation ends
-            Get.off(const Onboarding());
-          },
-          isRepeatingAnimation: false, // Ensure the animation runs only once
+          ),
         ),
       ),
     );
