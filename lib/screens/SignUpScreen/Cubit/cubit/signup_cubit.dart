@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:skintelligent/Helpers/KApi.dart';
@@ -25,10 +23,10 @@ class SignupCubit extends Cubit<SignupState> {
       emit(SignupcubitImagePicked(File(pickedFile.path)));
     }
   }
+
   // -------------------------------------------------------------------//
 
-  // Reister
-
+  // Register Function (Fix Null Errors)
   void signUp({
     required String email,
     required String password,
@@ -38,6 +36,7 @@ class SignupCubit extends Cubit<SignupState> {
   }) async {
     try {
       emit(Signuploadingstate());
+
       final response = await DioHelpers.postData(path: KApi.register, body: {
         "email": email,
         "password": password,
@@ -46,12 +45,17 @@ class SignupCubit extends Cubit<SignupState> {
       });
 
       Registermodel signupModel = Registermodel.fromJson(response.data);
+
+      // Fix null error: Ensure status is checked safely
       if (signupModel.status ?? false) {
+        // Fix null error: Ensure token is not null
         HiveHelper.setToken(signupModel.data?.token ?? "");
-        Get.offAll((HomePage));
+
+        Get.offAll(() => HomePage()); // Fix navigation call
+
         emit(SignupSuccessState());
       } else {
-        emit(SignupFailureState(signupModel.message ?? "Error"));
+        emit(SignupFailureState(signupModel.message ?? "Registration failed"));
       }
     } catch (e) {
       emit(SignupFailureState(e.toString()));
