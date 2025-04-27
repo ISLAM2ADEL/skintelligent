@@ -8,6 +8,7 @@ class ForgetScreen extends StatelessWidget {
   static const String id = 'ForgetScreen';
   @override
   Widget build(BuildContext context) {
+    final cubit=context.read<ForgetCubit>();
     return BlocConsumer<ForgetCubit, ForgetState>(
       listener: (context, state) {
         if (state is ForgetSuccess) {
@@ -16,9 +17,11 @@ class ForgetScreen extends StatelessWidget {
               content: Text(state.successMessage),
             ),
           );
-          Future.delayed(Duration(seconds: 1), () {
-            Navigator.pushReplacementNamed(context, ResetPassword.id);
-          });
+          Navigator.pushReplacementNamed(
+            context,
+            ResetPassword.id,
+            arguments: cubit.getEmail(), // Pass the collected email
+          );
         } else if (state is ForgetFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
