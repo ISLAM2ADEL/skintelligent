@@ -1,5 +1,6 @@
 // lib/features/doctor/presentation/widgets/about_me_section.dart
 import 'package:flutter/material.dart';
+import 'package:skintelligent/widgets/review_screen.dart';
 
 class AboutMeSection extends StatelessWidget {
   final String about;
@@ -17,6 +18,13 @@ class AboutMeSection extends StatelessWidget {
         Text(about,
             style: const TextStyle(color: Colors.grey),
             textAlign: TextAlign.justify),
+        const SizedBox(height: 20),
+        GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, ReviewScreen.id);
+            },
+            child: const Text("Show Reviews",
+                style: TextStyle(color: Colors.blue))),
       ],
     );
   }
