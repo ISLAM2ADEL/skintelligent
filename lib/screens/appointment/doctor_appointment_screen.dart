@@ -302,15 +302,14 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
 
           if (state is GetDoctorSuccess) {
             final doctor = state.doctor;
-
-            if (!doctor.isApproved) {
+            if (doctor.isApproved) {
               return Center(
                 child: Text(
                   "The doctor is still not approved 😔",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -326,7 +325,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   const SizedBox(height: 24),
                   StatsRow(
                     experienceYears: doctor.experienceYears,
-                    gender: doctor.gender,
+                    phoneNumber: doctor.phoneNumber,
                     email: doctor.email,
                   ),
                   const SizedBox(height: 30),

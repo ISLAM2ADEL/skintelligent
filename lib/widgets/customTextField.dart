@@ -7,17 +7,20 @@ class Customtextfield extends StatelessWidget {
       required this.MyController,
       @required this.validate,
       required this.myIcon,
+      this.isEmail =false,
       this.sufIcon});
   // Attributes
   TextEditingController MyController;
   String? hintM;
   IconData myIcon;
   IconData? sufIcon;
+  bool isEmail;
   String? Function(String?)? validate;
   //---------------------------------------------
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: isEmail ?true:false,
       controller: MyController,
       validator: validate,
       decoration: InputDecoration(

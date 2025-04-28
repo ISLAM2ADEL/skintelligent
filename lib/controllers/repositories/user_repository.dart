@@ -29,7 +29,7 @@ class UserRepository {
       );
       final user = SigninModel.fromJson(response);
       // final decodedToken = JwtDecoder.decode(user.token);
-      await getIt<CacheHelper>().saveData(key: ApiKey.token, value: user.token);
+      await getIt<CacheHelper>().saveData(key: ApiKey.Authorization, value: user.token);
       // await getIt<CacheHelper>().saveData(key: ApiKey.id, value: decodedToken[ApiKey.id]);
       return Right(user);
     } on ServerException catch (e) {
@@ -92,17 +92,23 @@ class UserRepository {
 
   Future<Either<String, DoctorModel>> getDoctorProfile(int doctorID) async {
     try {
-      // final String doctorId = await getIt<CacheHelper>().getData(key: ApiKey.id);
+      final response = await api.get(Endpoint.doctorById(doctorID));
 
-      final response = await api.get(
-        Endpoint.doctorById(doctorID),
-      );
-
-      return Right(DoctorModel.fromJson(response));
+      if (response is List && response.isNotEmpty) {
+        // ✅ Pick the first doctor from the list
+        final doctorData = response.first as Map<String, dynamic>;
+        return Right(DoctorModel.fromJson(doctorData));
+      } else {
+        // ❗ Handle if list is empty
+        return Left('Doctor not found.');
+      }
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
+    } catch (e) {
+      return Left(e.toString());
     }
   }
+
 
   Future<Either<String, ForgetModel>> forgetPassword({
     required String email,

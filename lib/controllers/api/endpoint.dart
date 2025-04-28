@@ -44,7 +44,7 @@ class ApiKey {
   static const String isApproved = "isApproved";
   static const String createdDate = "createdDate";
   static const String updatedDate = "updatedDate";
-
+  static String Authorization = "Authorization";
   // Location (if used later)
   static const String location = "location";
   // Available booking

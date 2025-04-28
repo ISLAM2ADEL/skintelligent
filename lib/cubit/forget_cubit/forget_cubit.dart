@@ -32,11 +32,13 @@ class ForgetCubit extends Cubit<ForgetState> {
       (ForgetModel) => emit(ForgetSuccess(successMessage: ForgetModel.message)),
     );
   }
-
+  String getEmail(){
+    return forgetEmail.text;
+  }
   newPassword() async {
     emit(ForgetResetLoading());
     final response = await userRepository.resetPassword(
-      email: resetEmail.text,
+      email: forgetEmail.text,
       password: resetPassword.text,
       resetOTP: resetOTP.text,
     );

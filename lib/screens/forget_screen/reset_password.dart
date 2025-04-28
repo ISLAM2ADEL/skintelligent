@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
-import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+  const ResetPassword({super.key,});
   static const String id = 'ResetPassword';
 
   @override
@@ -14,6 +16,9 @@ class ResetPassword extends StatefulWidget {
 class _OtpScreenState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
+    final String email = ModalRoute.of(context)!.settings.arguments as String;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return BlocConsumer<ForgetCubit, ForgetState>(
       listener: (context, state) {
         if (state is ForgetResetSuccess) {
@@ -22,7 +27,7 @@ class _OtpScreenState extends State<ResetPassword> {
               content: Text(state.successMessage),
             ),
           );
-          Navigator.pushReplacementNamed(context, HomePage.id);
+          Navigator.pushReplacementNamed(context, LoginScreen.id);
         } else if (state is ForgetResetFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -36,136 +41,140 @@ class _OtpScreenState extends State<ResetPassword> {
           appBar: AppBar(),
           body: Stack(
             children: [
-              // Black background container
-              Align(
-                alignment: Alignment.bottomCenter,
+              Form(
+                key: context.read<ForgetCubit>().forgetFormKey,
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  color: const Color(0xff474646),
-                ),
-              ),
-
-              // OTP Form inside a circular ListView
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 70, // Leaves space for the black container
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                  ),
-                  child: Form(
-                    key: context.read<ForgetCubit>().forgetFormKey,
-                    child: Container(
-                      color: Colors.white, // Background color of the form
-                      child: ListView(
-                        padding: const EdgeInsets.all(25.0),
+                  color: Colors.white,
+                  child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Customtextfield(
-                            myIcon: Icons.mail_outline,
-                            validate: MethodsHelper.validateEmail,
-                            MyController:
-                                context.read<ForgetCubit>().resetEmail,
-                            hintM: "Enter your email",
+                          const Text(
+                            'Enter the OTP sent to your email:',
+                            style: TextStyle(fontSize: 20),
                           ),
                           const SizedBox(height: 20),
-                          Customtextfield(
-                            myIcon: Icons.lock_open,
-                            sufIcon: FontAwesomeIcons.eyeSlash,
-                            validate: MethodsHelper.validatePassword,
-                            MyController:
-                                context.read<ForgetCubit>().resetPassword,
-                            hintM: "Password",
-                          ),
+                          Image.asset("${path}otp.png", width: width * 0.9),
                           const SizedBox(height: 20),
-                          Column(
-                            children: [
-                              const Text(
-                                'Enter the OTP sent to your email:',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Text(
-                                context.read<ForgetCubit>().resetOTP.text,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.purple[300],
-                                ),
-                              ),
-                            ],
+                          Text(
+                              (context.read<ForgetCubit>().resetOTP.text),
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.purple[300],
+                            ),
                           ),
-                          const SizedBox(height: 20),
-                          OtpTextField(
-                            numberOfFields: 6,
-                            fillColor: Colors.black.withValues(alpha: 0.1),
-                            filled: true,
-                            keyboardType: TextInputType.number,
-                            onSubmit: (value) {
-                              context.read<ForgetCubit>().resetOTP.text = value;
-                              print("The OTP is $value");
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          GestureDetector(
-                            onTap: () {
-                              if (context
-                                  .read<ForgetCubit>()
-                                  .forgetFormKey
-                                  .currentState!
-                                  .validate()) {
-                                context.read<ForgetCubit>().newPassword();
-                              }
-                            },
-                            child: state is ForgetResetLoading
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : const SubmittButton(),
-                          ),
-                          const SizedBox(height: 50),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 20, // Keeps it 20 pixels above the bottom
-                left: 0,
-                right: 0, // Ensures it stretches across the screen
-                child: Center(
-                  // Centers the Row horizontally
-                  child: Row(
-                    mainAxisSize:
-                        MainAxisSize.min, // Avoids unnecessary stretching
-                    children: [
-                      Text(
-                        "You have an account?",
-                        style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.5)),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, LoginScreen.id);
-                          context.read<UserCubit>().signInEmail.clear();
-                          context.read<UserCubit>().signInPassword.clear();
+                      const SizedBox(height: 20),
+                      OtpTextField(
+                        numberOfFields: 6,
+                        fillColor: Colors.black.withOpacity(0.1),
+                        filled: true,
+                        keyboardType: TextInputType.number,
+                        onSubmit: (value) {
+                          context.read<ForgetCubit>().resetOTP.text = value;
                         },
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(height: 25),
+                      GestureDetector(
+                        onTap: () {
+                          if (context.read<ForgetCubit>().forgetFormKey.currentState!.validate()) {
+                            Navigator.of(context).push(_createRoute(userEmail: email));
+                          }
+                        },
+                        child: state is ForgetResetLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : Container(
+                          height: height*.06,
+                          width: width*.85,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Next',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
                       ),
-                    ],
+                  ],
                   ),
                 ),
-              )
-
-              // Circular login prompt above the black container
+              ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+// -------------------- TRANSITION --------------------
+Route _createRoute({
+  required String userEmail,
+}) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => NewPasswordPage(email: userEmail,),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+// -------------------- NEW PAGE --------------------
+class NewPasswordPage extends StatelessWidget {
+  final String email; // Store the email as a field
+
+  const NewPasswordPage({super.key, required this.email}); // Assign to field
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: const Text('Reset Password')),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ListView(
+          children: [
+            Customtextfield(
+              myIcon: Icons.mail_outline,
+              validate: MethodsHelper.validateEmail,
+              MyController: context.read<ForgetCubit>().resetEmail,
+              hintM: email, // Now correctly references the field
+              isEmail: true,
+            ),
+            const SizedBox(height: 20),
+            Customtextfield(
+              myIcon: Icons.lock_open,
+              sufIcon: FontAwesomeIcons.eyeSlash,
+              validate: MethodsHelper.validatePassword,
+              MyController: context.read<ForgetCubit>().resetPassword,
+              hintM: "New Password",
+            ),
+            const SizedBox(height: 30),
+            GestureDetector(
+              onTap: (){
+                if (context
+                    .read<ForgetCubit>()
+                    .forgetFormKey
+                    .currentState!
+                    .validate()) {
+                  context.read<ForgetCubit>().newPassword();
+                }
+              },
+                child: const SubmittButton()),
+          ],
+        ),
+      ),
     );
   }
 }
