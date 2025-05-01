@@ -7,12 +7,17 @@ class Endpoint {
   static String resetPassword = "/api/auth/reset-password";
   static String getDoctors = "/api/doctors";
   static String signUp = "/api/auth/register";
-  static String appointmentByWeek = '/api/appointments/week' ;
+  static String appointmentByWeek = '/api/appointments/week';
   static String doctorById(num id) => "/api/doctors/$id";
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
   }
-}
+  // review endpoint 
+ static String getReviews(int doctorID) {
+  return "/api/reviews/doctor/$doctorID";
+  }
+ }  
+
 
 class ApiKey {
   static const String status = "statusCode";
@@ -48,11 +53,20 @@ class ApiKey {
   // Location (if used later)
   static const String location = "location";
   // Available booking
-  static const String startTime = "startTime"; 
+  static const String startTime = "startTime";
   static const String endTime = "endTime";
   static const String isCanceled = "isCanceled";
   static const String isRepeating = "isRepeating";
   static const String repeatDay = "repeatDay";
   static const String repeatUntil = "repeatUntil";
-
+  // Review and rating
+  static const String comment = "comment";
+  static const String rating = "rating";
+  static const String patientName = "patientName";
+  static const String patientImage = "patientImage";
+  static const String createdAt = "createdAt";
+  static const String pageIndex = "pageIndex";
+  static const String pageSize = "pageSize";
+  static const String count = "count";
+  static const String data = "data";
 }

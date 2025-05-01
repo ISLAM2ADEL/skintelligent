@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
+import 'package:skintelligent/models/review_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
 
 import '../../models/appointment_model.dart';
@@ -29,7 +30,8 @@ class UserRepository {
       );
       final user = SigninModel.fromJson(response);
       // final decodedToken = JwtDecoder.decode(user.token);
-      await getIt<CacheHelper>().saveData(key: ApiKey.Authorization, value: user.token);
+      await getIt<CacheHelper>()
+          .saveData(key: ApiKey.Authorization, value: user.token);
       // await getIt<CacheHelper>().saveData(key: ApiKey.id, value: decodedToken[ApiKey.id]);
       return Right(user);
     } on ServerException catch (e) {
@@ -80,6 +82,7 @@ class UserRepository {
       return Left(e.errorModel.errorMessage);
     }
   }
+
   Future<Either<String, AppointmentModel>> getAllDoctors() async {
     try {
       final response = await api.get(Endpoint.getDoctors);
@@ -109,6 +112,18 @@ class UserRepository {
     }
   }
 
+  Future<Either<String, ReviewModel>> getReviews(
+      int doctorID, int pageSize) async {
+    try {
+      final response =
+          await api.get(Endpoint.getReviews(doctorID), queryParameters: {
+        ApiKey.pageSize: pageSize,
+      });
+      return Right(ReviewModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
 
   Future<Either<String, ForgetModel>> forgetPassword({
     required String email,
