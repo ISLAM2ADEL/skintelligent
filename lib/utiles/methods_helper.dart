@@ -44,7 +44,7 @@ class MethodsHelper {
     cubit.dateOfBirth.clear();
   }
 
-  static void signInTextFormHelper(BuildContext context) {
+  static void signInClearTextHelper(BuildContext context) {
     context.read<UserCubit>().signInEmail.clear();
     context.read<UserCubit>().signInPassword.clear();
   }

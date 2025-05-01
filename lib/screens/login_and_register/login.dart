@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             //     .validate()) {
                             // }
                             context.read<UserCubit>().signIn().then((value) {
-                              MethodsHelper.signInTextFormHelper(context);
+                              MethodsHelper.signInClearTextHelper(context);
                             });
                           },
                           text: "Login",

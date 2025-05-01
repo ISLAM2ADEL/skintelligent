@@ -4,7 +4,9 @@ import 'package:skintelligent/controllers/api/dio_consumer.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
 import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
+import 'package:skintelligent/cubit/review_cubti/review_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/widgets/review_screen.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
@@ -66,6 +68,11 @@ class MyApp extends StatelessWidget {
             UserRepository(api: DioConsumer(dio: Dio())),
           ),
         ),
+        BlocProvider(
+          create: (context) => ReviewCubit(
+            UserRepository(api: DioConsumer(dio: Dio())),
+          ),
+        ),
       ],
       child: GetMaterialApp(
         routes: {
@@ -83,7 +90,7 @@ class MyApp extends StatelessWidget {
           AppointmentScreen.id: (context) => const AppointmentScreen(),
           ResetPassword.id: (context) => const ResetPassword(),
           ForgetScreen.id: (context) => const ForgetScreen(),
-          TestSignUpScreen.id: (context) => TestSignUpScreen()
+          TestSignUpScreen.id: (context) => TestSignUpScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()

@@ -214,6 +214,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:skintelligent/widgets/review_screen.dart';
 import 'package:skintelligent/widgets/doctor_card.dart';
 import 'package:skintelligent/widgets/stats_row.dart';
 import 'package:skintelligent/widgets/about_me_section.dart';
@@ -330,6 +331,22 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   ),
                   const SizedBox(height: 30),
                   AboutMeSection(about: doctor.aboutMe),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ReviewViewScreen(
+                            doctorID: 9,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Show Reviews ",
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
                   const SizedBox(height: 30),
                   const Text(
                     "Weekly's Schedule",
