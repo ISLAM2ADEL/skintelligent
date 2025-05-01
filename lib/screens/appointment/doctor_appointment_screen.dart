@@ -214,6 +214,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:skintelligent/cubit/review_cubti/review_cubit.dart';
 import 'package:skintelligent/widgets/review_screen.dart';
 import 'package:skintelligent/widgets/doctor_card.dart';
 import 'package:skintelligent/widgets/stats_row.dart';
@@ -333,12 +334,14 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   AboutMeSection(about: doctor.aboutMe),
                   GestureDetector(
                     onTap: () {
+                      context.read<ReviewCubit>().getReview(
+                            widget.doctorId,
+                            10,
+                          );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ReviewViewScreen(
-                            doctorID: 9,
-                          ),
+                          builder: (context) => const ReviewViewScreen(),
                         ),
                       );
                     },
