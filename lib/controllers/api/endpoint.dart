@@ -51,7 +51,7 @@ class ApiKey {
   static const String startTime = "startTime"; 
   static const String endTime = "endTime";
   static const String isCanceled = "isCanceled";
-  static const String isRepeating = "isRepeating";
+  static const String isBooked = "isBooked";
   static const String repeatDay = "repeatDay";
   static const String repeatUntil = "repeatUntil";
 

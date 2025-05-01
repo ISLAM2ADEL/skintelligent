@@ -5,8 +5,7 @@ class AppointmentSlot {
   final DateTime startTime;
   final DateTime endTime;
   final bool isCanceled;
-  final bool isRepeating;
-  final int repeatDay;
+  final bool isBooked;
   final DateTime repeatUntil;
 
   AppointmentSlot({
@@ -14,8 +13,7 @@ class AppointmentSlot {
     required this.startTime,
     required this.endTime,
     required this.isCanceled,
-    required this.isRepeating,
-    required this.repeatDay,
+    required this.isBooked,
     required this.repeatUntil,
   });
 
@@ -25,8 +23,7 @@ class AppointmentSlot {
       startTime: DateTime.parse(json[ApiKey.startTime]),
       endTime: DateTime.parse(json[ApiKey.endTime]),
       isCanceled: json[ApiKey.isCanceled],
-      isRepeating: json[ApiKey.isRepeating],
-      repeatDay: json[ApiKey.repeatDay],
+      isBooked: json[ApiKey.isBooked],
       repeatUntil: DateTime.parse(json[ApiKey.repeatUntil]),
     );
   }
