@@ -100,8 +100,7 @@ class BookingSlot extends StatelessWidget {
                   startTime: slotDateTime,
                   endTime: slotDateTime.add(const Duration(minutes: 20)),
                   isCanceled: false,
-                  isRepeating: false,
-                  repeatDay: 0,
+                  isBooked: false,
                   repeatUntil: slotDateTime,
                 ),
               );
