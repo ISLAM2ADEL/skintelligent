@@ -1,5 +1,4 @@
 // // lib/features/doctor/presentation/widgets/booking_slot.dart
-import 'package:flutter/material.dart';
 
 // class BookingSlot extends StatelessWidget {
 //   final String time;
@@ -133,8 +132,9 @@ import 'package:flutter/material.dart';
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // مهمة جداً لـ context.read
 import 'package:skintelligent/models/available_booking_model.dart';
-import 'package:skintelligent/utiles/booking_store.dart';
+import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
 
 class BookingSlot extends StatelessWidget {
   final String time;
@@ -152,24 +152,8 @@ class BookingSlot extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        final isAlreadyBooked = BookingStore().selectedSlots.any(
-              (slot) => slot.startTime == session.startTime,
-            );
-
-        final message =
-            isAlreadyBooked ? "Booked before" : "Booking successfully";
-
-        if (!isAlreadyBooked) {
-          BookingStore().selectedSlots.add(session);
-        }
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: isAlreadyBooked ? Colors.orange : Colors.green,
-            duration: const Duration(seconds: 1),
-          ),
-        );
+        // حجز مباشر من الـ API
+        context.read<MakeReviewCubit>().makeReview(appointmentId: session.id);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
