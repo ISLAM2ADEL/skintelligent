@@ -69,41 +69,98 @@ import 'package:flutter/material.dart';
 //   }
 // }
 
+// import 'package:skintelligent/models/available_booking_model.dart';
+// import 'package:skintelligent/utiles/booking_store.dart';
+
+// class BookingSlot extends StatelessWidget {
+//   final String time;
+//   final DateTime slotDateTime; // لتحديد وقت الحجز بدقة
+
+//   const BookingSlot({
+//     super.key,
+//     required this.time,
+//     required this.slotDateTime,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         final isAlreadyBooked = BookingStore().selectedSlots.any(
+//               (slot) => slot.startTime == slotDateTime,
+//             );
+
+//         final message =
+//             isAlreadyBooked ? "Booked before" : "Booking successfully";
+
+//         if (!isAlreadyBooked) {
+//           BookingStore().selectedSlots.add(
+//                 AppointmentSlot(
+//                   id: 0,
+//                   startTime: slotDateTime,
+//                   endTime: slotDateTime.add(const Duration(minutes: 20)),
+//                   isCanceled: false,
+//                   isBooked: false,
+//                   repeatUntil: slotDateTime,
+//                 ),
+//               );
+//         }
+
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(
+//             content: Text(message),
+//             backgroundColor: isAlreadyBooked ? Colors.orange : Colors.green,
+//             duration: const Duration(seconds: 1),
+//           ),
+//         );
+//       },
+//       child: Container(
+//         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//         decoration: BoxDecoration(
+//           color: Colors.grey[200],
+//           borderRadius: BorderRadius.circular(10),
+//           border: Border.all(color: Colors.black12),
+//         ),
+//         child: Text(
+//           time,
+//           style: const TextStyle(
+//             color: Colors.black,
+//             fontWeight: FontWeight.bold,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+import 'package:flutter/material.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/utiles/booking_store.dart';
 
 class BookingSlot extends StatelessWidget {
   final String time;
-  final DateTime slotDateTime; // لتحديد وقت الحجز بدقة
+  final Session session;
 
   const BookingSlot({
     super.key,
     required this.time,
-    required this.slotDateTime,
+    required this.session,
   });
 
   @override
   Widget build(BuildContext context) {
+    final startDateTime = DateTime.parse(session.startTime);
+
     return GestureDetector(
       onTap: () {
         final isAlreadyBooked = BookingStore().selectedSlots.any(
-              (slot) => slot.startTime == slotDateTime,
+              (slot) => slot.startTime == session.startTime,
             );
 
         final message =
             isAlreadyBooked ? "Booked before" : "Booking successfully";
 
         if (!isAlreadyBooked) {
-          BookingStore().selectedSlots.add(
-                AppointmentSlot(
-                  id: 0,
-                  startTime: slotDateTime,
-                  endTime: slotDateTime.add(const Duration(minutes: 20)),
-                  isCanceled: false,
-                  isBooked: false,
-                  repeatUntil: slotDateTime,
-                ),
-              );
+          BookingStore().selectedSlots.add(session);
         }
 
         ScaffoldMessenger.of(context).showSnackBar(

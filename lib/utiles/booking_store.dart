@@ -5,5 +5,5 @@ class BookingStore {
   factory BookingStore() => _instance;
   BookingStore._internal();
 
-  final Set<AppointmentSlot> selectedSlots = {};
+  final Set<Session> selectedSlots = {};
 }

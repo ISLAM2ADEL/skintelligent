@@ -77,6 +77,8 @@ class Session {
   }
 }
 
+
+
 class WeeklySchedule {
   final List<Session> sunday;
   final List<Session> monday;
@@ -100,15 +102,11 @@ class WeeklySchedule {
     return WeeklySchedule(
       sunday: (json['Sunday'] as List).map((e) => Session.fromJson(e)).toList(),
       monday: (json['Monday'] as List).map((e) => Session.fromJson(e)).toList(),
-      tuesday:
-          (json['Tuesday'] as List).map((e) => Session.fromJson(e)).toList(),
-      wednesday:
-          (json['Wednesday'] as List).map((e) => Session.fromJson(e)).toList(),
-      thursday:
-          (json['Thursday'] as List).map((e) => Session.fromJson(e)).toList(),
+      tuesday: (json['Tuesday'] as List).map((e) => Session.fromJson(e)).toList(),
+      wednesday: (json['Wednesday'] as List).map((e) => Session.fromJson(e)).toList(),
+      thursday: (json['Thursday'] as List).map((e) => Session.fromJson(e)).toList(),
       friday: (json['Friday'] as List).map((e) => Session.fromJson(e)).toList(),
-      saturday:
-          (json['Saturday'] as List).map((e) => Session.fromJson(e)).toList(),
+      saturday: (json['Saturday'] as List).map((e) => Session.fromJson(e)).toList(),
     );
   }
 }
