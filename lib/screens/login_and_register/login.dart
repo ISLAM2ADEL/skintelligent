@@ -2,7 +2,6 @@ import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
-import 'package:skintelligent/test_space/screens/test_sign_up_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -128,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                       onPressed: () =>
-                          Navigator.pushNamed(context, TestSignUpScreen.id),
+                          Navigator.pushNamed(context, Registerscreen.id),
                       child: const Text('Create new account')),
                   const SizedBox(
                     height: 20,

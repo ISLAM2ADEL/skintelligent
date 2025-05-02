@@ -12,12 +12,16 @@ class Endpoint {
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
   }
-  // review endpoint 
- static String getReviews(int doctorID) {
-  return "/api/reviews/doctor/$doctorID";
-  }
- }  
 
+  // review endpoint
+  static String getReviews(int doctorID) {
+    return "/api/reviews/doctor/$doctorID";
+  }
+
+  static String makeReviews() {
+    return "/api/reviews";
+  }
+}
 
 class ApiKey {
   static const String status = "statusCode";
@@ -59,7 +63,7 @@ class ApiKey {
   static const String isBooked = "isBooked";
   static const String repeatDay = "repeatDay";
   static const String repeatUntil = "repeatUntil";
-  // Review and rating
+  // Get All Reviews
   static const String comment = "comment";
   static const String rating = "rating";
   static const String patientName = "patientName";
@@ -69,4 +73,7 @@ class ApiKey {
   static const String pageSize = "pageSize";
   static const String count = "count";
   static const String data = "data";
+// Make Review
+  static const String doctorId = "doctorId";
+  static const String patientId = "patientId";
 }

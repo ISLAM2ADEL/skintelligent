@@ -48,4 +48,6 @@ class MethodsHelper {
     context.read<UserCubit>().signInEmail.clear();
     context.read<UserCubit>().signInPassword.clear();
   }
+
+
 }

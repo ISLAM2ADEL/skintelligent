@@ -1,20 +1,20 @@
 import 'package:skintelligent/controllers/api/endpoint.dart';
 
-class ReviewModel {
+class GetReviewModel {
   final int pageIndex;
   final int pageSize;
   final int count;
   final List<ReviewItem> reviews;
 
-  ReviewModel({
+  GetReviewModel({
     required this.pageIndex,
     required this.pageSize,
     required this.count,
     required this.reviews,
   });
 
-  factory ReviewModel.fromJson(Map<String, dynamic> json) {
-    return ReviewModel(
+  factory GetReviewModel.fromJson(Map<String, dynamic> json) {
+    return GetReviewModel(
       pageIndex: json[ApiKey.pageIndex],
       pageSize: json[ApiKey.pageSize],
       count: json[ApiKey.count],

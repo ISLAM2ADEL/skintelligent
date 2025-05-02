@@ -214,9 +214,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:skintelligent/cubit/review_cubti/review_cubit.dart';
-import 'package:skintelligent/widgets/review_screen.dart';
+import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
+import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
+import 'package:skintelligent/widgets/get_review_screen.dart';
 import 'package:skintelligent/widgets/doctor_card.dart';
+import 'package:skintelligent/widgets/make_review_screen.dart';
 import 'package:skintelligent/widgets/stats_row.dart';
 import 'package:skintelligent/widgets/about_me_section.dart';
 import 'package:skintelligent/widgets/available_booking.dart';
@@ -332,23 +334,43 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   ),
                   const SizedBox(height: 30),
                   AboutMeSection(about: doctor.aboutMe),
-                  GestureDetector(
-                    onTap: () {
-                      context.read<ReviewCubit>().getReview(
-                            widget.doctorId,
-                            10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          context.read<GetReviewCubit>().getReview(
+                                widget.doctorId,
+                                100,
+                              );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const GetReviewViewScreen(),
+                            ),
                           );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ReviewViewScreen(),
+                        },
+                        child: const Text(
+                          "Show Reviews ",
+                          style: TextStyle(color: Colors.blue),
                         ),
-                      );
-                    },
-                    child: const Text(
-                      "Show Reviews ",
-                      style: TextStyle(color: Colors.blue),
-                    ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MakeReviewScreen(doctorID: widget.doctorId),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Write Reviews ",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 30),
                   const Text(

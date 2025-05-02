@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
-import 'package:skintelligent/utiles/booking_store.dart';
 import 'booking_slot.dart';
 
 // class AvailableBooking extends StatelessWidget {

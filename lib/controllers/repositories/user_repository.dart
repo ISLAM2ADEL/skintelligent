@@ -5,7 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
-import 'package:skintelligent/models/review_model.dart';
+import 'package:skintelligent/models/get_review_model.dart';
+import 'package:skintelligent/models/make_review_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
 
 import '../../models/appointment_model.dart';
@@ -98,11 +99,9 @@ class UserRepository {
       final response = await api.get(Endpoint.doctorById(doctorID));
 
       if (response is List && response.isNotEmpty) {
-        // ✅ Pick the first doctor from the list
         final doctorData = response.first as Map<String, dynamic>;
         return Right(DoctorModel.fromJson(doctorData));
       } else {
-        // ❗ Handle if list is empty
         return Left('Doctor not found.');
       }
     } on ServerException catch (e) {
@@ -112,14 +111,36 @@ class UserRepository {
     }
   }
 
-  Future<Either<String, ReviewModel>> getReviews(
+  Future<Either<String, GetReviewModel>> getReviews(
       int doctorID, int pageSize) async {
     try {
       final response =
           await api.get(Endpoint.getReviews(doctorID), queryParameters: {
         ApiKey.pageSize: pageSize,
       });
-      return Right(ReviewModel.fromJson(response));
+      return Right(GetReviewModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, MakeReviewModel>> makeReview({
+    required int patientID,
+    required int doctorID,
+    required String comment,
+    required int rating,
+  }) async {
+    try {
+      final response = await api.post(
+        Endpoint.makeReviews(),
+        data: {
+          ApiKey.patientId : patientID,
+          ApiKey.doctorId: doctorID,
+          ApiKey.comment: comment,
+          ApiKey.rating: rating,
+        },
+      );
+      return Right(MakeReviewModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }

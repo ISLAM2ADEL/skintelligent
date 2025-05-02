@@ -6,7 +6,7 @@ import 'package:skintelligent/const/custom_container.dart';
 import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
 import '../../commons.dart';
-import '../../test_space/appoinment.dart';
+// import '../../test_space/appoinment.dart';
 
 class Appointment extends StatelessWidget {
   const Appointment({super.key});

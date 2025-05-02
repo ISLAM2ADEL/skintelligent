@@ -4,17 +4,14 @@ import 'package:skintelligent/controllers/api/dio_consumer.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
 import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
-import 'package:skintelligent/cubit/review_cubti/review_cubit.dart';
+import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
+import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
-import 'package:skintelligent/widgets/review_screen.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
 import 'package:skintelligent/screens/user_booking/user_booking.dart';
-import 'package:skintelligent/test_space/appoinment.dart';
-import 'package:skintelligent/test_space/login_screen.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
-import 'package:skintelligent/test_space/screens/test_sign_up_screen.dart';
 import 'commons.dart';
 
 void main() async {
@@ -69,7 +66,12 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) => ReviewCubit(
+          create: (context) => GetReviewCubit(
+            UserRepository(api: DioConsumer(dio: Dio())),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => MakeReviewCubit(
             UserRepository(api: DioConsumer(dio: Dio())),
           ),
         ),
@@ -86,11 +88,8 @@ class MyApp extends StatelessWidget {
           Chatbotscreen.id: (context) => Chatbotscreen(),
           Registerscreen.id: (context) => Registerscreen(),
           OtpScreen.id: (context) => const OtpScreen(),
-          LoginScreenTest.id: (context) => LoginScreenTest(),
-          AppointmentScreen.id: (context) => const AppointmentScreen(),
           ResetPassword.id: (context) => const ResetPassword(),
           ForgetScreen.id: (context) => const ForgetScreen(),
-          TestSignUpScreen.id: (context) => TestSignUpScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
