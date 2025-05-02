@@ -134,7 +134,7 @@ class UserRepository {
       final response = await api.post(
         Endpoint.makeReviews(),
         data: {
-          ApiKey.patientId : patientID,
+          ApiKey.patientId: patientID,
           ApiKey.doctorId: doctorID,
           ApiKey.comment: comment,
           ApiKey.rating: rating,
@@ -188,7 +188,26 @@ class UserRepository {
     }
   }
 
-  Future<Either<String, AvailableBookingModel>> getAvailableBookings({
+  // Future<Either<String, AvailableBookingModel>> getAvailableBookings({
+  //   required String date,
+  //   required int clinicId,
+  //   required int doctorId,
+  // }) async {
+  //   try {
+  //     final response = await api.get(
+  //       Endpoint.appointmentByWeek,
+  //       queryParameters: {
+  //         'date': date,
+  //         'clinicId': clinicId,
+  //         'doctorId': doctorId,
+  //       },
+  //     );
+  //     return Right(AvailableBookingModel.fromJson(response));
+  //   } on ServerException catch (e) {
+  //     return Left(e.errorModel.errorMessage);
+  //   }
+  // }
+  Future<Either<String, WeeklySchedule>> getAvailableBookings({
     required String date,
     required int clinicId,
     required int doctorId,
@@ -197,14 +216,15 @@ class UserRepository {
       final response = await api.get(
         Endpoint.appointmentByWeek,
         queryParameters: {
-          'date': date,
-          'clinicId': clinicId,
-          'doctorId': doctorId,
+          "date": date,
+          "clinicId": clinicId,
+          "doctorId": doctorId,
         },
       );
-      return Right(AvailableBookingModel.fromJson(response));
-    } on ServerException catch (e) {
-      return Left(e.errorModel.errorMessage);
+      final schedule = WeeklySchedule.fromJson(response);
+      return Right(schedule);
+    } catch (e) {
+      return Left(e.toString());
     }
   }
 }
