@@ -8,6 +8,7 @@ class Endpoint {
   static String getDoctors = "/api/doctors";
   static String signUp = "/api/auth/register";
   static String appointmentByWeek = '/api/appointments/week';
+  static String makeBooking = '/api/appointments/book';
   static String doctorById(num id) => "/api/doctors/$id";
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
@@ -76,4 +77,6 @@ class ApiKey {
 // Make Review
   static const String doctorId = "doctorId";
   static const String patientId = "patientId";
+// Booking 
+static const String appointmentId = "appointmentId" ; 
 }

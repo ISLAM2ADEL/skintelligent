@@ -227,4 +227,19 @@ class UserRepository {
       return Left(e.toString());
     }
   }
+    Future<Either<String, WeeklySchedule>> makeBooking({
+    required int appointmentId,
+  }) async {
+    try {
+      final response = await api.post(
+        queryParameters: {
+          ApiKey.appointmentId: appointmentId,
+        },
+        Endpoint.makeBooking,
+      );
+      return Right(WeeklySchedule.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
 }

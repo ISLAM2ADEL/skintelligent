@@ -75,6 +75,11 @@ class MyApp extends StatelessWidget {
             UserRepository(api: DioConsumer(dio: Dio())),
           ),
         ),
+        BlocProvider(
+          create: (context) => MakeReviewCubit(
+            UserRepository(api: DioConsumer(dio: Dio())),
+          ),
+        ),
       ],
       child: GetMaterialApp(
         routes: {
