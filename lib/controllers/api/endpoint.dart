@@ -8,8 +8,13 @@ class Endpoint {
   static String getDoctors = "/api/doctors";
   static String signUp = "/api/auth/register";
   static String appointmentByWeek = '/api/appointments/week';
+  static String user_booking_appointments = "/api/patients/appointments";
   static String makeBooking = '/api/appointments/book';
   static String doctorById(num id) => "/api/doctors/$id";
+  static String cancelBooking({required int appointmentid}) {
+    return "/api/patient/appointments/$appointmentid/cancel";
+  }
+
   static String getUserDataEndPoint(id) {
     return "user/get-user/$id";
   }
@@ -25,7 +30,7 @@ class Endpoint {
 }
 
 class ApiKey {
-  static const String status = "statusCode";
+  static const String statusCode = "statusCode";
   static const String errorMessage = "message";
   static String message = "message";
 
@@ -77,6 +82,10 @@ class ApiKey {
 // Make Review
   static const String doctorId = "doctorId";
   static const String patientId = "patientId";
-// Booking 
-static const String appointmentId = "appointmentId" ; 
+// Booking
+  static const String appointmentId = "appointmentId";
+// Get User Booking
+  static const String doctorName = "doctorName";
+  static const String clinicName = "clinicName";
+  static const String clinicAddress = "clinicAddress";
 }
