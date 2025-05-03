@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/models/user_appointment_cancel_model.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
 import 'package:skintelligent/models/get_review_model.dart';
 import 'package:skintelligent/models/make_review_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
+import 'package:skintelligent/models/user_booking_model.dart';
 
 import '../../models/appointment_model.dart';
 import '../../models/forget_model.dart';
@@ -188,25 +190,6 @@ class UserRepository {
     }
   }
 
-  // Future<Either<String, AvailableBookingModel>> getAvailableBookings({
-  //   required String date,
-  //   required int clinicId,
-  //   required int doctorId,
-  // }) async {
-  //   try {
-  //     final response = await api.get(
-  //       Endpoint.appointmentByWeek,
-  //       queryParameters: {
-  //         'date': date,
-  //         'clinicId': clinicId,
-  //         'doctorId': doctorId,
-  //       },
-  //     );
-  //     return Right(AvailableBookingModel.fromJson(response));
-  //   } on ServerException catch (e) {
-  //     return Left(e.errorModel.errorMessage);
-  //   }
-  // }
   Future<Either<String, WeeklySchedule>> getAvailableBookings({
     required String date,
     required int clinicId,
@@ -227,7 +210,8 @@ class UserRepository {
       return Left(e.toString());
     }
   }
-    Future<Either<String, WeeklySchedule>> makeBooking({
+
+  Future<Either<String, WeeklySchedule>> makeBooking({
     required int appointmentId,
   }) async {
     try {
@@ -238,6 +222,33 @@ class UserRepository {
         Endpoint.makeBooking,
       );
       return Right(WeeklySchedule.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, List<UserBookingModel>>> getMyBookings() async {
+    try {
+      final response = await api.get(Endpoint.user_booking_appointments);
+      final bookings =
+          (response as List).map((e) => UserBookingModel.fromJson(e)).toList();
+      return Right(bookings);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  Future<Either<String, UserAppointmentCancelModel>> cancelBooking({
+    required int appointmentId,
+  }) async {
+    try {
+      final response = await api.put(
+        Endpoint.cancelBooking(appointmentid: appointmentId),
+        data: {
+          ApiKey.appointmentId: appointmentId,
+        },
+      );
+      return Right(UserAppointmentCancelModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
