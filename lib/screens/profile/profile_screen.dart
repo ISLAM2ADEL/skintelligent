@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
-import 'package:skintelligent/screens/user_booking/user_booking.dart';
+import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/widgets/logout_button.dart';
 
 class ProfileScreen extends StatelessWidget {
