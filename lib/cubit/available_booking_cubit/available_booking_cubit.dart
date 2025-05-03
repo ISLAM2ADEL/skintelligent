@@ -65,13 +65,13 @@ class AvailableBookingCubit extends Cubit<AvailableBookingState> {
       (schedule) {
         // نختار أول يوم فيه جلسات متاحة
         final dayMap = {
-          'Sunday': schedule.sunday,
-          'Monday': schedule.monday,
-          'Tuesday': schedule.tuesday,
-          'Wednesday': schedule.wednesday,
-          'Thursday': schedule.thursday,
-          'Friday': schedule.friday,
-          'Saturday': schedule.saturday,
+          'Sunday': schedule.Sunday,
+          'Monday': schedule.Monday,
+          'Tuesday': schedule.Tuesday,
+          'Wednesday': schedule.Wednesday,
+          'Thursday': schedule.Thursday,
+          'Friday': schedule.Friday,
+          'Saturday': schedule.Saturday,
         };
 
         final firstAvailableDay = dayMap.entries.firstWhere(

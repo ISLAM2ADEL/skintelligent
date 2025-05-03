@@ -1,231 +1,18 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:intl/intl.dart';
-// import 'package:skintelligent/widgets/doctor_card.dart';
-// import 'package:skintelligent/widgets/stats_row.dart';
-// import 'package:skintelligent/widgets/about_me_section.dart';
-// import 'package:skintelligent/widgets/available_booking.dart';
-// import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
-// import 'package:skintelligent/cubit/available_booking_cubit/available_booking_state.dart';
-// import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
-// import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
-
-// class DoctorAppointmentScreen extends StatefulWidget {
-//   const DoctorAppointmentScreen({super.key});
-
-//   @override
-//   State<DoctorAppointmentScreen> createState() =>
-//       _DoctorAppointmentScreenState();
-// }
-
-// class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
-//   DateTime selectedDate = DateTime.now();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     context.read<DoctorCubit>().getDoctorProfile();
-//   }
-
-//   List<DateTime> getWeekDates() =>
-//       List.generate(7, (index) => selectedDate.add(Duration(days: index)));
-
-//   void updateBooking(DateTime date, {int clinicId = 8, int doctorId = 10}) {
-//     context.read<AvailableBookingCubit>().getAvailableBookings(
-//           date: DateFormat('yyyy-MM-dd').format(date),
-//           clinicId: clinicId,
-//           doctorId: doctorId,
-//         );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final weekDates = getWeekDates();
-
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         title: const Text('Doctor Info', style: TextStyle(color: Colors.black)),
-//         backgroundColor: Colors.white,
-//         elevation: 0,
-//         leading: const BackButton(color: Colors.black),
-//       ),
-//       body: BlocBuilder<DoctorCubit, DoctorState>(
-//         builder: (context, state) {
-//           if (state is GetDoctorLoading) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-
-//           if (state is GetDoctorFailure) {
-//             return Center(
-//               child: Text(
-//                 'Error: ${state.errMessage}',
-//                 style: const TextStyle(color: Colors.red),
-//               ),
-//             );
-//           }
-
-//           if (state is GetDoctorSuccess) {
-//             final doctor = state.doctor;
-
-//             if (!doctor.isApproved) {
-//               return Center(
-//                 child: Text(
-//                   "The doctor is still not approved 😔",
-//                   style: TextStyle(
-//                     fontSize: 18,
-//                     fontWeight: FontWeight.w500,
-//                     color: Colors.black.withValues(alpha: 0.7),
-//                   ),
-//                   textAlign: TextAlign.center,
-//                 ),
-//               );
-//             }
-
-//             return SingleChildScrollView(
-//               padding: const EdgeInsets.all(20),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   DoctorCard(doctor: doctor),
-//                   const SizedBox(height: 24),
-//                   StatsRow(
-//                     experienceYears: doctor.experienceYears,
-//                     gender: doctor.gender,
-//                     email: doctor.email,
-//                   ),
-//                   const SizedBox(height: 30),
-//                   AboutMeSection(about: doctor.aboutMe),
-//                   const SizedBox(height: 30),
-//                   const Text(
-//                     "Today's Schedule",
-//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                   ),
-//                   const SizedBox(height: 10),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       IconButton(
-//                         icon: const Icon(Icons.arrow_back_ios),
-//                         onPressed: () {
-//                           setState(() {
-//                             selectedDate =
-//                                 selectedDate.subtract(const Duration(days: 1));
-//                           });
-//                           updateBooking(selectedDate);
-//                         },
-//                       ),
-//                       Expanded(
-//                         child: SizedBox(
-//                           height: 70,
-//                           child: ListView.builder(
-//                             scrollDirection: Axis.horizontal,
-//                             itemCount: weekDates.length,
-//                             itemBuilder: (context, index) {
-//                               final date = weekDates[index];
-//                               final isSelected = DateFormat('yyyy-MM-dd')
-//                                       .format(date) ==
-//                                   DateFormat('yyyy-MM-dd').format(selectedDate);
-
-//                               return GestureDetector(
-//                                 onTap: () {
-//                                   setState(() {
-//                                     selectedDate = date;
-//                                   });
-//                                   updateBooking(date);
-//                                 },
-//                                 child: Container(
-//                                   margin:
-//                                       const EdgeInsets.symmetric(horizontal: 5),
-//                                   padding: const EdgeInsets.symmetric(
-//                                       horizontal: 11, vertical: 10),
-//                                   decoration: BoxDecoration(
-//                                     color: isSelected
-//                                         ? Colors.blue
-//                                         : Colors.grey[200],
-//                                     borderRadius: BorderRadius.circular(12),
-//                                   ),
-//                                   child: Column(
-//                                     mainAxisAlignment: MainAxisAlignment.center,
-//                                     children: [
-//                                       Text(
-//                                         DateFormat('E').format(date),
-//                                         style: TextStyle(
-//                                           color: isSelected
-//                                               ? Colors.white
-//                                               : Colors.black,
-//                                         ),
-//                                       ),
-//                                       const SizedBox(height: 5),
-//                                       Text(
-//                                         DateFormat('d').format(date),
-//                                         style: TextStyle(
-//                                           color: isSelected
-//                                               ? Colors.white
-//                                               : Colors.black,
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               );
-//                             },
-//                           ),
-//                         ),
-//                       ),
-//                       IconButton(
-//                         icon: const Icon(Icons.arrow_forward_ios),
-//                         onPressed: () {
-//                           setState(() {
-//                             selectedDate =
-//                                 selectedDate.add(const Duration(days: 1));
-//                           });
-//                           updateBooking(selectedDate, clinicId: 7, doctorId: 7);
-//                         },
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(height: 10),
-//                   BlocBuilder<AvailableBookingCubit, AvailableBookingState>(
-//                     builder: (context, bookingState) {
-//                       if (bookingState is AvailableBookingLoading) {
-//                         return const Center(child: CircularProgressIndicator());
-//                       } else if (bookingState is AvailableBookingFailure) {
-//                         return Text("Failed to load: ${bookingState.message}");
-//                       } else if (bookingState is AvailableBookingSuccess) {
-//                         return AvailableBooking(allSlots: bookingState.data);
-//                       }
-//                       return const SizedBox.shrink();
-//                     },
-//                   ),
-//                   const SizedBox(height: 30),
-//                 ],
-//               ),
-//             );
-//           }
-
-//           return const SizedBox.shrink();
-//         },
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
-import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
-import 'package:skintelligent/widgets/get_review_screen.dart';
-import 'package:skintelligent/widgets/doctor_card.dart';
-import 'package:skintelligent/widgets/make_review_screen.dart';
-import 'package:skintelligent/widgets/stats_row.dart';
-import 'package:skintelligent/widgets/about_me_section.dart';
-import 'package:skintelligent/widgets/available_booking.dart';
-import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
-import 'package:skintelligent/cubit/available_booking_cubit/available_booking_state.dart';
+import 'package:skintelligent/models/available_booking_model.dart';
+import 'package:skintelligent/models/doctor_model.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
+import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
+import 'package:skintelligent/cubit/make_booking_cubit/make_booking_state.dart';
+import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
+
+import '../../widgets/doctor_info_card.dart';
+import '../../widgets/review_buttons.dart';
+import '../../widgets/week_selector.dart';
+import '../../widgets/booking_section.dart';
 
 class DoctorAppointmentScreen extends StatefulWidget {
   const DoctorAppointmentScreen({
@@ -245,38 +32,62 @@ class DoctorAppointmentScreen extends StatefulWidget {
 class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
   late DateTime selectedWeekStart;
   late List<DateTime> visibleWeekStartDates;
-  late List<DateTime> weekDates;
-
+  DoctorModel? doctor;
+  Map<String, List<Session>>? cachedWeeklySlots;
   int weekOffset = 0;
-  int numberOfVisibleWeeks = 4;
+
+  static const int numberOfVisibleWeeks = 4;
 
   @override
   void initState() {
     super.initState();
-    context.read<DoctorCubit>().getDoctorProfile(widget.doctorId);
     selectedWeekStart = _getStartOfWeek(DateTime.now());
-    weekDates = updateBooking(selectedWeekStart);
     visibleWeekStartDates =
-        generateWeekStartDates(weekOffset, numberOfVisibleWeeks);
+        _generateWeekStartDates(weekOffset, numberOfVisibleWeeks);
+    _fetchDoctorAndBookings();
   }
 
-  DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday % 7));
+  void _fetchDoctorAndBookings() {
+    context.read<DoctorCubit>().getDoctorProfile(widget.doctorId);
+    _fetchAvailableBookings();
   }
 
-  List<DateTime> updateBooking(DateTime startOfWeek) {
+  void _fetchAvailableBookings() {
     context.read<AvailableBookingCubit>().getAvailableBookings(
-          date: DateFormat('yyyy-MM-dd').format(startOfWeek),
+          date: DateFormat('yyyy-MM-dd').format(selectedWeekStart),
           clinicId: widget.clinicId,
           doctorId: widget.doctorId,
         );
-    return [startOfWeek];
   }
 
-  List<DateTime> generateWeekStartDates(int startOffset, int count) {
-    final baseDate =
-        _getStartOfWeek(DateTime.now().add(Duration(days: startOffset * 7)));
-    return List.generate(count, (i) => baseDate.add(Duration(days: i * 7)));
+  Future<void> _onRefresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+
+    _fetchDoctorAndBookings();
+  }
+
+  DateTime _getStartOfWeek(DateTime date) =>
+      date.subtract(Duration(days: date.weekday % 7));
+
+  List<DateTime> _generateWeekStartDates(int offset, int count) {
+    final base =
+        _getStartOfWeek(DateTime.now().add(Duration(days: offset * 7)));
+    return List.generate(count, (i) => base.add(Duration(days: i * 7)));
+  }
+
+  void _onDateSelected(DateTime date) {
+    setState(() {
+      selectedWeekStart = date;
+      _fetchAvailableBookings();
+    });
+  }
+
+  void _onWeekChange(int direction) {
+    setState(() {
+      weekOffset += direction;
+      visibleWeekStartDates =
+          _generateWeekStartDates(weekOffset, numberOfVisibleWeeks);
+    });
   }
 
   @override
@@ -289,200 +100,78 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
         elevation: 0,
         leading: const BackButton(color: Colors.black),
       ),
-      body: BlocBuilder<DoctorCubit, DoctorState>(
-        builder: (context, state) {
-          if (state is GetDoctorLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state is GetDoctorFailure) {
-            return Center(
-              child: Text(
-                'Error: ${state.errMessage}',
-                style: const TextStyle(color: Colors.red),
-              ),
+      body: BlocListener<MakeBookingCubit, MakeBookginState>(
+        listener: (context, state) {
+          final messenger = ScaffoldMessenger.of(context);
+          if (state is BookingSuccess) {
+            messenger.showSnackBar(
+              const SnackBar(
+                  content: Text("✅ Booking successful!"),
+                  duration: Duration.zero),
+            );
+          } else if (state is BookingFailure) {
+            messenger.showSnackBar(
+              SnackBar(
+                  content: Text("❌ ${state.errMessage}"),
+                  duration: Duration.zero),
             );
           }
+        },
+        child: BlocBuilder<DoctorCubit, DoctorState>(
+          builder: (context, state) {
+            if (state is GetDoctorLoading && doctor == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (state is GetDoctorSuccess) {
-            final doctor = state.doctor;
-            if (doctor.isApproved) {
+            if (state is GetDoctorFailure) {
               return Center(
-                child: Text(
-                  "The doctor is still not approved 😔",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black.withValues(alpha: 0.7),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                child: Text("Error: ${state.errMessage}",
+                    style: const TextStyle(color: Colors.red)),
               );
             }
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DoctorCard(doctor: doctor),
-                  const SizedBox(height: 24),
-                  StatsRow(
-                    experienceYears: doctor.experienceYears,
-                    phoneNumber: doctor.phoneNumber,
-                    email: doctor.email,
-                  ),
-                  const SizedBox(height: 30),
-                  AboutMeSection(about: doctor.aboutMe),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          context.read<GetReviewCubit>().getReview(
-                                widget.doctorId,
-                                100,
-                              );
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const GetReviewViewScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Show Reviews ",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  MakeReviewScreen(doctorID: widget.doctorId),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Write Reviews ",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    "Weekly's Schedule",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: () {
-                          setState(() {
-                            weekOffset -= numberOfVisibleWeeks;
-                            visibleWeekStartDates = generateWeekStartDates(
-                                weekOffset, numberOfVisibleWeeks);
-                          });
-                        },
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 70,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: visibleWeekStartDates.length,
-                            itemBuilder: (context, index) {
-                              final date = visibleWeekStartDates[index];
-                              final isSelected =
-                                  DateFormat('yyyy-MM-dd').format(date) ==
-                                      DateFormat('yyyy-MM-dd')
-                                          .format(selectedWeekStart);
+            if (state is GetDoctorSuccess) {
+              doctor = state.doctor;
+            }
 
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedWeekStart = date;
-                                    weekDates = updateBooking(date);
-                                  });
-                                },
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 11, vertical: 10),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? Colors.blue
-                                        : Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        DateFormat('E').format(date),
-                                        style: TextStyle(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        DateFormat('d').format(date),
-                                        style: TextStyle(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios),
-                        onPressed: () {
-                          setState(() {
-                            weekOffset += numberOfVisibleWeeks;
-                            visibleWeekStartDates = generateWeekStartDates(
-                                weekOffset, numberOfVisibleWeeks);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  BlocBuilder<AvailableBookingCubit, AvailableBookingState>(
-                    builder: (context, bookingState) {
-                      if (bookingState is AvailableBookingLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (bookingState is AvailableBookingFailure) {
-                        return Text("Failed to load: ${bookingState.message}");
-                      } else if (bookingState is AvailableBookingSuccess) {
-                        return AvailableBooking(allSlots: bookingState.data);
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                ],
+            if (doctor == null) return const SizedBox.shrink();
+
+            return RefreshIndicator(
+              color: Colors.blue,
+              onRefresh: _onRefresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DoctorInfoCard(doctor: doctor!),
+                    const SizedBox(height: 30),
+                    ReviewButtons(doctorId: widget.doctorId),
+                    const SizedBox(height: 30),
+                    WeekSelector(
+                      selectedDate: selectedWeekStart,
+                      dates: visibleWeekStartDates,
+                      onDateSelected: _onDateSelected,
+                      onNextPressed: () => _onWeekChange(1),
+                      onBackPressed: () => _onWeekChange(-1),
+                    ),
+                    const SizedBox(height: 10),
+                    BookingSection(
+                      cachedWeeklySlots: cachedWeeklySlots,
+                      onCacheUpdate: (slots) {
+                        setState(() {
+                          cachedWeeklySlots = slots;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
               ),
             );
-          }
-
-          return const SizedBox.shrink();
-        },
+          },
+        ),
       ),
     );
   }
