@@ -16,16 +16,23 @@ class ReviewButtons extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            context.read<GetReviewCubit>().getReview(doctorId, 100);
-            Navigator.push(context, MaterialPageRoute(builder: (_) => const GetReviewViewScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => GetReviewViewScreen(doctorId: doctorId)));
           },
-          child: const Text("Show Reviews ", style: TextStyle(color: Colors.blue)),
+          child:
+              const Text("Show Reviews ", style: TextStyle(color: Colors.blue)),
         ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => MakeReviewScreen(doctorID: doctorId)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => MakeReviewScreen(doctorID: doctorId)));
           },
-          child: const Text("Write Reviews ", style: TextStyle(color: Colors.blue)),
+          child: const Text("Write Reviews ",
+              style: TextStyle(color: Colors.blue)),
         ),
       ],
     );
