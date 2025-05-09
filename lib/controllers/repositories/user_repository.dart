@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
@@ -10,7 +9,6 @@ import 'package:skintelligent/models/get_review_model.dart';
 import 'package:skintelligent/models/make_review_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
 import 'package:skintelligent/models/user_booking_model.dart';
-
 import '../../models/appointment_model.dart';
 import '../../models/forget_model.dart';
 import '../../models/reset_model.dart';

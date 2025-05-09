@@ -57,7 +57,7 @@ class CustomReviewCard extends StatelessWidget {
 
             // Meta info
             Text(
-              "Reviewed in the United States on $date",
+              "Date: $date",
               style: const TextStyle(fontSize: 12, color: Colors.grey),
             ),
             const SizedBox(height: 4),
