@@ -87,7 +87,6 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         routes: {
           LoginScreen.id: (context) => const LoginScreen(),
-          Qrcode.id: (context) => const Qrcode(),
           ProfileScreen.id: (context) => ProfileScreen(),
           UserBookingScreen.id: (context) => const UserBookingScreen(),
           SplashScreen.id: (context) => const SplashScreen(),
