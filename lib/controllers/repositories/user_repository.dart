@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/models/sumarize_model.dart';
 import 'package:skintelligent/models/user_appointment_cancel_model.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
@@ -247,6 +248,17 @@ class UserRepository {
         },
       );
       return Right(UserAppointmentCancelModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, SummarizeModelResponse>> summarize(
+      dynamic messages) async {
+    try {
+      final response =
+          await api.post(Endpoint.getSummary, data: {"messages": messages});
+      return Right(SummarizeModelResponse.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }

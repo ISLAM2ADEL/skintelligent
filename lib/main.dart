@@ -7,12 +7,14 @@ import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
 import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
 import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
+import 'package:skintelligent/cubit/summary_cubit/summary_cubit.dart';
 import 'package:skintelligent/cubit/user_appointment_cancel_cubit/user_appointment_cancel_cubit.dart';
 import 'package:skintelligent/cubit/user_booking_cubit/user_booking_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
+import 'package:skintelligent/screens/summary_screen/summary_screen.dart';
 import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
 import 'commons.dart';
@@ -78,6 +80,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UserAppointmentCancelCubit(userRepository),
         ),
+        BlocProvider(
+          create: (context) => SummaryCubit(userRepository),
+        ),
       ],
       child: GetMaterialApp(
         routes: {
@@ -93,6 +98,7 @@ class MyApp extends StatelessWidget {
           OtpScreen.id: (context) => const OtpScreen(),
           ResetPassword.id: (context) => const ResetPassword(),
           ForgetScreen.id: (context) => const ForgetScreen(),
+          SummaryScreen.id: (context) => const SummaryScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
