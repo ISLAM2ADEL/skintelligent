@@ -1,6 +1,6 @@
-// lib/providers/chat_provider.dart
 import 'package:flutter/material.dart';
 import 'package:skintelligent/screens/ChatbotScrean/Model/message.dart';
+import 'package:skintelligent/screens/ChatbotScrean/data/Claude_Api_Service.dart';
 
 class ChatProvider with ChangeNotifier {
   final List<Message> _messages = [];
@@ -9,8 +9,9 @@ class ChatProvider with ChangeNotifier {
   List<Message> get messages => _messages;
   bool get isLoading => _isLoading;
 
+  final ClaudeApiService _apiService = ClaudeApiService();
+
   Future<void> sendMessage(String content) async {
-    // Add user message
     _messages.add(Message(
       content: content,
       isUser: true,
@@ -20,18 +21,21 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      // Here you would call your actual API (Claude or your backend)
-      // For now, we'll simulate a response
-      await Future.delayed(const Duration(seconds: 1));
-      
+      // استدعاء API الحقيقية مع المعلمات المطلوبة
+      final response = await _apiService.sendMessage(
+        message: content,
+        appointmentId: 1032, // استخدم القيم المناسبة
+        patientId: 9,
+      );
+
       _messages.add(Message(
-        content: "This is a simulated response to: $content",
+        content: response,
         isUser: false,
         timestamp: DateTime.now(),
       ));
     } catch (e) {
       _messages.add(Message(
-        content: "Error: $e",
+        content: "حدث خطأ أثناء إرسال الرسالة: $e",
         isUser: false,
         timestamp: DateTime.now(),
       ));

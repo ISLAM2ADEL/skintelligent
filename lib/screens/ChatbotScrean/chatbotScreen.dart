@@ -84,9 +84,6 @@ class Chatbotscreen extends StatelessWidget {
                                   _buildOptionButton(
                                       "Update on lipid control guidelines for cardiovascular event prevention?",
                                       context),
-                                  _buildOptionButton(
-                                      "Which type of pain signals a heart attack?",
-                                      context),
                                 ],
                               ),
                             ],
@@ -205,9 +202,10 @@ class Chatbotscreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              if (_messageController.text.isNotEmpty) {
-                final chatProvider = context.read<ChatProvider>();
-                chatProvider.sendMessage(_messageController.text);
+              final text = _messageController.text.trim();
+              if (text.isNotEmpty) {
+                Provider.of<ChatProvider>(context, listen: false)
+                    .sendMessage(text);
                 _messageController.clear();
               }
             },
