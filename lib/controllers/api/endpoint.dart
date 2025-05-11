@@ -8,10 +8,9 @@ class Endpoint {
   static String getDoctors = "/api/doctors";
   static String signUp = "/api/auth/register";
   static String appointmentByWeek = '/api/appointments/week';
-  static String user_booking_appointments = "/api/patients/appointments";
+  static String userBookingAppointments = "/api/patients/appointments";
   static String makeBooking = '/api/appointments/book';
-  static String getSummary =
-      "https://779c-34-124-251-195.ngrok-free.app/summarize"; 
+
   static String doctorById(num id) => "/api/doctors/$id";
   static String cancelBooking({required int appointmentid}) {
     return "/api/patient/appointments/$appointmentid/cancel";
@@ -29,6 +28,10 @@ class Endpoint {
   static String makeReviews() {
     return "/api/reviews";
   }
+
+  // summarize endpoint
+  static String getSummary =
+      "https://779c-34-124-251-195.ngrok-free.app/summarize";
 }
 
 class ApiKey {
@@ -84,6 +87,7 @@ class ApiKey {
 // Make Review
   static const String doctorId = "doctorId";
   static const String patientId = "patientId";
+  static const String clinictId = "clinictId"; 
 // Booking
   static const String appointmentId = "appointmentId";
 // Get User Booking
