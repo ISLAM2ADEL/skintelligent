@@ -147,7 +147,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   children: [
                     DoctorInfoCard(doctor: doctor!),
                     const SizedBox(height: 30),
-                    ReviewButtons(doctorId: widget.doctorId),
+                    ReviewButtons(doctorId: widget.doctorId , clinicId: widget.clinicId),
                     const SizedBox(height: 30),
                     WeekSelector(
                       selectedDate: selectedWeekStart,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skintelligent/widgets/get_review_screen.dart';
 import 'package:skintelligent/widgets/make_review_screen.dart';
-import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
 
 class ReviewButtons extends StatelessWidget {
   final int doctorId;
+  final int clinicId;
 
-  const ReviewButtons({super.key, required this.doctorId});
+  const ReviewButtons(
+      {super.key, required this.doctorId, required this.clinicId});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,8 @@ class ReviewButtons extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => MakeReviewScreen(doctorID: doctorId)));
+                    builder: (_) => MakeReviewScreen(
+                        doctorID: doctorId, clinicID: clinicId)));
           },
           child: const Text("Write Reviews ",
               style: TextStyle(color: Colors.blue)),

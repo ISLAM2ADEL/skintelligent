@@ -126,7 +126,7 @@ class UserRepository {
   }
 
   Future<Either<String, MakeReviewModel>> makeReview({
-    required int patientID,
+    required int clinicID,
     required int doctorID,
     required String comment,
     required int rating,
@@ -135,7 +135,7 @@ class UserRepository {
       final response = await api.post(
         Endpoint.makeReviews(),
         data: {
-          ApiKey.patientId: patientID,
+          ApiKey.clinictId: clinicID,
           ApiKey.doctorId: doctorID,
           ApiKey.comment: comment,
           ApiKey.rating: rating,
@@ -228,7 +228,7 @@ class UserRepository {
 
   Future<Either<String, List<UserBookingModel>>> getMyBookings() async {
     try {
-      final response = await api.get(Endpoint.user_booking_appointments);
+      final response = await api.get(Endpoint.userBookingAppointments);
       final bookings =
           (response as List).map((e) => UserBookingModel.fromJson(e)).toList();
       return Right(bookings);

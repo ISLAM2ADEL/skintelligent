@@ -8,7 +8,6 @@ class MakeReviewCubit extends Cubit<MakeReviewState> {
   MakeReviewCubit(this.userRepository) : super(ReviewInitial());
   TextEditingController addComment = TextEditingController();
   TextEditingController addRate = TextEditingController();
-  TextEditingController patientID = TextEditingController();
 
   // Future<void> makeReview({required int doctorID}) async {
   //   emit(ReviewLoading());
@@ -32,20 +31,17 @@ class MakeReviewCubit extends Cubit<MakeReviewState> {
   //     (result) => emit(ReviewSuccess(review: result)),
   //   );
   // }
-  Future<void> makeReview({required int doctorID}) async {
+  Future<void> makeReview(
+      {required int doctorID, required int clinicID}) async {
     emit(ReviewLoading());
     try {
-      final token =
-          await getIt<CacheHelper>().getData(key: ApiKey.Authorization);
-      final decodedToken = JwtDecoder.decode(token);
-      final patientId = decodedToken[ApiKey.patientId]; // غالبًا int أصلاً
-
+// غالبًا int أصلاً
       final rating = int.parse(addRate.text.trim());
-      print(" patientId: $patientId, type: ${patientId.runtimeType}");
-      print(
-          " comment: ${addComment.text}, type: ${addComment.text.runtimeType}");
-      print(" rate: ${addRate.text}, type: ${addRate.text.runtimeType}");
-      print("doctorID: $doctorID, type: ${doctorID.runtimeType}");
+      // print(" patientId: $patientId, type: ${patientId.runtimeType}");
+      // print(
+      //     " comment: ${addComment.text}, type: ${addComment.text.runtimeType}");
+      // print(" rate: ${addRate.text}, type: ${addRate.text.runtimeType}");
+      // print("doctorID: $doctorID, type: ${doctorID.runtimeType}");
       if (rating < 1 || rating > 5) {
         emit(ReviewFailure(errMessage: '❌ Rate must be between 1 and '));
         return;
@@ -54,7 +50,7 @@ class MakeReviewCubit extends Cubit<MakeReviewState> {
       final response = await userRepository.makeReview(
         comment: addComment.text,
         rating: rating,
-        patientID: int.parse(patientId), // بدون int.parse
+        clinicID: clinicID, // بدون int.parse
         doctorID: doctorID,
       );
 
