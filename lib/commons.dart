@@ -12,7 +12,6 @@ export '../../widgets/customButton.dart';
 export '../../widgets/customTextButton.dart';
 export '../../widgets/customTextField.dart';
 export '../../widgets/dividerWithText.dart';
-export '../../widgets/languages.dart';
 export '../../widgets/termsAndPrivacy.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export '../../const/const.dart';
