@@ -82,10 +82,6 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        Icon(
-          Icons.notifications_none_rounded,
-          size: 32,
-        ),
       ],
     );
   }
