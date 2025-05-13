@@ -1,6 +1,6 @@
 import 'package:skintelligent/commons.dart';
-import 'package:skintelligent/screens/home_screen/home_page.dart';
-import 'package:skintelligent/utiles/dio_helper.dart';
+import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,106 +13,105 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController email = TextEditingController();
+  GlobalKey<FormState> signInFormKey = GlobalKey();
 
-  final TextEditingController password = TextEditingController();
-
-  GlobalKey<FormState> formState = GlobalKey();
-
-//---------------------------------------------------
+//------------------------------------------------------
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: Form(
-        key: formState,
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: ListView(
-            children: [
-              const LanguagesDropDown(),
-              const SizedBox(height: 45),
-              Image.asset(
-                kSkintelligenPath,
-                height: 172,
-                width: 310,
+    return BlocConsumer<UserCubit, UserState>(
+      listener: (context, state) {
+        if (state is SignInSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('success'),
+            ),
+          );
+          Navigator.pushNamed(context, HomePage.id);
+        } else if (state is SignInFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errMessage),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: kBackgroundColor,
+          body: Form(
+            key: signInFormKey,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ListView(
+                children: [
+                  Image.asset(
+                    kSkintelligenPath,
+                    height: 172,
+                    width: 310,
+                  ),
+                  Customtextfield(
+                    myIcon: Icons.mail_outline,
+                    validate: MethodsHelper.validateEmail,
+                    MyController: context.read<UserCubit>().signInEmail,
+                    hintM: "Enter your email",
+                  ),
+                  const SizedBox(height: 20),
+                  Customtextfield(
+                    myIcon: Icons.lock_open,
+                    sufIcon: FontAwesomeIcons.eyeSlash,
+                    validate: MethodsHelper.validatePassword,
+                    MyController: context.read<UserCubit>().signInPassword,
+                    hintM: "Password",
+                  ),
+                  Customtextbutton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      ForgetScreen.id,
+                    ),
+                    text: "Forget Password?",
+                    position: MainAxisAlignment.end,
+                  ),
+                  const SizedBox(height: 20),
+                  state is SignInLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Custombutton(
+                          hight: 70,
+                          textStyle: const TextStyle(
+                              color: kMyPrimaryColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                          color: kMySecondaryColor,
+                          onTap: () {
+                            context.read<UserCubit>().signIn().then((value) {
+                              MethodsHelper.signInClearTextHelper(context);
+                            });
+                          },
+                          text: "Login",
+                        ),
+                  const DividerWithText(),
+                  TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, Registerscreen.id),
+                      child: const Text('Create new account')),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const TermsAndPrivacy(),
+                  const SizedBox(
+                    height: 80,
+                  ),
+                  const Center(
+                    child: Text(
+                      "Version 1.4.1",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                ],
               ),
-              Customtextfield(
-                myIcon: Icons.mail_outline,
-                validate: ConstantsMethods.validateEmail,
-                MyController: email,
-                hintM: "Enter your email",
-              ),
-              const SizedBox(height: 20),
-              Customtextfield(
-                myIcon: Icons.lock_open,
-                sufIcon: FontAwesomeIcons.eyeSlash,
-                validate: ConstantsMethods.validatePassword,
-                MyController: password,
-                hintM: "Password",
-              ),
-              Customtextbutton(
-                text: "Forget Password?",
-                position: MainAxisAlignment.end,
-              ),
-              const SizedBox(height: 20),
-              Custombutton(
-                hight: 70,
-                textStyle: const TextStyle(
-                    color: kMyPrimaryColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-                color: kMySecondaryColor,
-                onTap: () {
-                  if (formState.currentState!.validate()) {
-                    Navigator.pushReplacementNamed(context, HomePage.id);
-                  }
-                },
-                text: "Login",
-              ),
-              DividerWithText(),
-              Custombutton(
-                imagePath: kGoogleImagePath,
-                hight: 70,
-                textStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-                onTap: () =>
-                    Navigator.pushReplacementNamed(context, LoginScreen.id),
-                text: "Sign in with google",
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Custombutton(
-                imagePath: kFacebookImagePath,
-                hight: 70,
-                textStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-                onTap: () =>
-                    Navigator.pushReplacementNamed(context, LoginScreen.id),
-                text: "Sign in with facebook",
-              ),
-              const SizedBox(
-                height: 125,
-              ),
-              TermsAndPrivacy(),
-              const SizedBox(
-                height: 20,
-              ),
-              const Center(
-                child: Text(
-                  "Version 1.4.1",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

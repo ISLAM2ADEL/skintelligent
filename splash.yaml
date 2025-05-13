@@ -1,0 +1,13 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: "#FFFFFF"
+  image : "assets/images/Skintelligent_splash_native.png"
+#  branding : "assets/images/Skintelligent_splash_native.png"
+#  branding_dark : "assets/images/Skintelligent_splash_native.png"
+  android_12:
+    color: "#FFFFFF"
+    image :  "assets/images/Skintelligent_splash_native.png"
+#    branding: "assets/images/Skintelligent_splash_native.png"
+#    branding_dark : "assets/images/Skintelligent_splash_native.png"

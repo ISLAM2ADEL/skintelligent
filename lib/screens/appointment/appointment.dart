@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skintelligent/const/const.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
+import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
-import 'confirm_appointment.dart';
+import '../../commons.dart';
+// import '../../test_space/appoinment.dart';
 
 class Appointment extends StatelessWidget {
   const Appointment({super.key});
@@ -13,11 +16,18 @@ class Appointment extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: const CustomBottomBar(),
-      body: SingleChildScrollView(
-        child: Column(
+
+    return BlocProvider(
+      create: (context) {
+        final cubit = context.read<AppointmentCubit>();
+        cubit.getAllDoctors(); // Fetch doctors on init
+        return cubit;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: const CustomBottomBar(),
+        body: ListView(
+          padding: EdgeInsets.zero,
           children: [
             CustomContainer(
               height: height,
@@ -30,170 +40,42 @@ class Appointment extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "SkinCo",
-                clinicAddress: "Helwan",
-                doctorName: "Mohammed Hanafy",
-                experience: "7",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "PureSkin Center",
-                clinicAddress: "Maadi",
-                doctorName: "Mamdouh Fathallah",
-                experience: "3",
-                context: context),
-            SizedBox(
-              height: height * .025,
-            ),
-            doctorContainer(height, width,
-                clinicName: "DermaCare Clinic",
-                clinicAddress: "6 October",
-                doctorName: "Marwan Sallam",
-                experience: "5",
-                context: context),
-            SizedBox(
-              height: height * .025,
+            BlocBuilder<AppointmentCubit, AppointmentState>(
+              builder: (context, state) {
+                if (state is AppointmentLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is AppointmentFailure) {
+                  return Center(child: Text(state.errorMessage));
+                } else if (state is AppointmentSuccess) {
+                  return ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(horizontal: width * .025),
+                    itemCount: state.doctors.length,
+                    itemBuilder: (context, index) {
+                      final doctor = state.doctors[index];
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: height * .02),
+                        child: doctorContainer(
+                          height,
+                          width,
+                          doctorID: doctor.id,
+                          clinicName: doctor.clinics.first.clinicName,
+                          doctorName: "${doctor.firstName} ${doctor.lastName}",
+                          experience: doctor.experienceYears.toString(),
+                          fees: doctor.defaultExaminationFee,
+                          profilePicture: doctor.profilePicture,
+                          clinicID: doctor.clinics.first.id,
+                          context: context,
+                        ),
+                      );
+                    },
+                    separatorBuilder: (_, __) => SizedBox(height: height * .01),
+                  );
+                } else {
+                  return const Center(child: Text("No data available"));
+                }
+              },
             ),
           ],
         ),
@@ -207,11 +89,14 @@ class Appointment extends StatelessWidget {
     required String clinicName,
     required String doctorName,
     required String experience,
-    required String clinicAddress,
+    required int fees,
+    required String profilePicture,
+    required int doctorID,
+    required int clinicID,
     required BuildContext context,
   }) {
     return Container(
-      height: height * .17,
+      height: height * .22,
       width: width * .95,
       decoration: BoxDecoration(
         color: Colors.grey.shade300,
@@ -221,87 +106,66 @@ class Appointment extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: width * .025),
         child: Row(
           children: [
-            const CircleAvatar(
-              backgroundImage: AssetImage("${path}skin doctor.png"),
-              radius: 45,
+            CircleAvatar(
+              backgroundImage: NetworkImage(profilePicture),
+              radius: 46,
             ),
-            const SizedBox(
-              width: 7,
-            ),
+            const SizedBox(width: 15),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: height * .02),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      clinicName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    clinicName,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    doctorName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Experience Years : $experience Years",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "Examination Fee : $fees EGP",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DoctorAppointmentScreen(
+                              doctorId: doctorID, clinicId: clinicID),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: width,
+                      height: height * .035,
+                      decoration: BoxDecoration(
+                        color: color7,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Make Appointment",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.deepPurple,
+                          ),
+                        ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: width * .45,
-                          child: Text(
-                            doctorName,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "$experience Years",
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        InkWell(
-                          child: Container(
-                            width: 85,
-                            height: 25,
-                            decoration: BoxDecoration(
-                                color: color7,
-                                borderRadius: BorderRadius.circular(20.0)),
-                            child: const Center(
-                              child: Text(
-                                "Appointment",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.deepPurple,
-                                ),
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return ConfirmAppointment();
-                                });
-                          },
-                        ),
-                        const Spacer(),
-                        Text(
-                          clinicAddress,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -333,10 +197,6 @@ class Appointment extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        Icon(
-          Icons.notifications_none_rounded,
-          size: 32,
         ),
       ],
     );

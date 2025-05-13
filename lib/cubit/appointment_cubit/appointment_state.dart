@@ -8,3 +8,17 @@ final class AppointmentInitial extends AppointmentState {}
 final class AppointmentDateUpdate extends AppointmentState {}
 
 final class AppointmentTimeUpdate extends AppointmentState {}
+
+final class AppointmentLoading extends AppointmentState {}
+
+final class AppointmentFailure extends AppointmentState {
+  final String errorMessage;
+  AppointmentFailure({required this.errorMessage});
+}
+
+final class AppointmentSuccess extends AppointmentState {
+  final String successMessage;
+  final List<DoctorModel> doctors;
+
+  AppointmentSuccess({required this.successMessage,required this.doctors});
+}

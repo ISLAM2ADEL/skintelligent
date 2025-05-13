@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/cubit/user_cubit/user_cubit.dart'; 
 
-Widget buildInputField(IconData icon, String label, String texthint,
-    {TextEditingController? controller}) {
+Widget buildInputField(IconData icon, String label, String texthint) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: SingleChildScrollView(
