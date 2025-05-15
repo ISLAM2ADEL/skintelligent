@@ -10,11 +10,25 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit(this.userRepository) : super(ChatInitial());
 
   Future<void> sendConversation(List<Map<String, String>> messages) async {
+    print("ChatCubit called with: $messages");
     emit(ChatLoading());
 
     final result = await userRepository.sendConversation(messages);
 
-    result.fold((failure) => emit(ChatFailure(failure)),
-        (summaryResponse) => emit(ChatSuccess(summaryResponse)));
+    result.fold(
+      (failure) {
+        print("❌ API Error: $failure");
+        emit(ChatFailure(failure));
+      },
+      (chatModel) {
+        print("✅ API Success:");
+        print("Response: ${chatModel.response}");
+        print("Finished: ${chatModel.finished}");
+        for (var convo in chatModel.fullConversation) {
+          print("→ ${convo.role}: ${convo.content}");
+        }
+        emit(ChatSuccess(chatModel));
+      },
+    );
   }
 }

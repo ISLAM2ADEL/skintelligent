@@ -12,7 +12,7 @@ class Chatbotscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 217, 237, 253),
+      backgroundColor: Color(0xffD4E7EE),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pushNamed(context, HomePage.id),
@@ -32,6 +32,24 @@ class Chatbotscreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            //chat header
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xffD4E7EE),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Text(
+                  'How Can I Help You Today?',
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
             // Chat messages list
             Expanded(
               child: BlocBuilder<ChatCubit, ChatState>(
@@ -45,7 +63,8 @@ class Chatbotscreen extends StatelessWidget {
                   if (state is ChatSuccess) {
                     final chatModel = state.chatModel;
                     return ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       itemCount: chatModel.fullConversation.length,
                       itemBuilder: (context, index) {
                         final message = chatModel.fullConversation[index];

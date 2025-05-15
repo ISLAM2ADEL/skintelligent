@@ -266,24 +266,20 @@ class UserRepository {
   }
 
   Future<Either<String, ChatModel>> sendConversation(dynamic messages) async {
-  try {
-    final messageContent = messages[0]['content'];
+    try {
+      final messageContent = messages[0]['content'];
+      print("Sending message to API: $messageContent");
 
-    final response = await api.post(
-      Endpoint.chats,
-      data: {
-        "appointmentId": 0,
-        "message": messageContent,
-        "patinetId": 0
-      },
-    );
+      final response = await api.post(
+        Endpoint.chats,
+        data: {"appointmentId": 0, "message": messageContent, "patinetId": 0},
+      );
 
-    print("API response: ${response}");
-    return Right(ChatModel.fromJson(response));
-  } on ServerException catch (e) {
-    print("API error: ${e.errorModel.errorMessage}");
-    return Left(e.errorModel.errorMessage);
+      print("API response: ${response}");
+      return Right(ChatModel.fromJson(response));
+    } on ServerException catch (e) {
+      print("API error: ${e.errorModel.errorMessage}");
+      return Left(e.errorModel.errorMessage);
+    }
   }
-}
-
 }
