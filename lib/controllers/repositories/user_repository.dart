@@ -272,7 +272,11 @@ class UserRepository {
 
       final response = await api.post(
         Endpoint.chats,
-        data: {"appointmentId": 0, "message": messageContent, "patinetId": 0},
+        data: {
+          "appointmentId": 1032,
+          "message": messageContent,
+          "patientId": 9,
+        },
       );
 
       print("API response: ${response}");

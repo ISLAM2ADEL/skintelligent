@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
-        initialRoute: Chatbotscreen.id,
+        initialRoute:  SplashScreen.id,
       ),
     );
   }

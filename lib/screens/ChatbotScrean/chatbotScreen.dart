@@ -56,11 +56,11 @@ class Chatbotscreen extends StatelessWidget {
                 builder: (context, state) {
                   if (state is ChatLoading) {
                     return Center(child: CircularProgressIndicator());
-                  }
-                  if (state is ChatFailure) {
-                    return Center(child: Text(state.error));
-                  }
-                  if (state is ChatSuccess) {
+                  } else if (state is ChatFailure) {
+                    return SnackBar(
+                        content: Text(state.error),
+                        backgroundColor: Colors.red);
+                  } else if (state is ChatSuccess) {
                     final chatModel = state.chatModel;
                     return ListView.builder(
                       padding: const EdgeInsets.symmetric(
