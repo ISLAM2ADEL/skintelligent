@@ -24,7 +24,10 @@ import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.da
 import 'commons.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  setputServiceLocator();
+  await getIt<CacheHelper>().init();
   runApp(MyApp());
 }
 

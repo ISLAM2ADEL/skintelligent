@@ -9,10 +9,12 @@ class Chatbotscreen extends StatelessWidget {
   static const String id = 'Chatbotscreen';
   final TextEditingController _messageController = TextEditingController();
 
+  Chatbotscreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffD4E7EE),
+      backgroundColor: const Color(0xffD4E7EE),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pushNamed(context, HomePage.id),
@@ -32,7 +34,7 @@ class Chatbotscreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            //chat header
+            // Chat header
             Container(
               height: 60,
               width: double.infinity,
@@ -50,32 +52,43 @@ class Chatbotscreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Chat messages list
-            Expanded(
-              child: BlocBuilder<ChatCubit, ChatState>(
-                builder: (context, state) {
-                  if (state is ChatLoading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state is ChatFailure) {
-                    return SnackBar(
-                        content: Text(state.error),
-                        backgroundColor: Colors.red);
-                  } else if (state is ChatSuccess) {
-                    final chatModel = state.chatModel;
-                    return ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      itemCount: chatModel.fullConversation.length,
-                      itemBuilder: (context, index) {
-                        final message = chatModel.fullConversation[index];
-                        return ChatBubble(message: message);
-                      },
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
+
+            // BlocListener for showing error snackbar
+            BlocListener<ChatCubit, ChatState>(
+              listener: (context, state) {
+                if (state is ChatFailure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.error),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: Expanded(
+                child: BlocBuilder<ChatCubit, ChatState>(
+                  builder: (context, state) {
+                    if (state is ChatLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ChatSuccess) {
+                      final chatModel = state.chatModel;
+                      return ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        itemCount: chatModel.fullConversation.length,
+                        itemBuilder: (context, index) {
+                          final message = chatModel.fullConversation[index];
+                          return ChatBubble(message: message);
+                        },
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
               ),
             ),
+
+            // Chat input field
             _buildChatInput(context),
           ],
         ),
@@ -103,16 +116,7 @@ class Chatbotscreen extends StatelessWidget {
           ),
           const SizedBox(width: 5),
           IconButton(
-            onPressed: () {
-              final text = _messageController.text.trim();
-              if (text.isNotEmpty) {
-                final messages = [
-                  {"role": "user", "content": text}
-                ];
-                context.read<ChatCubit>().sendConversation(messages);
-                _messageController.clear();
-              }
-            },
+            onPressed: () => _sendMessage(context),
             icon: const Icon(Icons.send),
           ),
         ],

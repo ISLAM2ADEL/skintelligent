@@ -275,7 +275,7 @@ class UserRepository {
         data: {
           "appointmentId": 1032,
           "message": messageContent,
-          "patientId": 9,
+          "patinetId": 9,
         },
       );
 
