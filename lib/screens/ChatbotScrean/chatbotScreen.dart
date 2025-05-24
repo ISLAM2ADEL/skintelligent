@@ -78,7 +78,7 @@ class Chatbotscreen extends StatelessWidget {
                         itemCount: chatModel.fullConversation.length,
                         itemBuilder: (context, index) {
                           final message = chatModel.fullConversation[index];
-                          return ChatBubble(message: message);
+                          return ChatBubble(message: message, role: null);
                         },
                       );
                     }

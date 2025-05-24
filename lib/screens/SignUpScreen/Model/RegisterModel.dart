@@ -44,3 +44,4 @@ class RegisterData {
     token = json['token'] ?? "";
   }
 }
+
