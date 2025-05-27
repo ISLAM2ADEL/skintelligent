@@ -53,7 +53,10 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
         if (state is UserBookingLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is UserBookingFailure) {
-          return Center(child: Text("❌ ${state.message}"));
+          return const Center(child: Text("❌ No booked appointments found",style: TextStyle(
+            fontSize: 18,
+            color: Colors.grey
+          ),));
         } else if (state is UserBookingSuccess) {
           if (state.bookings.isEmpty) {
             return const Center(child: Text("No bookings yet."));

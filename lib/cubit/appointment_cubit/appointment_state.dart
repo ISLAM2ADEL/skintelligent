@@ -19,6 +19,11 @@ final class AppointmentFailure extends AppointmentState {
 final class AppointmentSuccess extends AppointmentState {
   final String successMessage;
   final List<DoctorModel> doctors;
+  final int count;
 
-  AppointmentSuccess({required this.successMessage,required this.doctors});
+  AppointmentSuccess({
+    required this.successMessage,
+    required this.doctors,
+    required this.count,
+  });
 }
