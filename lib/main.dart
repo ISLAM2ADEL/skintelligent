@@ -4,13 +4,18 @@ import 'package:skintelligent/controllers/api/dio_consumer.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
 import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
+import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
+import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
+import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
+import 'package:skintelligent/cubit/summary_cubit/summary_cubit.dart';
+import 'package:skintelligent/cubit/user_appointment_cancel_cubit/user_appointment_cancel_cubit.dart';
+import 'package:skintelligent/cubit/user_booking_cubit/user_booking_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
-import 'package:skintelligent/screens/user_booking/user_booking.dart';
-import 'package:skintelligent/test_space/appoinment.dart';
-import 'package:skintelligent/test_space/login_screen.dart';
+import 'package:skintelligent/screens/summary_screen/summary_screen.dart';
+import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
 import 'commons.dart';
 
@@ -29,6 +34,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    UserRepository userRepository =
+        UserRepository(api: DioConsumer(dio: Dio()));
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -38,7 +45,7 @@ class MyApp extends StatelessWidget {
           create: (context) => OnboardingCubit(),
         ),
         BlocProvider(
-          create: (context) => AppointmentCubit(UserRepository(api: DioConsumer(dio: Dio()))),
+          create: (context) => AppointmentCubit(userRepository),
         ),
         BlocProvider(
           create: (context) => ChatbotcubitCubit(),
@@ -47,28 +54,39 @@ class MyApp extends StatelessWidget {
           create: (context) => SignupCubit(),
         ),
         BlocProvider(
-          create: (context) =>
-              ForgetCubit(UserRepository(api: DioConsumer(dio: Dio()))),
+          create: (context) => ForgetCubit(userRepository),
         ),
         BlocProvider(
-          create: (context) =>
-              UserCubit(UserRepository(api: DioConsumer(dio: Dio()))),
+          create: (context) => UserCubit(userRepository),
         ),
         BlocProvider(
-          create: (context) => DoctorCubit(
-            UserRepository(api: DioConsumer(dio: Dio())),
-          ),
+          create: (context) => DoctorCubit(userRepository),
         ),
         BlocProvider(
-          create: (context) => AvailableBookingCubit(
-            UserRepository(api: DioConsumer(dio: Dio())),
-          ),
+          create: (context) => AvailableBookingCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => GetReviewCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => MakeReviewCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => MakeBookingCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => UserBookingCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => UserAppointmentCancelCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => SummaryCubit(userRepository),
         ),
       ],
       child: GetMaterialApp(
         routes: {
           LoginScreen.id: (context) => const LoginScreen(),
-          Qrcode.id: (context) => const Qrcode(),
           ProfileScreen.id: (context) => ProfileScreen(),
           UserBookingScreen.id: (context) => const UserBookingScreen(),
           SplashScreen.id: (context) => const SplashScreen(),
@@ -77,10 +95,9 @@ class MyApp extends StatelessWidget {
           Chatbotscreen.id: (context) => Chatbotscreen(),
           Registerscreen.id: (context) => Registerscreen(),
           OtpScreen.id: (context) => const OtpScreen(),
-          LoginScreenTest.id: (context) => LoginScreenTest(),
-          AppointmentScreen.id: (context) => const AppointmentScreen(),
           ResetPassword.id: (context) => const ResetPassword(),
-          ForgetScreen.id:(context)=>const ForgetScreen()
+          ForgetScreen.id: (context) => const ForgetScreen(),
+          SummaryScreen.id: (context) => const SummaryScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
@@ -89,4 +106,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

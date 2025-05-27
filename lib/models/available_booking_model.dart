@@ -1,14 +1,14 @@
 import 'package:skintelligent/controllers/api/endpoint.dart';
 
-class AppointmentSlot {
+class Session {
   final int id;
-  final DateTime startTime;
-  final DateTime endTime;
+  final String startTime;
+  final String endTime;
   final bool isCanceled;
   final bool isBooked;
-  final DateTime repeatUntil;
+  final String repeatUntil;
 
-  AppointmentSlot({
+  Session({
     required this.id,
     required this.startTime,
     required this.endTime,
@@ -17,32 +17,60 @@ class AppointmentSlot {
     required this.repeatUntil,
   });
 
-  factory AppointmentSlot.fromJson(Map<String, dynamic> json) {
-    return AppointmentSlot(
+  factory Session.fromJson(Map<String, dynamic> json) {
+    return Session(
       id: json[ApiKey.id],
-      startTime: DateTime.parse(json[ApiKey.startTime]),
-      endTime: DateTime.parse(json[ApiKey.endTime]),
+      startTime: json[ApiKey.startTime],
+      endTime: json[ApiKey.endTime],
       isCanceled: json[ApiKey.isCanceled],
       isBooked: json[ApiKey.isBooked],
-      repeatUntil: DateTime.parse(json[ApiKey.repeatUntil]),
+      repeatUntil: json[ApiKey.repeatUntil],
     );
   }
 }
 
-class AvailableBookingModel {
-  final Map<String, List<AppointmentSlot>> bookings;
+class WeeklySchedule {
+  final List<Session> Sunday;
+  final List<Session> Monday;
+  final List<Session> Tuesday;
+  final List<Session> Wednesday;
+  final List<Session> Thursday;
+  final List<Session> Friday;
+  final List<Session> Saturday;
 
-  AvailableBookingModel({required this.bookings});
+  WeeklySchedule({
+    required this.Sunday,
+    required this.Monday,
+    required this.Tuesday,
+    required this.Wednesday,
+    required this.Thursday,
+    required this.Friday,
+    required this.Saturday,
+  });
 
-  factory AvailableBookingModel.fromJson(Map<String, dynamic> json) {
-    final Map<String, List<AppointmentSlot>> parsed = {};
-
-    json.forEach((day, slotsJson) {
-      parsed[day] = (slotsJson as List)
-          .map((slotJson) => AppointmentSlot.fromJson(slotJson))
-          .toList();
-    });
-
-    return AvailableBookingModel(bookings: parsed);
+  factory WeeklySchedule.fromJson(Map<String, dynamic> json) {
+    return WeeklySchedule(
+      Sunday: (json['Sunday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+      Monday: (json['Monday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+      Tuesday: (json['Tuesday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+      Wednesday: (json['Wednesday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+      Thursday: (json['Thursday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+      Friday: (json['Friday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+      Saturday: (json['Saturday'] ?? [])
+          .map<Session>((e) => Session.fromJson(e))
+          .toList(),
+    );
   }
 }

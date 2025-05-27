@@ -39,7 +39,6 @@ class ForgetScreen extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: ListView(
                 children: [
-                  const LanguagesDropDown(),
                   const SizedBox(height: 45),
                   Image.asset(
                     kSkintelligenPath,

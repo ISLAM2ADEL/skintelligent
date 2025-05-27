@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
-import 'package:skintelligent/screens/user_booking/user_booking.dart';
+import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/widgets/logout_button.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -35,24 +35,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? scanResult =
-        ModalRoute.of(context)?.settings.arguments as String?;
+    ModalRoute.of(context)?.settings.arguments as String?;
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, Qrcode.id);
-            },
-            child: const Icon(
-              Icons.qr_code_2,
-              size: 40,
-            ),
-          ),
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(100),
+            preferredSize: const Size.fromHeight(100),
             child: AppBar(
               elevation: 0,
               backgroundColor: Colors.transparent,
@@ -62,38 +52,6 @@ class ProfileScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              if (scanResult != null)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    color: Colors.black87,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: "Scanned QR Code:\n",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: scanResult,
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.greenAccent),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: iconPalitte.length,

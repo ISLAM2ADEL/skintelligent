@@ -12,7 +12,6 @@ export '../../widgets/customButton.dart';
 export '../../widgets/customTextButton.dart';
 export '../../widgets/customTextField.dart';
 export '../../widgets/dividerWithText.dart';
-export '../../widgets/languages.dart';
 export '../../widgets/termsAndPrivacy.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export '../../const/const.dart';
@@ -29,7 +28,6 @@ export 'package:skintelligent/screens/SignUpScreen/Cubit/cubit/signup_cubit.dart
 export 'package:skintelligent/screens/SignUpScreen/Registerscreen.dart';
 export 'package:skintelligent/screens/appointment/appointment.dart';
 export 'package:skintelligent/screens/home_screen/home_page.dart';
-export 'package:skintelligent/screens/qr_code/qr_code.dart';
 export 'package:skintelligent/controllers/api/endpoint.dart';
 export 'package:skintelligent/controllers/cache/cache_helper.dart';
 export 'package:skintelligent/services/service_locator.dart';

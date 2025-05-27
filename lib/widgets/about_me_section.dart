@@ -17,6 +17,7 @@ class AboutMeSection extends StatelessWidget {
         Text(about,
             style: const TextStyle(color: Colors.grey),
             textAlign: TextAlign.justify),
+        const SizedBox(height: 20),
       ],
     );
   }

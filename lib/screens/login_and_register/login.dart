@@ -1,7 +1,6 @@
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
-import 'package:skintelligent/screens/otp/otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(15.0),
               child: ListView(
                 children: [
-                  const LanguagesDropDown(),
                   Image.asset(
                     kSkintelligenPath,
                     height: 172,
@@ -84,47 +82,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontWeight: FontWeight.bold),
                           color: kMySecondaryColor,
                           onTap: () {
-                            // if (context
-                            //     .read<UserCubit>()
-                            //     .signInFormKey
-                            //     .currentState!
-                            //     .validate()) {
-                            // }
                             context.read<UserCubit>().signIn().then((value) {
-                              MethodsHelper.signInTextFormHelper(context);
+                              MethodsHelper.signInClearTextHelper(context);
                             });
                           },
                           text: "Login",
                         ),
                   const DividerWithText(),
-                  Custombutton(
-                    imagePath: kGoogleImagePath,
-                    hight: 70,
-                    textStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    ),
-                    onTap: () =>
-                        Navigator.pushReplacementNamed(context, LoginScreen.id),
-                    text: "Sign in with google",
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Custombutton(
-                    imagePath: kFacebookImagePath,
-                    hight: 70,
-                    textStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    ),
-                    onTap: () =>
-                        Navigator.pushReplacementNamed(context, LoginScreen.id),
-                    text: "Sign in with facebook",
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   TextButton(
                       onPressed: () =>
                           Navigator.pushNamed(context, Registerscreen.id),
@@ -134,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const TermsAndPrivacy(),
                   const SizedBox(
-                    height: 20,
+                    height: 80,
                   ),
                   const Center(
                     child: Text(

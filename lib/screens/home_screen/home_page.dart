@@ -3,7 +3,7 @@ import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
 import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
-import 'package:skintelligent/screens/qr_code/qr_code.dart';
+import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import '../../const/const.dart';
 
 class HomePage extends StatelessWidget {
@@ -39,8 +39,8 @@ class HomePage extends StatelessWidget {
             SizedBox(height: height * .037),
             buildContainer(
                 context: context,
-                containerText: "QR Code",
-                containerImage: "QR code.png",
+                containerText: "Bookings",
+                containerImage: "bookings.png",
                 containerColor: color7,
                 width: width,
                 height: height),
@@ -81,10 +81,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        Icon(
-          Icons.notifications_none_rounded,
-          size: 32,
         ),
       ],
     );
@@ -128,8 +124,8 @@ class HomePage extends StatelessWidget {
       onTap: () {
         containerText == "Appointment"
             ? Navigator.pushNamed(context, Appointment.id)
-            : containerText == "QR Code"
-                ? Navigator.pushNamed(context, Qrcode.id)
+            : containerText == "Bookings"
+                ? Navigator.pushNamed(context, UserBookingScreen.id)
                 : Navigator.pushNamed(context, Chatbotscreen.id);
       },
     );

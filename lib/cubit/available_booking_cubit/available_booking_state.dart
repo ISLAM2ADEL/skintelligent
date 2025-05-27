@@ -1,5 +1,3 @@
-// lib/cubit/available_booking_cubit/available_booking_state.dart
-
 import 'package:skintelligent/models/available_booking_model.dart';
 
 abstract class AvailableBookingState {}
@@ -14,9 +12,9 @@ class AvailableBookingFailure extends AvailableBookingState {
 }
 
 class AvailableBookingSuccess extends AvailableBookingState {
-  final Map<String, List<AppointmentSlot>> data;
+  final Map<String, List<Session>> data;
   final String currentDay;
-  final List<AppointmentSlot> currentSlots;
+  final List<Session> currentSlots;
 
   AvailableBookingSuccess({
     required this.data,

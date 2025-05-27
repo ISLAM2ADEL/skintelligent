@@ -6,7 +6,7 @@ import 'package:skintelligent/const/custom_container.dart';
 import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
 import '../../commons.dart';
-import '../../test_space/appoinment.dart';
+// import '../../test_space/appoinment.dart';
 
 class Appointment extends StatelessWidget {
   const Appointment({super.key});
@@ -34,7 +34,8 @@ class Appointment extends StatelessWidget {
               widget: CustomContainer(
                 height: height,
                 widget: Padding(
-                  padding: EdgeInsets.only(left: width * .08, right: width * .08),
+                  padding:
+                      EdgeInsets.only(left: width * .08, right: width * .08),
                   child: buildWidget(),
                 ),
               ),
@@ -54,17 +55,17 @@ class Appointment extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final doctor = state.doctors[index];
                       return Padding(
-                        padding: EdgeInsets.symmetric(vertical: height*.02),
+                        padding: EdgeInsets.symmetric(vertical: height * .02),
                         child: doctorContainer(
                           height,
                           width,
                           doctorID: doctor.id,
-                          clinicName:  doctor.clinics.first.clinicName,
+                          clinicName: doctor.clinics.first.clinicName,
                           doctorName: "${doctor.firstName} ${doctor.lastName}",
                           experience: doctor.experienceYears.toString(),
                           fees: doctor.defaultExaminationFee,
                           profilePicture: doctor.profilePicture,
-                          clinicID:doctor.clinics.first.id,
+                          clinicID: doctor.clinics.first.id,
                           context: context,
                         ),
                       );
@@ -83,17 +84,17 @@ class Appointment extends StatelessWidget {
   }
 
   Container doctorContainer(
-      double height,
-      double width, {
-        required String clinicName,
-        required String doctorName,
-        required String experience,
-        required int fees,
-        required String profilePicture,
-        required int doctorID,
-        required int clinicID,
-        required BuildContext context,
-      }) {
+    double height,
+    double width, {
+    required String clinicName,
+    required String doctorName,
+    required String experience,
+    required int fees,
+    required String profilePicture,
+    required int doctorID,
+    required int clinicID,
+    required BuildContext context,
+  }) {
     return Container(
       height: height * .22,
       width: width * .95,
@@ -140,13 +141,14 @@ class Appointment extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DoctorAppointmentScreen(doctorId: doctorID, clinicId: clinicID),
+                          builder: (context) => DoctorAppointmentScreen(
+                              doctorId: doctorID, clinicId: clinicID),
                         ),
                       );
                     },
                     child: Container(
                       width: width,
-                      height: height*.035,
+                      height: height * .035,
                       decoration: BoxDecoration(
                         color: color7,
                         borderRadius: BorderRadius.circular(20.0),
@@ -195,10 +197,6 @@ class Appointment extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        Icon(
-          Icons.notifications_none_rounded,
-          size: 32,
         ),
       ],
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/home_screen/home_page.dart';
 import 'package:skintelligent/commons.dart';
-import 'package:skintelligent/screens/qr_code/qr_code.dart';
+import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'const.dart';
 
 class CustomBottomBar extends StatelessWidget {
@@ -35,10 +35,10 @@ class CustomBottomBar extends StatelessWidget {
               ),
               InkWell(
                 child: buildIcon(
-                  icons: Icons.document_scanner,
+                  icons: Icons.calendar_month_outlined,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, Qrcode.id);
+                  Navigator.pushNamed(context, UserBookingScreen.id);
                 },
               ),
               InkWell(
