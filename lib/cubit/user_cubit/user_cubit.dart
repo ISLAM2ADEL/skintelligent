@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit_state.dart';
@@ -23,6 +23,7 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController signUpLastName = TextEditingController();
   //Sign up phone number
   TextEditingController signUpPhoneNumber = TextEditingController();
+  TextEditingController signUpAddress = TextEditingController();
   //Sign up email
   TextEditingController signUpEmail = TextEditingController();
   //Sign up password
@@ -31,29 +32,44 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController dateOfBirth = TextEditingController();
   TextEditingController gender = TextEditingController();
-  TextEditingController address = TextEditingController();
   SigninModel? user;
 
-  void uploadProfilePic(File profilePic) {
-    emit(UploadProfilePic(profilePic: profilePic));
+  void uploadProfilePic(File pic) {
+    profilePic = pic; // Store the selected image
+    emit(UploadProfilePic(profilePic: pic));
   }
+
 
   signUp() async {
     emit(SignUpLoading());
+
+    if (profilePic == null) {
+      emit(SignUpFailure(errMessage: "Please upload a profile picture."));
+      return;
+    }
+
+    final multipartFile = await MultipartFile.fromFile(profilePic!.path,
+        filename: profilePic!.path.split('/').last);
+
     final response = await userRepository.signUp(
-      name: signUpFirstName.text,
+      firstName: signUpFirstName.text,
+      lastName: signUpLastName.text,
+      address: signUpAddress.text,
       phone: signUpPhoneNumber.text,
       email: signUpEmail.text,
       password: signUpPassword.text,
+      dateOfBirth: dateOfBirth.text,
+      gender: gender.text,
       confirmPassword: confirmPassword.text,
-      profilePic :profilePic as XFile,
+      profilePic: multipartFile,
     );
-    response.fold(
-      (errMessage) => emit(SignUpFailure(errMessage: errMessage)),
-      (signUpModel) => emit(SignUpSuccess(message: "Signup Successful"))
 
+    response.fold(
+          (errMessage) => emit(SignUpFailure(errMessage: errMessage)),
+          (signUpModel) => emit(SignUpSuccess(message: "Signup Successful")),
     );
   }
+
 
   signIn() async {
     emit(SignInLoading());

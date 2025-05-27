@@ -98,6 +98,14 @@ class Registerscreen extends StatelessWidget {
                                     context.read<UserCubit>().signUpPhoneNumber,
                               ),
                               const SizedBox(height: 16),
+                              CustomInputField(
+                                labelText: 'Address',
+                                hintText: 'Dokki, Giza',
+                                isDense: true,
+                                controller:
+                                context.read<UserCubit>().signUpAddress,
+                              ),
+                              const SizedBox(height: 16),
                               //! Password
                               CustomInputField(
                                 labelText: 'Password',
@@ -132,13 +140,6 @@ class Registerscreen extends StatelessWidget {
                                 hintText: 'Your gender',
                                 isDense: true,
                                 controller: context.read<UserCubit>().gender,
-                              ),
-                              const SizedBox(height: 16),
-                              CustomInputField(
-                                labelText: 'Address',
-                                hintText: 'Your address',
-                                isDense: true,
-                                controller: context.read<UserCubit>().address,
                               ),
                               const SizedBox(height: 10),
                               state is SignUpLoading

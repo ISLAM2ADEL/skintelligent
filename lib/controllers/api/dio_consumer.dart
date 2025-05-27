@@ -46,17 +46,32 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  Future post(String path,
-      {dynamic data,
-      Map<String, dynamic>? queryParameters,
-      bool isFormData = false}) async {
+  Future post(
+      String path, {
+        dynamic data,
+        Options? options,
+        Map<String, dynamic>? queryParameters,
+        bool isFormData = false,
+      }) async {
     try {
-      final response = await dio.post(path,
-          data: isFormData ? FormData.fromMap(data) : data,
-          queryParameters: queryParameters);
+      // Prepare headers
+      final headers = Map<String, dynamic>.from(options?.headers ?? {});
+      if (isFormData) {
+        headers['Content-Type'] = 'multipart/form-data';
+      }
+
+      // Make the request
+      final response = await dio.post(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options?.copyWith(headers: headers) ?? Options(headers: headers),
+      );
+
       return response.data;
     } on DioException catch (e) {
       handleDioException(e);
+      rethrow;
     }
   }
 

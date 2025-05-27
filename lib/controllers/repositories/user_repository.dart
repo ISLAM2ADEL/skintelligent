@@ -1,7 +1,7 @@
 import 'dart:io';
-
+import 'package:http_parser/http_parser.dart'; // For MediaType
 import 'package:dartz/dartz.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
@@ -38,35 +38,52 @@ class UserRepository {
   }
 
   Future<Either<String, SignupModel>> signUp({
-    required String name,
+    required String firstName,
+    required String lastName,
+    required String dateOfBirth,
+    required String gender,
     required String phone,
     required String email,
     required String password,
+    required String address,
     required String confirmPassword,
-    required XFile profilePic,
+    required MultipartFile profilePic,
   }) async {
     try {
+      final formData = FormData.fromMap({
+        'Patient.Email': email,
+        'Patient.Phone': phone,
+        'Patient.Password': password,
+        'Patient.ConfirmPassword': confirmPassword,
+        'Patient.FirstName': firstName,
+        'Patient.LastName': lastName,
+        'Patient.DateOfBirth': dateOfBirth,
+        'Patient.Gender': gender,
+        'Patient.Address': address,
+        'Patient.ProfilePicture': profilePic, // Use the existing MultipartFile
+      });
+
       final response = await api.post(
         Endpoint.signUp,
+        data: formData,
         isFormData: true,
-        data: {
-          ApiKey.name: name,
-          ApiKey.phone: phone,
-          ApiKey.email: email,
-          ApiKey.password: password,
-          ApiKey.confirmPassword: confirmPassword,
-          ApiKey.location:
-              '{"name":"methalfa","address":"meet halfa","coordinates":[30.1572709,31.224779]}',
-          ApiKey.profilePic: await uploadImageToApi(profilePic as File)
-        },
+        queryParameters: {'registerType': 'patient'},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${getIt<CacheHelper>().getData(key: ApiKey.Authorization)}',
+          },
+        ),
       );
-      print(response);
-      final signUPModel = SignupModel.fromJson(response);
-      return Right(signUPModel);
-    } on ServerException catch (e) {
-      return Left(e.errorModel.errorMessage);
+
+      return Right(SignupModel.fromJson(response));
+    } on DioException catch (e) {
+      print('Upload Error: ${e.response?.data}');
+      return Left(e.response?.data?['message'] ?? 'Failed to upload image');
+    } catch (e) {
+      return Left('Unexpected error: ${e.toString()}');
     }
   }
+
 
   Future<Either<String, UserModel>> getUserProfile() async {
     try {

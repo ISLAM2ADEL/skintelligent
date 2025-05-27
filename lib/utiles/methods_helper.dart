@@ -36,9 +36,7 @@ class MethodsHelper {
     cubit.signUpEmail.clear();
     cubit.signUpPassword.clear();
     cubit.confirmPassword.clear();
-    cubit.signInPassword.clear();
-    cubit.address.clear();
-
+    cubit.signUpAddress.clear();
     cubit.profilePic;
     cubit.gender.clear();
     cubit.dateOfBirth.clear();
