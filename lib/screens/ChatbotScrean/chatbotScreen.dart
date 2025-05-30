@@ -1,143 +1,137 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:skintelligent/const/const.dart';
-import 'package:skintelligent/screens/ChatbotScrean/chatbotWidgets.dart';
-import 'package:skintelligent/screens/ChatbotScrean/cubit/chatbotcubit_cubit.dart';
+import 'package:skintelligent/cubit/chat_cubit/chat_cubit.dart';
+import 'package:skintelligent/screens/ChatbotScrean/presentation/chatBubble.dart';
 import 'package:skintelligent/screens/home_screen/home_page.dart';
 
 class Chatbotscreen extends StatelessWidget {
   static const String id = 'Chatbotscreen';
+  final TextEditingController _messageController = TextEditingController();
+
+  Chatbotscreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 217, 237, 253),
+      backgroundColor: const Color(0xffD4E7EE),
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, HomePage.id);
-          },
-          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pushNamed(context, HomePage.id),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: Text(
+        title: const Text(
           'Doctor Assistant',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
         ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              children: [
-                Text(
-                  "Hello, how can I help you today?",
+        child: Column(
+          children: [
+            // Chat header
+            Container(
+              height: 60,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xffD4E7EE),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Text(
+                  'How Can I Help You Today?',
                   style: GoogleFonts.poppins(
                     fontSize: 18,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 20),
+              ),
+            ),
 
-                // 🔹 Responsive heart image
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Image.asset(
-                      "${path}heart_icon.png",
-                      height: constraints.maxWidth * 0.6,
-                      width: constraints.maxWidth * 0.6,
-                    );
-                  },
-                ),
-                SizedBox(height: 20),
-
-                // 🔹 List of predefined questions
-                ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    buildOptionButton("Who is susceptible to measles?"),
-                    buildOptionButton(
-                        "Disease prevention after the rainy and flood season"),
-                    buildOptionButton(
-                        "Nutritional treatment for patients with malabsorption?"),
-                    buildOptionButton(
-                        "Update on lipid control guidelines for cardiovascular event prevention?"),
-                    buildOptionButton(
-                        "Which type of pain signals a heart attack?"),
-                  ],
-                ),
-
-                SizedBox(height: 80),
-
-                BlocBuilder<ChatbotcubitCubit, ChatbotcubitState>(
+            // BlocListener for showing error snackbar
+            BlocListener<ChatCubit, ChatState>(
+              listener: (context, state) {
+                if (state is ChatFailure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.error),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: Expanded(
+                child: BlocBuilder<ChatCubit, ChatState>(
                   builder: (context, state) {
-                    if (state is ChatbotcubitImagePicked) {
-                      return Column(
-                        children: [
-                          SizedBox(height: 20),
-                          Image.file(
-                            state.image,
-                            height: 200,
-                            width: 200,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 10),
-                        ],
+                    if (state is ChatLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ChatSuccess) {
+                      final chatModel = state.chatModel;
+                      return ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        itemCount: chatModel.fullConversation.length,
+                        itemBuilder: (context, index) {
+                          final message = chatModel.fullConversation[index];
+                          return ChatBubble(message: message, role: null);
+                        },
                       );
                     }
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   },
                 ),
-
-                // chat input field with image
-                _buildChatInput(context),
-              ],
+              ),
             ),
-          ),
+
+            // Chat input field
+            _buildChatInput(context),
+          ],
         ),
       ),
     );
   }
 
-  /// 🔹 Chat input field with image picker
   Widget _buildChatInput(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
+              controller: _messageController,
               decoration: InputDecoration(
                 hintText: "Ask me anything",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                prefixIcon: Icon(Icons.chat_bubble_outline),
+                prefixIcon: const Icon(Icons.chat_bubble_outline),
               ),
+              onSubmitted: (text) => _sendMessage(context),
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.mic),
-            color: const Color.fromARGB(255, 56, 55, 55),
-          ),
-          SizedBox(width: 5),
-          IconButton(
-            onPressed: () => context.read<ChatbotcubitCubit>().pickImage(),
-            icon: Icon(Icons.image),
-            color: const Color.fromARGB(255, 56, 55, 55),
+            onPressed: () => _sendMessage(context),
+            icon: const Icon(Icons.send),
           ),
         ],
       ),
     );
+  }
+
+  void _sendMessage(BuildContext context) {
+    final text = _messageController.text.trim();
+    if (text.isNotEmpty) {
+      final messages = [
+        {"role": "user", "content": text}
+      ];
+      context.read<ChatCubit>().sendConversation(messages);
+      _messageController.clear();
+    }
   }
 }

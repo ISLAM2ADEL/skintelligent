@@ -10,6 +10,7 @@ import 'package:skintelligent/models/make_review_model.dart';
 import 'package:skintelligent/models/signup_model.dart';
 import 'package:skintelligent/models/user_booking_model.dart';
 import '../../models/appointment_model.dart';
+import '../../models/chat_model.dart';
 import '../../models/forget_model.dart';
 import '../../models/reset_model.dart';
 
@@ -276,6 +277,27 @@ class UserRepository {
           await api.post(Endpoint.getSummary, data: {"messages": messages});
       return Right(SummarizeModelResponse.fromJson(response));
     } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+  Future<Either<String, ChatModel>> sendConversation(dynamic messages) async {
+    try {
+      final messageContent = messages[0]['content'];
+      print("Sending message to API: $messageContent");
+
+      final response = await api.post(
+        Endpoint.chats,
+        data: {
+          "appointmentId": 1032,
+          "message": messageContent,
+          "patinetId": 9,
+        },
+      );
+
+      print("API response: ${response}");
+      return Right(ChatModel.fromJson(response));
+    } on ServerException catch (e) {
+      print("API error: ${e.errorModel.errorMessage}");
       return Left(e.errorModel.errorMessage);
     }
   }

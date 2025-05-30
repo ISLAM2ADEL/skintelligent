@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:skintelligent/controllers/api/dio_consumer.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
 import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
+import 'package:skintelligent/cubit/chat_cubit/chat_cubit.dart';
 import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
 import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
@@ -82,6 +83,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => SummaryCubit(userRepository),
+        ),
+        BlocProvider(
+          create: (context) => ChatCubit(userRepository),
         ),
       ],
       child: GetMaterialApp(

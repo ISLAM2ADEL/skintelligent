@@ -10,6 +10,7 @@ class Endpoint {
   static String appointmentByWeek = '/api/appointments/week';
   static String userBookingAppointments = "/api/patients/appointments";
   static String makeBooking = '/api/appointments/book';
+  static String chats = "/api/chats/send";
 
   static String doctorById(num id) => "/api/doctors/$id";
   static String cancelBooking({required int appointmentid}) {
