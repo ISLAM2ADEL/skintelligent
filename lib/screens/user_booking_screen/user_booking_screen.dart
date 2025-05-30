@@ -70,9 +70,12 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
             itemBuilder: (context, index) {
               final booking = sortedBookings[index];
               final startDateTime = booking.startTime;
+              final endDateTime = booking.endTime;
               final dayName = DateFormat.EEEE().format(startDateTime);
               final date = DateFormat('yyyy-MM-dd').format(startDateTime);
-              final time =
+              final startTime =
+                  TimeOfDay.fromDateTime(startDateTime).format(context);
+              final endTime =
                   TimeOfDay.fromDateTime(startDateTime).format(context);
 
               return Slidable(
@@ -93,18 +96,24 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        title:
-                            Text("${index + 1}.Doctor: ${booking.doctorName}"),
-                        subtitle: Text(
-                          "$dayName - $date at $time\n${booking.clinicName}",
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        trailing: booking.isCanceled
-                            ? const Icon(Icons.cancel, color: Colors.red)
-                            : const Icon(Icons.check_circle,
-                                color: Colors.green),
+                        child: ListTile(
+                          title:
+                              Text("${index + 1}.Doctor: ${booking.doctorName}"),
+                          subtitle: Text(
+                            "Date: $dayName - $date \nTime: $startTime -> $endTime\nClinic Name: ${booking.clinicName}",
+                          ),
+                          trailing: booking.isCanceled
+                              ? const Icon(Icons.cancel, color: Colors.red)
+                              : const Icon(Icons.check_circle,
+                                  color: Colors.green),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5),

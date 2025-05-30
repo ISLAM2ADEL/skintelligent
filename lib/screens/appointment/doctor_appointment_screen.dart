@@ -107,13 +107,13 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
             messenger.showSnackBar(
               const SnackBar(
                   content: Text("✅ Booking successful!"),
-                  duration: Duration.zero),
+                duration: Duration(seconds: 2),),
             );
           } else if (state is BookingFailure) {
             messenger.showSnackBar(
               SnackBar(
                   content: Text("❌ ${state.errMessage}"),
-                  duration: Duration.zero),
+                duration: const Duration(seconds: 2),),
             );
           }
         },
