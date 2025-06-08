@@ -105,7 +105,11 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
-        initialRoute: LoginScreen.id,
+        initialRoute: getIt<CacheHelper>().getData(key: ApiKey.Authorization) != null
+            ? HomePage.id
+            : (getIt<CacheHelper>().getData(key: "isOnboarding") ?? false)
+            ? LoginScreen.id
+            : SplashScreen.id,
       ),
     );
   }

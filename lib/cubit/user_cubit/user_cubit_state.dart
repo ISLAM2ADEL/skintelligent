@@ -5,6 +5,7 @@ import '../../models/user_model.dart'; // Make sure to import dart:io for File
 class UserState {}
 
 final class UserInitial extends UserState {}
+final class ChangeState extends UserState {}
 
 final class SignInSuccess extends UserState {
   final String message;

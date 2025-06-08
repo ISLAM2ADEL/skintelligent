@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:get/get.dart';
+import '../../controllers/cache/cache_helper.dart';
 import '../../screens/login_and_register/login.dart';
+import '../../services/service_locator.dart';
 part 'onboarding_state.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {
@@ -30,6 +32,8 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   }
 
   void loginPage() {
+    getIt<CacheHelper>()
+        .saveData(key: "isOnboarding", value: true);
     Get.off(const LoginScreen());
   }
 }

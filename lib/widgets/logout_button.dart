@@ -12,6 +12,7 @@ class LogoutButton extends StatelessWidget {
       onTap: () {
         context.read<UserCubit>().signInEmail.clear();
         context.read<UserCubit>().signInPassword.clear();
+        getIt<CacheHelper>().removeData(key: ApiKey.Authorization);
         Navigator.pushReplacementNamed(context, LoginScreen.id);
       },
       child: Container(

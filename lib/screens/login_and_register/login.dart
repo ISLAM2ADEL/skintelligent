@@ -62,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     validate: MethodsHelper.validatePassword,
                     MyController: context.read<UserCubit>().signInPassword,
                     hintM: "Password",
+                    isPassword: true,
                   ),
                   Customtextbutton(
                     onPressed: () => Navigator.pushNamed(

@@ -10,6 +10,7 @@ import 'package:skintelligent/cubit/user_cubit/user_cubit_state.dart';
 class UserCubit extends Cubit<UserState> {
   UserCubit(this.userRepository) : super(UserInitial());
   final UserRepository userRepository;
+  bool isObstruct = true;
   //Sign in Form key
   //Sign in email
   TextEditingController signInEmail = TextEditingController();
@@ -90,5 +91,9 @@ class UserCubit extends Cubit<UserState> {
       (errMessage) => emit(GetUserFailure(errMessage: errMessage)),
       (user) => emit(GetUserSuccess(user: user)),
     );
+  }
+  changeState() {
+    isObstruct = !isObstruct;
+    emit(ChangeState());
   }
 }

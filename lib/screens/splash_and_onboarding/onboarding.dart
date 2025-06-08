@@ -33,7 +33,7 @@ class Onboarding extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Get.offAll(const LoginScreen());
+                cubit.loginPage();
               },
             ),
           ),
