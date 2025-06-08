@@ -11,25 +11,16 @@ class ProfileScreen extends StatelessWidget {
 
   final List<Color> colorPalitte = [
     Colors.green,
-    Colors.lightBlue,
-    Colors.blue,
-    Colors.grey,
     Colors.orange, // لون جديد للحجوزات
   ];
 
   final List<IconData> iconPalitte = [
     CupertinoIcons.person_crop_circle_fill,
-    Icons.notifications,
-    Icons.language,
-    CupertinoIcons.trash_fill,
     Icons.calendar_today, // أيقونة للحجوزات
   ];
 
   final List<String> title = [
     "Personal Information",
-    "Notification",
-    "Change Language",
-    "Delete Account",
     "My Bookings",
   ];
 
@@ -63,8 +54,7 @@ class ProfileScreen extends StatelessWidget {
                         primaryIcon: iconPalitte[index],
                       ),
                       onTap: () {
-                        if (index == 4) {
-                          // انتقل إلى صفحة الحجوزات
+                        if (index == 1) {
                           Navigator.pushNamed(context, UserBookingScreen.id);
                         } else {
                           Navigator.pushNamed(context, Registerscreen.id);

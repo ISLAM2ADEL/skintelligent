@@ -13,33 +13,35 @@ class Appointment extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return BlocProvider(
-      create: (context) {
-        final cubit = context.read<AppointmentCubit>();
-        cubit.getAllDoctors();
-        return cubit;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: const Text('Doctor Appointments'),
-        ),
-        body: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(height: height*.05,),
-            BlocBuilder<AppointmentCubit, AppointmentState>(
-              builder: (context, state) {
-                if (state is AppointmentLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is AppointmentFailure) {
-                  return Center(child: Text(state.errorMessage));
-                } else if (state is AppointmentSuccess) {
-                  return
-                    Column(
-                      children: [
-                        doctorsRow(context, title: "All Doctors"),
-                        ListView.separated(
+    final cubit= context.read<AppointmentCubit>();
+    cubit.getAllDoctors();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Doctor Appointments'),
+      ),
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          SizedBox(height: height*.05,),
+          BlocBuilder<AppointmentCubit, AppointmentState>(
+            builder: (context, state) {
+              if (state is AppointmentLoading || state is AppointmentSortLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is AppointmentFailure) {
+                return Center(child: Text(state.errorMessage));
+              }else if (state is AppointmentSortFailure) {
+                return Center(child: Text(state.errorMessage));
+              }
+              else if (state is AppointmentFailure) {
+                return Center(child: Text(state.errorMessage));
+              }
+              else if (state is AppointmentSortSuccess) {
+                return
+                  Column(
+                    children: [
+                      doctorsRow(context, title: "All Doctors"),
+                      ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         padding: EdgeInsets.symmetric(horizontal: width * .025),
@@ -63,16 +65,48 @@ class Appointment extends StatelessWidget {
                           );
                         },
                         separatorBuilder: (_, __) => SizedBox(height: height * .01),
-                                          ),
-                      ],
-                    );
-                } else {
-                  return const Center(child: Text("No data available"));
-                }
-              },
-            ),
-          ],
-        ),
+                      ),
+                    ],
+                  );
+              }
+              else if (state is AppointmentSuccess) {
+                return
+                  Column(
+                    children: [
+                      doctorsRow(context, title: "All Doctors"),
+                      ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(horizontal: width * .025),
+                      itemCount: state.doctors.length,
+                      itemBuilder: (context, index) {
+                        final doctor = state.doctors[index];
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .02),
+                          child: doctorContainer(
+                            height,
+                            width,
+                            doctorID: doctor.id,
+                            clinicName: doctor.clinics.first.clinicName,
+                            doctorName: "${doctor.firstName} ${doctor.lastName}",
+                            experience: doctor.experienceYears.toString(),
+                            fees: doctor.defaultExaminationFee,
+                            profilePicture: doctor.profilePicture,
+                            clinicID: doctor.clinics.first.id,
+                            context: context,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, __) => SizedBox(height: height * .01),
+                                        ),
+                    ],
+                  );
+              } else {
+                return const Center(child: Text("No data available"));
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -247,40 +281,40 @@ class Appointment extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Icons.sort_by_alpha),
                         title: const Text("From A to Z"),
-                        onTap: () {
-                          context.read<AppointmentCubit>().getAllDoctorsSortLocally("name", "asc");
+                        onTap: () async {
+                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("name", "asc");
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
                         leading: const Icon(Icons.sort_by_alpha_outlined),
                         title: const Text("From Z to A"),
-                        onTap: () {
-                          context.read<AppointmentCubit>().getAllDoctorsSortLocally("name", "des");
+                        onTap: () async {
+                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("name", "des");
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
                         leading: const Icon(Icons.trending_up),
                         title: const Text("Highest Experience"),
-                        onTap: () {
-                          context.read<AppointmentCubit>().getAllDoctorsSortLocally("experience", "des");
-                          Navigator.pop(context);
-                        },
+                          onTap: () async {
+                            await context.read<AppointmentCubit>().getAllDoctorsSortLocally("experience", "des");
+                            Navigator.pop(context);
+                          },
                       ),
                       ListTile(
                         leading: const Icon(Icons.trending_up),
                         title: const Text("Cost: Low -> High"),
-                        onTap: () {
-                          context.read<AppointmentCubit>().getAllDoctorsSortLocally("cost", "asc");
+                        onTap: () async {
+                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("cost", "asc");
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
                         leading: const Icon(Icons.trending_down),
                         title: const Text("Cost: High -> Low"),
-                        onTap: () {
-                          context.read<AppointmentCubit>().getAllDoctorsSortLocally("cost", "des");
+                        onTap: () async {
+                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("cost", "des");
                           Navigator.pop(context);
                         },
                       ),

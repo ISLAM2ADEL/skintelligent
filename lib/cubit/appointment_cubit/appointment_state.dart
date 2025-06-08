@@ -27,3 +27,21 @@ final class AppointmentSuccess extends AppointmentState {
     required this.count,
   });
 }
+final class AppointmentSortLoading extends AppointmentState {}
+
+final class AppointmentSortFailure extends AppointmentState {
+  final String errorMessage;
+  AppointmentSortFailure({required this.errorMessage});
+}
+
+final class AppointmentSortSuccess extends AppointmentState {
+  final String successMessage;
+  final List<DoctorModel> doctors;
+  final int count;
+
+  AppointmentSortSuccess({
+    required this.successMessage,
+    required this.doctors,
+    required this.count,
+  });
+}

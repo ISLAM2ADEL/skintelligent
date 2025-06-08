@@ -32,11 +32,11 @@ class AppointmentCubit extends Cubit<AppointmentState> {
   }
 
   Future<void> getAllDoctorsSortLocally(String sortBy, String sortOrder) async {
-    emit(AppointmentLoading());
+    emit(AppointmentSortLoading());
     final response = await userRepository.getAllDoctors(); // بدون أي sorting من الـ API
 
     response.fold(
-          (errMessage) => emit(AppointmentFailure(errorMessage: errMessage)),
+          (errMessage) => emit(AppointmentSortFailure(errorMessage: errMessage)),
           (appointment) {
         List<DoctorModel> sortedDoctors = [...appointment.doctors];
 
@@ -54,7 +54,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
               : b.defaultExaminationFee.compareTo(a.defaultExaminationFee));
         }
 
-        emit(AppointmentSuccess(
+        emit(AppointmentSortSuccess(
           successMessage: appointment.message,
           doctors: sortedDoctors,
           count:appointment.count,
