@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
           Appointment.id: (context) => const Appointment(),
           Chatbotscreen.id: (context) => Chatbotscreen(),
           Registerscreen.id: (context) => Registerscreen(),
-          OtpScreen.id: (context) => const OtpScreen(),
+          OtpScreen.id: (context) => OtpScreen(),
           ResetPassword.id: (context) => const ResetPassword(),
           ForgetScreen.id: (context) => const ForgetScreen(),
           SummaryScreen.id: (context) => const SummaryScreen(),

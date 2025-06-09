@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:skintelligent/commons.dart';
@@ -13,7 +15,7 @@ import '../../models/appointment_model.dart';
 import '../../models/chat_model.dart';
 import '../../models/forget_model.dart';
 import '../../models/reset_model.dart';
-import 'package:http_parser/http_parser.dart'; // for MediaType
+import 'package:http_parser/http_parser.dart'; // for Media
 
 class UserRepository {
   final ApiConsumer api;
@@ -53,21 +55,32 @@ class UserRepository {
     required String gender,
     required String imagePath,
   }) async {
-    final formData = FormData.fromMap({
-      'FirstName': firstName,
-      'LastName': lastName,
-      'Address': address,
-      'Phone': phone,
-      'Email': email,
-      'Password': password,
-      'ConfirmPassword': confirmPassword,
-      'DateOfBirth': dateOfBirth,
-      'Gender': gender,
-      'ProfilePicture': await MultipartFile.fromFile(
-          imagePath, filename: 'profile.jpg'),
-    });
-
     try {
+      // Read the image file as bytes
+      final bytes = await File(imagePath).readAsBytes();
+
+      // Create MultipartFile from bytes
+      final multipartFile = MultipartFile.fromBytes(
+        bytes,
+        filename: 'profile.jpg',
+        contentType: MediaType('image', 'jpeg'),
+      );
+
+      // Create FormData
+      final formData = FormData.fromMap({
+        'FirstName': firstName,
+        'LastName': lastName,
+        'Address': address,
+        'Phone': phone,
+        'Email': email,
+        'Password': password,
+        'ConfirmPassword': confirmPassword,
+        'DateOfBirth': dateOfBirth,
+        'Gender': gender,
+        'ProfilePicture': multipartFile,
+      });
+
+      // Send request
       final response = await Dio().post(
         'http://skintelligent.runasp.net/api/auth/patient/register',
         data: formData,
@@ -83,16 +96,14 @@ class UserRepository {
       if (e is DioException) {
         print("❗ Dio Error:");
         print("Status: ${e.response?.statusCode}");
-        print("Data: ${e.response?.data}"); // هنا هتظهر رسالة الخطأ من السيرفر
+        print("Data: ${e.response?.data}");
       } else {
         print("❗ Unknown Error: $e");
       }
     }
   }
 
-
-
-    Future<Either<String, UserModel>> getUserProfile() async {
+  Future<Either<String, UserModel>> getUserProfile() async {
     try {
       final id = await getIt<CacheHelper>().getData(key: ApiKey.id);
       final response = await api.get(Endpoint.getUserDataEndPoint(id));
@@ -191,6 +202,24 @@ class UserRepository {
           ApiKey.email: email,
           ApiKey.password: password,
           ApiKey.resetOTP: resetOTP,
+        },
+      );
+      return Right(ResetModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, ResetModel>> newUser({
+    required String email,
+    required String otpCode,
+  }) async {
+    try {
+      final response = await api.post(
+        Endpoint.newUser,
+        data: {
+          ApiKey.email: email,
+          ApiKey.codeOTP: otpCode,
         },
       );
       return Right(ResetModel.fromJson(response));

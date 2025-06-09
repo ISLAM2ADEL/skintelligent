@@ -3,6 +3,7 @@ import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/custom_form_button.dart';
 import 'package:skintelligent/custom_input_field.dart';
 import 'package:skintelligent/pick_image_widget.dart';
+import 'package:skintelligent/screens/otp/otp_screen.dart';
 
 class Registerscreen extends StatelessWidget {
   static const String id = 'Registerscreen';
@@ -19,8 +20,9 @@ class Registerscreen extends StatelessWidget {
               .showSnackBar(SnackBar(content: Text(state.message)));
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
+            MaterialPageRoute(builder: (context) => OtpScreen(email: context.read<UserCubit>().newEmail,)),
           );
+          MethodsHelper.signUpTextFormHelper(context);
         } else if (state is SignUpFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -148,16 +150,10 @@ class Registerscreen extends StatelessWidget {
                                   : CustomFormButton(
                                       innerText: 'Signup',
                                       onPressed: () {
-                                        // context
-                                        //     .read<UserCubit>()
-                                        //     .signUp()
-                                        //     .then((value) {
-                                        //   MethodsHelper.signUpTextFormHelper(
-                                        //       context);
-                                        // });
-                                        context.read<UserCubit>().signUp().then((value) {
-                                          MethodsHelper.signUpTextFormHelper(context);
-                                        });
+                                        if(signUpFormKey.currentState!.validate()){
+                                          context.read<UserCubit>().signUp();
+                                        }
+
                                       },
                                     ),
                             ],

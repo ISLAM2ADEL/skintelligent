@@ -11,6 +11,7 @@ class Endpoint {
   static String userBookingAppointments = "/api/patients/appointments";
   static String makeBooking = '/api/appointments/book';
   static String chats = "/api/chats/send";
+  static String newUser = "/api/auth/confirm-email";
 
   static String doctorById(num id) => "/api/doctors/$id";
   static String cancelBooking({required int appointmentid}) {
@@ -46,6 +47,7 @@ class ApiKey {
   static const String confirmPassword = "confirmPassword";
   static const String token = "token";
   static const String resetOTP = "resetOTP";
+  static const String codeOTP = "otpCode";
 
   // Doctor/User info
   static const String id = "id";

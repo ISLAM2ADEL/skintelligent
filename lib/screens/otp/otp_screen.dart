@@ -3,7 +3,10 @@ import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  final String? email;
+
+  OtpScreen({super.key, this.email});
+
   static final String id = 'OtpScreen';
 
   @override
@@ -14,6 +17,12 @@ class _OtpScreenState extends State<OtpScreen> {
   String otpNumber = '';
 
   @override
+  void initState() {
+    super.initState();
+    print('Email passed from Registerscreen: ${widget.email}');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {},
@@ -22,7 +31,6 @@ class _OtpScreenState extends State<OtpScreen> {
           appBar: AppBar(),
           body: Stack(
             children: [
-              // Black background container
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -30,20 +38,18 @@ class _OtpScreenState extends State<OtpScreen> {
                   color: const Color(0xff474646),
                 ),
               ),
-
-              // OTP Form inside a circular ListView
               Positioned(
                 top: 0,
                 left: 0,
                 right: 0,
-                bottom: 70, // Leaves space for the black container
+                bottom: 70,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(50),
                     bottomRight: Radius.circular(50),
                   ),
                   child: Container(
-                    color: Colors.white, // Background color of the form
+                    color: Colors.white,
                     child: ListView(
                       padding: const EdgeInsets.all(25.0),
                       children: [
@@ -53,25 +59,18 @@ class _OtpScreenState extends State<OtpScreen> {
                           width: MediaQuery.of(context).size.width,
                         ),
                         const SizedBox(height: 5),
-                        Column(
+                        const Column(
                           children: [
-                            const Text(
+                            Text(
                               'Enter the OTP sent to your email:',
                               style: TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              context.read<UserCubit>().signInEmail.text,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.purple[300],
-                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 20),
                         OtpTextField(
                           numberOfFields: 6,
-                          fillColor: Colors.black.withValues(alpha: 0.1),
+                          fillColor: Colors.black.withAlpha(25),
                           filled: true,
                           keyboardType: TextInputType.number,
                           onSubmit: (value) {
@@ -82,12 +81,15 @@ class _OtpScreenState extends State<OtpScreen> {
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {
-                            if (otpNumber == '123456') {
-                              print("The OTP is correct");
+                            if (otpNumber.isNotEmpty) {
+                              context.read<UserCubit>().newUser(
+                                email: widget.email!,
+                                otpCode: otpNumber,
+                              );
                               Navigator.pushReplacementNamed(
-                                  context, HomePage.id);
+                                  context, LoginScreen.id);
                             } else {
-                              print('The OTP is wrong');
+                              print("OTP or Email is empty");
                             }
                           },
                           child: const SubmittButton(),
@@ -99,19 +101,17 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               Positioned(
-                bottom: 20, // Keeps it 20 pixels above the bottom
+                bottom: 20,
                 left: 0,
-                right: 0, // Ensures it stretches across the screen
+                right: 0,
                 child: Center(
-                  // Centers the Row horizontally
                   child: Row(
-                    mainAxisSize:
-                        MainAxisSize.min, // Avoids unnecessary stretching
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         "You have an account?",
                         style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.5)),
+                            color: Colors.white.withAlpha(130)),
                       ),
                       TextButton(
                         onPressed: () {
@@ -128,9 +128,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ],
                   ),
                 ),
-              )
-
-              // Circular login prompt above the black container
+              ),
             ],
           ),
         );

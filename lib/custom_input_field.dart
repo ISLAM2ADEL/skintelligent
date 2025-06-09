@@ -85,6 +85,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextFormField(
+
               controller: widget.controller,
               readOnly: true,
               decoration: InputDecoration(

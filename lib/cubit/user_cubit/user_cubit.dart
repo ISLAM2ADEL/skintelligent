@@ -9,6 +9,8 @@ import 'package:skintelligent/cubit/user_cubit/user_cubit_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserCubit(this.userRepository) : super(UserInitial());
+
+  String newEmail = '';
   bool isObstruct = true;
   final UserRepository userRepository;
   //Sign in Form key
@@ -61,7 +63,7 @@ class UserCubit extends Cubit<UserState> {
       print('Gender: ${gender.text}');
       print('Confirm Password: ${confirmPassword.text}');
       print('Profile Picture Path: ${profilePic!.path}');
-
+      newEmail=signUpEmail.text;
       await userRepository.signUp(
         firstName: signUpFirstName.text,
         lastName: signUpLastName.text,
@@ -106,4 +108,22 @@ class UserCubit extends Cubit<UserState> {
     isObstruct=!isObstruct;
     emit(ChangeState());
   }
+
+  Future<void> newUser({required String email, required String otpCode}) async {
+    try {
+      emit(NewUserLoading());
+      final response = await userRepository.newUser(
+        email: email,
+        otpCode: otpCode,
+      );
+
+      response.fold(
+            (errMessage) => emit(NewUserFailure(errMessage: errMessage)),
+            (confirmModel) => emit(NewUserSuccess(user: confirmModel.message)),
+      );
+    } catch (e) {
+      emit(NewUserFailure(errMessage: 'Something went wrong: $e'));
+    }
+  }
+
 }

@@ -29,7 +29,7 @@ class MethodsHelper {
 
   static void signUpTextFormHelper(BuildContext context) {
     final cubit = context.read<UserCubit>();
-
+    cubit.profilePic=null;
     cubit.signUpFirstName.clear();
     cubit.signUpLastName.clear();
     cubit.signUpPhoneNumber.clear();

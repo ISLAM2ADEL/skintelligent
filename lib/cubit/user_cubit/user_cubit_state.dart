@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:skintelligent/models/confirm_model.dart';
+
 import '../../models/user_model.dart'; // Make sure to import dart:io for File
 
 class UserState {}
@@ -53,4 +55,16 @@ final class GetUserFailure extends UserState {
   final String errMessage;
 
   GetUserFailure({required this.errMessage});
+}
+final class NewUserLoading extends UserState {}
+
+final class NewUserFailure extends UserState {
+  final String errMessage;
+
+  NewUserFailure({required this.errMessage});
+}
+final class NewUserSuccess extends UserState {
+  final String user;
+
+  NewUserSuccess({required this.user});
 }

@@ -35,7 +35,7 @@ class PickImageWidget extends StatelessWidget {
                 backgroundColor: Colors.grey.shade200,
                 backgroundImage: updatedProfilePic != null
                     ? FileImage(updatedProfilePic) as ImageProvider
-                    : const AssetImage("assets/images/skin doctor.png"),
+                    : const AssetImage("assets/images/default_image.png"),
               ),
               Positioned(
                 bottom: 5,
