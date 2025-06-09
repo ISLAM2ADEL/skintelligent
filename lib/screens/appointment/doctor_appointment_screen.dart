@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
@@ -9,10 +14,111 @@ import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
 import 'package:skintelligent/cubit/make_booking_cubit/make_booking_state.dart';
 import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
 
+import '../../controllers/api/endpoint.dart';
+import '../../controllers/cache/cache_helper.dart';
+import '../../services/service_locator.dart';
 import '../../widgets/doctor_info_card.dart';
 import '../../widgets/review_buttons.dart';
 import '../../widgets/week_selector.dart';
 import '../../widgets/booking_section.dart';
+Future<void> pickImageFromCamera() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+  if (pickedFile != null) {
+    // هنا تقدر تتعامل مع الصورة اللي اتصورت
+    print('Image path: ${pickedFile.path}');
+  } else {
+    print('No image selected.');
+  }
+}
+// Future<void> pickAndUploadImage(int appointmentId) async {
+//   final ImagePicker picker = ImagePicker();
+//   final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+//
+//   if (pickedFile == null) {
+//     print('❌ No image selected.');
+//     return;
+//   }
+//
+//   File imageFile = File(pickedFile.path);
+//   String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
+//   // جهز الـ FormData
+//   FormData formData = FormData.fromMap({
+//     'AppointmentId': appointmentId,
+//     'ImageFile': await MultipartFile.fromFile(
+//       imageFile.path,
+//       filename: imageFile.path.split('/').last,
+//     ),
+//   });
+//
+//   // ابعت الطلب
+//   Dio dio = Dio();
+//   try {
+//     Response response = await dio.post(
+//       'http://skintelligent.runasp.net/api/chats/upload-image',
+//       data: formData,
+//       options: Options(
+//         contentType: 'multipart/form-data',
+//         headers: {
+//           'Authorization': 'Bearer $token', // ✅ أهم خطوة
+//         },
+//       ),
+//     );
+//
+//     if (response.statusCode == 200) {
+//       print('✅ Upload successful: ${response.data}');
+//     } else {
+//       print('⚠️ Upload failed with status: ${response.statusCode}');
+//     }
+//   } catch (e) {
+//     print('❌ Error uploading image: $e');
+//   }
+// }
+Future<void> pickAndUploadImage(int appointmentId) async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  if (pickedFile == null) {
+    print('❌ No image selected.');
+    return;
+  }
+
+  File imageFile = File(pickedFile.path);
+
+  String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
+  final formData = FormData.fromMap({
+    'AppointmentId': appointmentId, // ✅ لازم يكون int، مش String
+    'ImageFile': await MultipartFile.fromFile(
+      imageFile.path,
+      filename: imageFile.path.split('/').last,
+      contentType: MediaType('image', 'jpeg'), // ✅ أو png حسب الصورة
+    ),
+  });
+
+  final dio = Dio();
+  print('📦 Uploading with appointmentId: $appointmentId');
+  print('📦 Image file path: ${imageFile.path}');
+
+  try {
+    final response = await dio.post(
+      'http://skintelligent.runasp.net/api/chats/upload-image',
+      data: formData,
+      options: Options(
+        contentType: 'multipart/form-data',
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+
+    print('✅ Response: ${response.statusCode} => ${response.data}');
+  } on DioException catch (e) {
+    print('❌ Dio Error: ${e.response?.statusCode} => ${e.response?.data}');
+  } catch (e) {
+    print('❌ General Error: $e');
+  }
+}
 
 class DoctorAppointmentScreen extends StatefulWidget {
   const DoctorAppointmentScreen({
@@ -101,14 +207,15 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
         leading: const BackButton(color: Colors.black),
       ),
       body: BlocListener<MakeBookingCubit, MakeBookginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           final messenger = ScaffoldMessenger.of(context);
-          if (state is BookingSuccess) {
+          if (state is BookingSuccess){
             messenger.showSnackBar(
               const SnackBar(
                   content: Text("✅ Booking successful!"),
                 duration: Duration(seconds: 2),),
             );
+            await pickAndUploadImage(460);
           } else if (state is BookingFailure) {
             messenger.showSnackBar(
               SnackBar(
