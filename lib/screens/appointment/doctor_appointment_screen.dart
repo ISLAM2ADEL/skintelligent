@@ -21,17 +21,17 @@ import '../../widgets/doctor_info_card.dart';
 import '../../widgets/review_buttons.dart';
 import '../../widgets/week_selector.dart';
 import '../../widgets/booking_section.dart';
-Future<void> pickImageFromCamera() async {
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.camera);
+// Future<void> pickImageFromCamera() async {
+//   final picker = ImagePicker();
+//   final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
-  if (pickedFile != null) {
-    // هنا تقدر تتعامل مع الصورة اللي اتصورت
-    print('Image path: ${pickedFile.path}');
-  } else {
-    print('No image selected.');
-  }
-}
+//   if (pickedFile != null) {
+//     // هنا تقدر تتعامل مع الصورة اللي اتصورت
+//     print('Image path: ${pickedFile.path}');
+//   } else {
+//     print('No image selected.');
+//   }
+// }
 // Future<void> pickAndUploadImage(int appointmentId) async {
 //   final ImagePicker picker = ImagePicker();
 //   final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -77,7 +77,7 @@ Future<void> pickImageFromCamera() async {
 // }
 Future<void> pickAndUploadImage(int appointmentId) async {
   final ImagePicker picker = ImagePicker();
-  final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
 
   if (pickedFile == null) {
     print('❌ No image selected.');
@@ -209,18 +209,20 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
       body: BlocListener<MakeBookingCubit, MakeBookginState>(
         listener: (context, state) async {
           final messenger = ScaffoldMessenger.of(context);
-          if (state is BookingSuccess){
+          if (state is BookingSuccess) {
             messenger.showSnackBar(
               const SnackBar(
-                  content: Text("✅ Booking successful!"),
-                duration: Duration(seconds: 2),),
+                content: Text("✅ Booking successful!"),
+                duration: Duration(seconds: 2),
+              ),
             );
-            await pickAndUploadImage(460);
+            await pickAndUploadImage(1310);
           } else if (state is BookingFailure) {
             messenger.showSnackBar(
               SnackBar(
-                  content: Text("❌ ${state.errMessage}"),
-                duration: const Duration(seconds: 2),),
+                content: Text("❌ ${state.errMessage}"),
+                duration: const Duration(seconds: 2),
+              ),
             );
           }
         },
@@ -254,7 +256,8 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                   children: [
                     DoctorInfoCard(doctor: doctor!),
                     const SizedBox(height: 30),
-                    ReviewButtons(doctorId: widget.doctorId , clinicId: widget.clinicId),
+                    ReviewButtons(
+                        doctorId: widget.doctorId, clinicId: widget.clinicId),
                     const SizedBox(height: 30),
                     WeekSelector(
                       selectedDate: selectedWeekStart,
