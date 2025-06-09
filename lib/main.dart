@@ -8,6 +8,7 @@ import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit.dart';
 import 'package:skintelligent/cubit/get_review_cubti/review_cubit.dart';
 import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
 import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
+import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_cubit.dart';
 import 'package:skintelligent/cubit/summary_cubit/summary_cubit.dart';
 import 'package:skintelligent/cubit/user_appointment_cancel_cubit/user_appointment_cancel_cubit.dart';
 import 'package:skintelligent/cubit/user_booking_cubit/user_booking_cubit.dart';
@@ -87,6 +88,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ChatCubit(userRepository),
         ),
+        BlocProvider(
+          create: (context) => PatientProfileCubit(userRepository),
+        ),
       ],
       child: GetMaterialApp(
         routes: {
@@ -105,11 +109,12 @@ class MyApp extends StatelessWidget {
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
-        initialRoute: getIt<CacheHelper>().getData(key: ApiKey.Authorization) != null
-            ? HomePage.id
-            : (getIt<CacheHelper>().getData(key: "isOnboarding") ?? false)
-            ? LoginScreen.id
-            : SplashScreen.id,
+        initialRoute:
+            getIt<CacheHelper>().getData(key: ApiKey.Authorization) != null
+                ? HomePage.id
+                : (getIt<CacheHelper>().getData(key: "isOnboarding") ?? false)
+                    ? LoginScreen.id
+                    : SplashScreen.id,
       ),
     );
   }

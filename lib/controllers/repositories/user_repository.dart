@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/models/patient_profile_model.dart';
 import 'package:skintelligent/models/sumarize_model.dart';
 import 'package:skintelligent/models/user_appointment_cancel_model.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
@@ -37,6 +39,8 @@ class UserRepository {
       final user = SigninModel.fromJson(response);
       await getIt<CacheHelper>()
           .saveData(key: ApiKey.Authorization, value: user.token);
+      // Decode the token to extract patient ID
+
       return Right(user);
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
@@ -268,7 +272,7 @@ class UserRepository {
     try {
       final response = await api.get(Endpoint.userBookingAppointments);
       final bookings =
-      (response as List).map((e) => UserBookingModel.fromJson(e)).toList();
+          (response as List).map((e) => UserBookingModel.fromJson(e)).toList();
       return Right(bookings);
     } catch (e) {
       return Left(e.toString());
@@ -295,7 +299,7 @@ class UserRepository {
       dynamic messages) async {
     try {
       final response =
-      await api.post(Endpoint.getSummary, data: {"messages": messages});
+          await api.post(Endpoint.getSummary, data: {"messages": messages});
       return Right(SummarizeModelResponse.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
@@ -320,6 +324,18 @@ class UserRepository {
       return Right(ChatModel.fromJson(response));
     } on ServerException catch (e) {
       print("API error: ${e.errorModel.errorMessage}");
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, PatientProfileModel>> getPatientProfile(
+      int userID) async {
+    try {
+      final response = await api.get(
+        Endpoint.getUserProfile(userID),
+      );
+      return Right(PatientProfileModel.fromJson(response));
+    } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
   }

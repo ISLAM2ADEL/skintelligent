@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/const/custom_container.dart';
+import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_cubit.dart';
+import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.dart';
 import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
 import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import '../../const/const.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static const String id = 'HomePage';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    // Trigger the cubit method once when screen loads
+    context.read<PatientProfileCubit>().getPatientProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +74,10 @@ class HomePage extends StatelessWidget {
   }
 
   Row buildWidget() {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
+        const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -81,6 +96,25 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+        BlocBuilder<PatientProfileCubit, PatientProfileState>(
+          builder: (context, state) {
+            if (state is PatientProfileSuccess &&
+                state.patientModel.profilePicture.isNotEmpty) {
+              return CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                  state.patientModel.profilePicture,
+                ),
+              );
+            } else {
+              // Loading or failed state
+              return const CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage("assets/images/default_image.png"),
+              );
+            }
+          },
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:skintelligent/commons.dart';
+
 class UserModel {
   final String profilePic;
   final String name;
@@ -18,7 +19,7 @@ class UserModel {
       profilePic: json['user'][ApiKey.profilePic],
       name: json['user'][ApiKey.name],
       email: json['user'][ApiKey.email],
-      phone: json['user'][ApiKey.phone],
+      phone: json['user'][ApiKey.phoneNumber],
     );
   }
 }

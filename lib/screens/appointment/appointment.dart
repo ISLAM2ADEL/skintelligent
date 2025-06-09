@@ -5,6 +5,7 @@ import 'package:skintelligent/const/custom_bottom_bar.dart';
 import 'package:skintelligent/screens/appointment/doctor_appointment_screen.dart';
 
 import '../../commons.dart';
+
 class Appointment extends StatelessWidget {
   const Appointment({super.key});
   static const String id = 'Appointment';
@@ -13,7 +14,7 @@ class Appointment extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final cubit= context.read<AppointmentCubit>();
+    final cubit = context.read<AppointmentCubit>();
     cubit.getAllDoctors();
     return Scaffold(
       backgroundColor: Colors.white,
@@ -23,58 +24,29 @@ class Appointment extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          SizedBox(height: height*.05,),
+          SizedBox(
+            height: height * .05,
+          ),
           BlocBuilder<AppointmentCubit, AppointmentState>(
             builder: (context, state) {
-              if (state is AppointmentLoading || state is AppointmentSortLoading) {
-                return const Center(child: CircularProgressIndicator());
+              if (state is AppointmentLoading ||
+                  state is AppointmentSortLoading) {
+                return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ));
               } else if (state is AppointmentFailure) {
                 return Center(child: Text(state.errorMessage));
-              }else if (state is AppointmentSortFailure) {
+              } else if (state is AppointmentSortFailure) {
                 return Center(child: Text(state.errorMessage));
-              }
-              else if (state is AppointmentFailure) {
+              } else if (state is AppointmentFailure) {
                 return Center(child: Text(state.errorMessage));
-              }
-              else if (state is AppointmentSortSuccess) {
-                return
-                  Column(
-                    children: [
-                      doctorsRow(context, title: "All Doctors"),
-                      ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(horizontal: width * .025),
-                        itemCount: state.doctors.length,
-                        itemBuilder: (context, index) {
-                          final doctor = state.doctors[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(vertical: height * .02),
-                            child: doctorContainer(
-                              height,
-                              width,
-                              doctorID: doctor.id,
-                              clinicName: doctor.clinics.first.clinicName,
-                              doctorName: "${doctor.firstName} ${doctor.lastName}",
-                              experience: doctor.experienceYears.toString(),
-                              fees: doctor.defaultExaminationFee,
-                              profilePicture: doctor.profilePicture,
-                              clinicID: doctor.clinics.first.id,
-                              context: context,
-                            ),
-                          );
-                        },
-                        separatorBuilder: (_, __) => SizedBox(height: height * .01),
-                      ),
-                    ],
-                  );
-              }
-              else if (state is AppointmentSuccess) {
-                return
-                  Column(
-                    children: [
-                      doctorsRow(context, title: "All Doctors"),
-                      ListView.separated(
+              } else if (state is AppointmentSortSuccess) {
+                return Column(
+                  children: [
+                    doctorsRow(context, title: "All Doctors"),
+                    ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.symmetric(horizontal: width * .025),
@@ -88,7 +60,8 @@ class Appointment extends StatelessWidget {
                             width,
                             doctorID: doctor.id,
                             clinicName: doctor.clinics.first.clinicName,
-                            doctorName: "${doctor.firstName} ${doctor.lastName}",
+                            doctorName:
+                                "${doctor.firstName} ${doctor.lastName}",
                             experience: doctor.experienceYears.toString(),
                             fees: doctor.defaultExaminationFee,
                             profilePicture: doctor.profilePicture,
@@ -97,10 +70,44 @@ class Appointment extends StatelessWidget {
                           ),
                         );
                       },
-                      separatorBuilder: (_, __) => SizedBox(height: height * .01),
-                                        ),
-                    ],
-                  );
+                      separatorBuilder: (_, __) =>
+                          SizedBox(height: height * .01),
+                    ),
+                  ],
+                );
+              } else if (state is AppointmentSuccess) {
+                return Column(
+                  children: [
+                    doctorsRow(context, title: "All Doctors"),
+                    ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(horizontal: width * .025),
+                      itemCount: state.doctors.length,
+                      itemBuilder: (context, index) {
+                        final doctor = state.doctors[index];
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: height * .02),
+                          child: doctorContainer(
+                            height,
+                            width,
+                            doctorID: doctor.id,
+                            clinicName: doctor.clinics.first.clinicName,
+                            doctorName:
+                                "${doctor.firstName} ${doctor.lastName}",
+                            experience: doctor.experienceYears.toString(),
+                            fees: doctor.defaultExaminationFee,
+                            profilePicture: doctor.profilePicture,
+                            clinicID: doctor.clinics.first.id,
+                            context: context,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, __) =>
+                          SizedBox(height: height * .01),
+                    ),
+                  ],
+                );
               } else {
                 return const Center(child: Text("No data available"));
               }
@@ -110,7 +117,6 @@ class Appointment extends StatelessWidget {
       ),
     );
   }
-
 
   Container doctorContainer(
     double height,
@@ -230,7 +236,9 @@ class Appointment extends StatelessWidget {
       ],
     );
   }
-  Widget doctorsRow(BuildContext context,{
+
+  Widget doctorsRow(
+    BuildContext context, {
     required String title,
   }) {
     return Padding(
@@ -238,11 +246,13 @@ class Appointment extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,style: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           GestureDetector(
             child: Container(
@@ -282,7 +292,9 @@ class Appointment extends StatelessWidget {
                         leading: const Icon(Icons.sort_by_alpha),
                         title: const Text("From A to Z"),
                         onTap: () async {
-                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("name", "asc");
+                          await context
+                              .read<AppointmentCubit>()
+                              .getAllDoctorsSortLocally("name", "asc");
                           Navigator.pop(context);
                         },
                       ),
@@ -290,23 +302,29 @@ class Appointment extends StatelessWidget {
                         leading: const Icon(Icons.sort_by_alpha_outlined),
                         title: const Text("From Z to A"),
                         onTap: () async {
-                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("name", "des");
+                          await context
+                              .read<AppointmentCubit>()
+                              .getAllDoctorsSortLocally("name", "des");
                           Navigator.pop(context);
                         },
                       ),
                       ListTile(
                         leading: const Icon(Icons.trending_up),
                         title: const Text("Highest Experience"),
-                          onTap: () async {
-                            await context.read<AppointmentCubit>().getAllDoctorsSortLocally("experience", "des");
-                            Navigator.pop(context);
-                          },
+                        onTap: () async {
+                          await context
+                              .read<AppointmentCubit>()
+                              .getAllDoctorsSortLocally("experience", "des");
+                          Navigator.pop(context);
+                        },
                       ),
                       ListTile(
                         leading: const Icon(Icons.trending_up),
                         title: const Text("Cost: Low -> High"),
                         onTap: () async {
-                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("cost", "asc");
+                          await context
+                              .read<AppointmentCubit>()
+                              .getAllDoctorsSortLocally("cost", "asc");
                           Navigator.pop(context);
                         },
                       ),
@@ -314,7 +332,9 @@ class Appointment extends StatelessWidget {
                         leading: const Icon(Icons.trending_down),
                         title: const Text("Cost: High -> Low"),
                         onTap: () async {
-                          await context.read<AppointmentCubit>().getAllDoctorsSortLocally("cost", "des");
+                          await context
+                              .read<AppointmentCubit>()
+                              .getAllDoctorsSortLocally("cost", "des");
                           Navigator.pop(context);
                         },
                       ),

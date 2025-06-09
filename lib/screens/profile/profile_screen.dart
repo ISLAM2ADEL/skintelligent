@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/screens/patient_profile/patient_profile_screen.dart';
 import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/widgets/logout_button.dart';
 
@@ -11,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
 
   final List<Color> colorPalitte = [
     Colors.green,
-    Colors.orange, // لون جديد للحجوزات
+    Colors.orange,
   ];
 
   final List<IconData> iconPalitte = [
@@ -57,7 +58,13 @@ class ProfileScreen extends StatelessWidget {
                         if (index == 1) {
                           Navigator.pushNamed(context, UserBookingScreen.id);
                         } else {
-                          Navigator.pushNamed(context, Registerscreen.id);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const PatientProfileScreen(),
+                            ),
+                          );
                         }
                       },
                     );

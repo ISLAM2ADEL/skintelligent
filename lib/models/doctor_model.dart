@@ -49,21 +49,26 @@ class DoctorModel {
       lastName: json['lastName'] ?? '',
       gender: json[ApiKey.gender] ?? '',
       licenseNumber: json[ApiKey.licenseNumber] ?? '',
-      dateOfBirth: DateTime.tryParse(json[ApiKey.dateOfBirth] ?? '') ?? DateTime(1900),
+      dateOfBirth:
+          DateTime.tryParse(json[ApiKey.dateOfBirth] ?? '') ?? DateTime(1900),
       experienceYears: (json[ApiKey.experienceYears] as num?)?.toInt() ?? 0,
-      phoneNumber: json[ApiKey.phone] ?? '',
-      defaultExaminationFee: (json[ApiKey.defaultExaminationFee] as num?)?.toInt() ?? 0,
-      defaultConsultationFee: (json[ApiKey.defaultConsultationFee] as num?)?.toInt() ?? 0,
+      phoneNumber: json[ApiKey.phoneNumber] ?? '',
+      defaultExaminationFee:
+          (json[ApiKey.defaultExaminationFee] as num?)?.toInt() ?? 0,
+      defaultConsultationFee:
+          (json[ApiKey.defaultConsultationFee] as num?)?.toInt() ?? 0,
       profilePicture: json[ApiKey.profilePic] ?? '',
       aboutMe: json[ApiKey.aboutMe] ?? '',
       qualification: json[ApiKey.qualification] ?? '',
       isApproved: json[ApiKey.isApproved] ?? false,
-      createdDate: DateTime.tryParse(json[ApiKey.createdDate] ?? '') ?? DateTime(1900),
-      updatedDate: DateTime.tryParse(json[ApiKey.updatedDate] ?? '') ?? DateTime(1900),
+      createdDate:
+          DateTime.tryParse(json[ApiKey.createdDate] ?? '') ?? DateTime(1900),
+      updatedDate:
+          DateTime.tryParse(json[ApiKey.updatedDate] ?? '') ?? DateTime(1900),
       email: json[ApiKey.email] ?? '',
       clinics: (json['clinics'] as List<dynamic>?)
-          ?.map((e) => ClinicModel.fromJson(e))
-          .toList() ??
+              ?.map((e) => ClinicModel.fromJson(e))
+              .toList() ??
           [],
     );
   }

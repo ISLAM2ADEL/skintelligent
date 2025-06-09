@@ -6,6 +6,7 @@ class MakeBookingCubit extends Cubit<MakeBookginState> {
   final UserRepository userRepository;
   MakeBookingCubit(this.userRepository) : super(BookingInitial());
 
+
   Future<void> makeReview({required int appointmentId}) async {
     emit(BookingLoading());
     final response =
