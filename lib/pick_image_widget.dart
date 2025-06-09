@@ -43,10 +43,19 @@ class PickImageWidget extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
-                      final file = File(pickedFile.path); // Convert XFile to File
-                      userCubit.uploadProfilePic(file);   // Update profile picture in cubit
-                    }
+        if (pickedFile != null) {
+        final file = File(pickedFile.path);
+        final extension = pickedFile.path.split('.').last.toLowerCase();
+
+        if (extension == 'jpg' || extension == 'jpeg' || extension == 'png') {
+        userCubit.uploadProfilePic(file); // الصيغة مدعومة، كمل
+        } else {
+        // اعرض رسالة للمستخدم إن الصيغة غير مدعومة
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('يرجى اختيار صورة بصيغة JPG أو PNG فقط')),
+        );
+        }
+        }
                   },
                   child: Container(
                     height: 50,

@@ -101,7 +101,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
                 if (pickedDate != null) {
                   String formattedDate =
-                      "${pickedDate.year}/${_twoDigits(pickedDate.month)}/${_twoDigits(pickedDate.day)}";
+                      "${pickedDate.year}-${_twoDigits(pickedDate.month)}-${_twoDigits(pickedDate.day)}";
                   setState(() {
                     widget.controller?.text = formattedDate;
                   });

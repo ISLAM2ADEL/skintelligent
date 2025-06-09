@@ -9,8 +9,8 @@ import 'package:skintelligent/cubit/user_cubit/user_cubit_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   UserCubit(this.userRepository) : super(UserInitial());
-  final UserRepository userRepository;
   bool isObstruct = true;
+  final UserRepository userRepository;
   //Sign in Form key
   //Sign in email
   TextEditingController signInEmail = TextEditingController();
@@ -40,8 +40,7 @@ class UserCubit extends Cubit<UserState> {
     emit(UploadProfilePic(profilePic: pic));
   }
 
-
-  signUp() async {
+  Future<void> signUp() async {
     emit(SignUpLoading());
 
     if (profilePic == null) {
@@ -49,28 +48,39 @@ class UserCubit extends Cubit<UserState> {
       return;
     }
 
-    final multipartFile = await MultipartFile.fromFile(profilePic!.path,
-        filename: profilePic!.path.split('/').last);
+    try {
+      // طباعة جميع البيانات قبل الإرسال
+      print('SignUp Data:');
+      print('First Name: ${signUpFirstName.text}');
+      print('Last Name: ${signUpLastName.text}');
+      print('Address: ${signUpAddress.text}');
+      print('Phone: ${signUpPhoneNumber.text}');
+      print('Email: ${signUpEmail.text}');
+      print('Password: ${signUpPassword.text}');
+      print('Date of Birth: ${dateOfBirth.text}');
+      print('Gender: ${gender.text}');
+      print('Confirm Password: ${confirmPassword.text}');
+      print('Profile Picture Path: ${profilePic!.path}');
 
-    final response = await userRepository.signUp(
-      firstName: signUpFirstName.text,
-      lastName: signUpLastName.text,
-      address: signUpAddress.text,
-      phone: signUpPhoneNumber.text,
-      email: signUpEmail.text,
-      password: signUpPassword.text,
-      dateOfBirth: dateOfBirth.text,
-      gender: gender.text,
-      confirmPassword: confirmPassword.text,
-      profilePic: multipartFile,
-    );
+      await userRepository.signUp(
+        firstName: signUpFirstName.text,
+        lastName: signUpLastName.text,
+        address: signUpAddress.text,
+        phone: signUpPhoneNumber.text,
+        email: signUpEmail.text,
+        password: signUpPassword.text,
+        dateOfBirth: dateOfBirth.text,
+        gender: gender.text,
+        confirmPassword: confirmPassword.text,
+        imagePath: profilePic!.path,
+      );
 
-    response.fold(
-          (errMessage) => emit(SignUpFailure(errMessage: errMessage)),
-          (signUpModel) => emit(SignUpSuccess(message: "Signup Successful")),
-    );
+      emit(SignUpSuccess(message: "Signup Successful"));
+    } catch (e) {
+      print('Error during signup: $e');
+      emit(SignUpFailure(errMessage: e.toString()));
+    }
   }
-
 
   signIn() async {
     emit(SignInLoading());
@@ -79,8 +89,8 @@ class UserCubit extends Cubit<UserState> {
       password: signInPassword.text,
     );
     response.fold(
-      (errMessage) => emit(SignInFailure(errMessage: errMessage)),
-      (signInModel) => emit(SignInSuccess(message: signInModel.message)),
+          (errMessage) => emit(SignInFailure(errMessage: errMessage)),
+          (signInModel) => emit(SignInSuccess(message: signInModel.message)),
     );
   }
 
@@ -88,12 +98,12 @@ class UserCubit extends Cubit<UserState> {
     emit(GetUserLoading());
     final response = await userRepository.getUserProfile();
     response.fold(
-      (errMessage) => emit(GetUserFailure(errMessage: errMessage)),
-      (user) => emit(GetUserSuccess(user: user)),
+          (errMessage) => emit(GetUserFailure(errMessage: errMessage)),
+          (user) => emit(GetUserSuccess(user: user)),
     );
   }
-  changeState() {
-    isObstruct = !isObstruct;
+  void changeState(){
+    isObstruct=!isObstruct;
     emit(ChangeState());
   }
 }

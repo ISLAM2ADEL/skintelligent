@@ -13,11 +13,13 @@ import '../../models/appointment_model.dart';
 import '../../models/chat_model.dart';
 import '../../models/forget_model.dart';
 import '../../models/reset_model.dart';
+import 'package:http_parser/http_parser.dart'; // for MediaType
 
 class UserRepository {
   final ApiConsumer api;
 
   UserRepository({required this.api});
+
   Future<Either<String, SigninModel>> signIn({
     required String email,
     required String password,
@@ -31,70 +33,69 @@ class UserRepository {
         },
       );
       final user = SigninModel.fromJson(response);
-      // final decodedToken = JwtDecoder.decode(user.token);
       await getIt<CacheHelper>()
           .saveData(key: ApiKey.Authorization, value: user.token);
-      // await getIt<CacheHelper>().saveData(key: ApiKey.id, value: decodedToken[ApiKey.id]);
       return Right(user);
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
   }
 
-  Future<Either<String, SignupModel>> signUp({
+  Future<void> signUp({
     required String firstName,
     required String lastName,
-    required String dateOfBirth,
-    required String gender,
+    required String address,
     required String phone,
     required String email,
     required String password,
-    required String address,
     required String confirmPassword,
-    required MultipartFile profilePic,
+    required String dateOfBirth,
+    required String gender,
+    required String imagePath,
   }) async {
-    try {
-      final formData = FormData.fromMap({
-        'Patient.Email': email,
-        'Patient.Phone': phone,
-        'Patient.Password': password,
-        'Patient.ConfirmPassword': confirmPassword,
-        'Patient.FirstName': firstName,
-        'Patient.LastName': lastName,
-        'Patient.DateOfBirth': dateOfBirth,
-        'Patient.Gender': gender,
-        'Patient.Address': address,
-        'Patient.ProfilePicture': profilePic, // Use the existing MultipartFile
-      });
+    final formData = FormData.fromMap({
+      'FirstName': firstName,
+      'LastName': lastName,
+      'Address': address,
+      'Phone': phone,
+      'Email': email,
+      'Password': password,
+      'ConfirmPassword': confirmPassword,
+      'DateOfBirth': dateOfBirth,
+      'Gender': gender,
+      'ProfilePicture': await MultipartFile.fromFile(
+          imagePath, filename: 'profile.jpg'),
+    });
 
-      final response = await api.post(
-        Endpoint.signUp,
+    try {
+      final response = await Dio().post(
+        'http://skintelligent.runasp.net/api/auth/patient/register',
         data: formData,
-        isFormData: true,
-        queryParameters: {'registerType': 'patient'},
         options: Options(
           headers: {
-            'Authorization': 'Bearer ${getIt<CacheHelper>().getData(key: ApiKey.Authorization)}',
+            'Content-Type': 'multipart/form-data',
           },
         ),
       );
 
-      return Right(SignupModel.fromJson(response));
-    } on DioException catch (e) {
-      print('Upload Error: ${e.response?.data}');
-      return Left(e.response?.data?['message'] ?? 'Failed to upload image');
+      print("✅ Response: ${response.data}");
     } catch (e) {
-      return Left('Unexpected error: ${e.toString()}');
+      if (e is DioException) {
+        print("❗ Dio Error:");
+        print("Status: ${e.response?.statusCode}");
+        print("Data: ${e.response?.data}"); // هنا هتظهر رسالة الخطأ من السيرفر
+      } else {
+        print("❗ Unknown Error: $e");
+      }
     }
   }
 
-  Future<Either<String, UserModel>> getUserProfile() async {
+
+
+    Future<Either<String, UserModel>> getUserProfile() async {
     try {
-      final response = await api.get(
-        Endpoint.getUserDataEndPoint(
-          await getIt<CacheHelper>().getData(key: ApiKey.id),
-        ),
-      );
+      final id = await getIt<CacheHelper>().getData(key: ApiKey.id);
+      final response = await api.get(Endpoint.getUserDataEndPoint(id));
       return Right(UserModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
@@ -103,10 +104,8 @@ class UserRepository {
 
   Future<Either<String, AppointmentModel>> getAllDoctors() async {
     try {
-      final response = await api.get(Endpoint.getDoctors,
-      );
-      final model = AppointmentModel.fromJson(response);
-      return Right(model);
+      final response = await api.get(Endpoint.getDoctors);
+      return Right(AppointmentModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
@@ -115,10 +114,8 @@ class UserRepository {
   Future<Either<String, DoctorModel>> getDoctorProfile(int doctorID) async {
     try {
       final response = await api.get(Endpoint.doctorById(doctorID));
-
       if (response is List && response.isNotEmpty) {
-        final doctorData = response.first as Map<String, dynamic>;
-        return Right(DoctorModel.fromJson(doctorData));
+        return Right(DoctorModel.fromJson(response.first));
       } else {
         return Left('Doctor not found.');
       }
@@ -132,10 +129,12 @@ class UserRepository {
   Future<Either<String, GetReviewModel>> getReviews(
       int doctorID, int pageSize) async {
     try {
-      final response =
-          await api.get(Endpoint.getReviews(doctorID), queryParameters: {
-        ApiKey.pageSize: pageSize,
-      });
+      final response = await api.get(
+        Endpoint.getReviews(doctorID),
+        queryParameters: {
+          ApiKey.pageSize: pageSize,
+        },
+      );
       return Right(GetReviewModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
@@ -170,14 +169,11 @@ class UserRepository {
     try {
       final response = await api.post(
         Endpoint.forgetPassword,
-        isFormData: false,
         data: {
           ApiKey.email: email,
         },
       );
-      print(response);
-      final forgetModel = ForgetModel.fromJson(response);
-      return Right(forgetModel);
+      return Right(ForgetModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
@@ -191,16 +187,13 @@ class UserRepository {
     try {
       final response = await api.post(
         Endpoint.resetPassword,
-        isFormData: false,
         data: {
           ApiKey.email: email,
           ApiKey.password: password,
           ApiKey.resetOTP: resetOTP,
         },
       );
-      print(response);
-      final resetModel = ResetModel.fromJson(response);
-      return Right(resetModel);
+      return Right(ResetModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
@@ -220,8 +213,7 @@ class UserRepository {
           "doctorId": doctorId,
         },
       );
-      final schedule = WeeklySchedule.fromJson(response);
-      return Right(schedule);
+      return Right(WeeklySchedule.fromJson(response));
     } catch (e) {
       return Left(e.toString());
     }
@@ -232,10 +224,10 @@ class UserRepository {
   }) async {
     try {
       final response = await api.post(
+        Endpoint.makeBooking,
         queryParameters: {
           ApiKey.appointmentId: appointmentId,
         },
-        Endpoint.makeBooking,
       );
       return Right(WeeklySchedule.fromJson(response));
     } on ServerException catch (e) {
@@ -247,7 +239,7 @@ class UserRepository {
     try {
       final response = await api.get(Endpoint.userBookingAppointments);
       final bookings =
-          (response as List).map((e) => UserBookingModel.fromJson(e)).toList();
+      (response as List).map((e) => UserBookingModel.fromJson(e)).toList();
       return Right(bookings);
     } catch (e) {
       return Left(e.toString());
@@ -274,12 +266,13 @@ class UserRepository {
       dynamic messages) async {
     try {
       final response =
-          await api.post(Endpoint.getSummary, data: {"messages": messages});
+      await api.post(Endpoint.getSummary, data: {"messages": messages});
       return Right(SummarizeModelResponse.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
   }
+
   Future<Either<String, ChatModel>> sendConversation(dynamic messages) async {
     try {
       final messageContent = messages[0]['content'];
@@ -294,7 +287,7 @@ class UserRepository {
         },
       );
 
-      print("API response: ${response}");
+      print("API response: $response");
       return Right(ChatModel.fromJson(response));
     } on ServerException catch (e) {
       print("API error: ${e.errorModel.errorMessage}");

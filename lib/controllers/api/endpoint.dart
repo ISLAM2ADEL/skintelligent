@@ -6,7 +6,7 @@ class Endpoint {
   static String forgetPassword = "/api/auth/forgot-password";
   static String resetPassword = "/api/auth/reset-password";
   static String getDoctors = "/api/doctors";
-  static String signUp = "/api/auth/register";
+  static String signUp = "/api/auth/patient/register";
   static String appointmentByWeek = '/api/appointments/week';
   static String userBookingAppointments = "/api/patients/appointments";
   static String makeBooking = '/api/appointments/book';
