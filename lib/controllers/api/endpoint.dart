@@ -34,6 +34,11 @@ class Endpoint {
   // summarize endpoint
   static String getSummary =
       "https://779c-34-124-251-195.ngrok-free.app/summarize";
+
+  // Get user profile
+  static String getUserProfile(int userId) {
+    return "/api/patients/$userId";
+  }
 }
 
 class ApiKey {
@@ -56,7 +61,7 @@ class ApiKey {
   static const String lastName = "lastName";
   static const String gender = "gender";
   static const String dateOfBirth = "dateOfBirth";
-  static const String phone = "phoneNumber";
+  static const String phoneNumber = "phoneNumber";
   static const String licenseNumber = "licenseNumber";
   static const String experienceYears = "experienceYears";
   static const String defaultExaminationFee = "defaultExaminationFee";
@@ -90,7 +95,7 @@ class ApiKey {
 // Make Review
   static const String doctorId = "doctorId";
   static const String patientId = "patientId";
-  static const String clinictId = "clinictId"; 
+  static const String clinictId = "clinictId";
 // Booking
   static const String appointmentId = "appointmentId";
 // Get User Booking
@@ -102,4 +107,8 @@ class ApiKey {
   static const String role = "role";
   static const String content = "content";
   static const String summaryMessage = "messages";
+  // User Profile
+  static const String address = 'address';
+  static const String profilePicture = 'profilePicture';
+  static const String phone = 'phone';
 }
