@@ -31,7 +31,9 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
     emit(PatientProfileLoading());
     String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    int patientId = int.parse(decodedToken['patientId']);
+    await getIt<CacheHelper>().saveData(
+        key: ApiKey.patientId, value: int.parse(decodedToken['patientId']));
+    int patientId = await getIt<CacheHelper>().getData(key: ApiKey.patientId);
 
     final response = await userRepository.getPatientProfile(patientId);
 
