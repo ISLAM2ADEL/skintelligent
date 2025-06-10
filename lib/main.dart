@@ -16,6 +16,7 @@ import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
 import 'package:skintelligent/screens/forget_screen/forget_screen.dart';
 import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
+import 'package:skintelligent/screens/patient_profile/patient_profile_screen.dart';
 import 'package:skintelligent/screens/summary_screen/summary_screen.dart';
 import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
@@ -106,6 +107,7 @@ class MyApp extends StatelessWidget {
           ResetPassword.id: (context) => const ResetPassword(),
           ForgetScreen.id: (context) => const ForgetScreen(),
           SummaryScreen.id: (context) => const SummaryScreen(),
+          PatientProfileScreen.id: (context) => const PatientProfileScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()
