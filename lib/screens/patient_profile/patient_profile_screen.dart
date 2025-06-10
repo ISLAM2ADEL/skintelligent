@@ -5,7 +5,7 @@ import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.
 
 class PatientProfileScreen extends StatefulWidget {
   const PatientProfileScreen({super.key});
-
+  static const String id = 'PatientProfileScreen';
   @override
   State<PatientProfileScreen> createState() => _PatientProfileScreenState();
 }

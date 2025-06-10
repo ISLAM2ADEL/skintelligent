@@ -6,6 +6,7 @@ import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_cubit.
 import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.dart';
 import 'package:skintelligent/screens/ChatbotScrean/chatbotScreen.dart';
 import 'package:skintelligent/screens/appointment/appointment.dart';
+import 'package:skintelligent/screens/patient_profile/patient_profile_screen.dart';
 import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import '../../const/const.dart';
 
@@ -99,23 +100,31 @@ class _HomePageState extends State<HomePage> {
         ),
         BlocBuilder<PatientProfileCubit, PatientProfileState>(
           builder: (context, state) {
+            Widget avatar;
+
             if (state is PatientProfileSuccess &&
                 state.patientModel.profilePicture.isNotEmpty) {
-              return CircleAvatar(
+              avatar = CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(
-                  state.patientModel.profilePicture,
-                ),
+                backgroundImage:
+                    NetworkImage(state.patientModel.profilePicture),
               );
             } else {
-              // Loading or failed state
-              return const CircleAvatar(
+              avatar = const CircleAvatar(
                 radius: 30,
                 backgroundImage: AssetImage("assets/images/default_image.png"),
               );
             }
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, PatientProfileScreen.id);
+                // OR: Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
+              },
+              child: avatar,
+            );
           },
-        ),
+        )
       ],
     );
   }
