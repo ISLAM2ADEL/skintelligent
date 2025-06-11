@@ -101,6 +101,8 @@ class _HomePageState extends State<HomePage> {
         BlocBuilder<PatientProfileCubit, PatientProfileState>(
           builder: (context, state) {
             Widget avatar;
+            final profileCubit =
+                context.read<PatientProfileCubit>().cachedProfilePic;
 
             if (state is PatientProfileSuccess &&
                 state.patientModel.profilePicture.isNotEmpty) {
@@ -108,8 +110,7 @@ class _HomePageState extends State<HomePage> {
                   radius: 30,
                   backgroundImage:
                       // NetworkImage(state.patientModel.profilePicture),
-                      FileImage(
-                          getIt<PatientProfileCubit>().cachedProfilePic!));
+                      FileImage(profileCubit!));
             } else {
               avatar = const CircleAvatar(
                 radius: 30,
