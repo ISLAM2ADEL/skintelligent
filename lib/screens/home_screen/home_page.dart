@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/const/custom_bottom_bar.dart';
@@ -98,35 +99,39 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        BlocBuilder<PatientProfileCubit, PatientProfileState>(
-          builder: (context, state) {
-            Widget avatar;
-            final profileCubit =
-                context.read<PatientProfileCubit>().cachedProfilePic;
-
-            if (state is PatientProfileSuccess &&
-                state.patientModel.profilePicture.isNotEmpty) {
-              avatar = CircleAvatar(
-                  radius: 30,
-                  backgroundImage:
-                      // NetworkImage(state.patientModel.profilePicture),
-                      FileImage(profileCubit!));
-            } else {
-              avatar = const CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage("assets/images/default_image.png"),
-              );
-            }
-
+      BlocBuilder<PatientProfileCubit, PatientProfileState>(
+        builder: (context, state) {
+          if (state is PatientProfileSuccess &&
+              state.patientModel.profilePicture.isNotEmpty) {
             return GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, PatientProfileScreen.id);
-                // OR: Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
               },
-              child: avatar,
+              child: CachedNetworkImage(
+                imageUrl: state.patientModel.profilePicture,
+                imageBuilder: (context, imageProvider) => CircleAvatar(
+                  radius: 30,
+                  backgroundImage: imageProvider,
+                ),
+                placeholder: (context, url) =>
+                    const CircleAvatar(radius: 30, child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    const CircleAvatar(radius: 30, child: Icon(Icons.error)),
+              ),
             );
-          },
-        )
+          } else {
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, PatientProfileScreen.id);
+              },
+              child: const CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage("assets/images/default_image.png"),
+              ),
+            );
+          }
+        },
+      )
       ],
     );
   }
