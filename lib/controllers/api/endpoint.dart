@@ -39,6 +39,11 @@ class Endpoint {
   static String getUserProfile(int userId) {
     return "/api/patients/$userId";
   }
+
+  // update patient profile
+  static String updatePatientProfile() {
+    return "/api/patients/update";
+  }
 }
 
 class ApiKey {
@@ -111,4 +116,7 @@ class ApiKey {
   static const String address = 'address';
   static const String profilePicture = 'profilePicture';
   static const String phone = 'phone';
+  // update patient profile
+  static const String errors = "errors";
+  static const String ProfilePicture = "ProfilePicture";
 }

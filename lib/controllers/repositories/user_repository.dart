@@ -6,6 +6,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/patient_profile_model.dart';
 import 'package:skintelligent/models/sumarize_model.dart';
+import 'package:skintelligent/models/update_patient_profile_model.dart';
 import 'package:skintelligent/models/user_appointment_cancel_model.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
@@ -335,6 +336,43 @@ class UserRepository {
         Endpoint.getUserProfile(userID),
       );
       return Right(PatientProfileModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.errorMessage);
+    }
+  }
+
+  Future<Either<String, UpdatePatientProfileModel>> updatePatientProfile({
+    required int id,
+    required String firstName,
+    required String lastName,
+    required String address,
+    required String phone,
+    required String dateOfBirth,
+    required String profilePicture,
+  }) async {
+    try {
+      final bytes = await File(profilePicture).readAsBytes();
+
+      // Create MultipartFile from bytes
+      final multipartFile = MultipartFile.fromBytes(
+        bytes,
+        filename: 'profile.jpg',
+        contentType: MediaType('image', 'jpeg'),
+      );
+      final response = await api.put(
+        isFormData: true,
+        Endpoint.updatePatientProfile(),
+        data: {
+          'Id ': id,
+          'FirstName': firstName,
+          'LastName': lastName,
+          'Address': address,
+          'Phone': phone,
+          'DateOfBirth': dateOfBirth,
+          'ProfilePicture': multipartFile
+        },
+      );
+      return Right(UpdatePatientProfileModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(e.errorModel.errorMessage);
     }
