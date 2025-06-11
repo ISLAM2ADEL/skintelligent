@@ -105,10 +105,11 @@ class _HomePageState extends State<HomePage> {
             if (state is PatientProfileSuccess &&
                 state.patientModel.profilePicture.isNotEmpty) {
               avatar = CircleAvatar(
-                radius: 30,
-                backgroundImage:
-                    NetworkImage(state.patientModel.profilePicture),
-              );
+                  radius: 30,
+                  backgroundImage:
+                      // NetworkImage(state.patientModel.profilePicture),
+                      FileImage(
+                          getIt<PatientProfileCubit>().cachedProfilePic!));
             } else {
               avatar = const CircleAvatar(
                 radius: 30,
