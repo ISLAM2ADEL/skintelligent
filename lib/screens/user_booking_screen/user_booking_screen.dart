@@ -70,7 +70,7 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
             itemBuilder: (context, index) {
               final booking = sortedBookings[index];
               final startDateTime = booking.startTime;
-              final endDateTime = booking.endTime;
+              // final endDateTime = booking.endTime;
               final dayName = DateFormat.EEEE().format(startDateTime);
               final date = DateFormat('yyyy-MM-dd').format(startDateTime);
               final startTime =
