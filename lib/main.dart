@@ -10,6 +10,7 @@ import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
 import 'package:skintelligent/cubit/make_review_cubit/make_review_cubit.dart';
 import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_cubit.dart';
 import 'package:skintelligent/cubit/summary_cubit/summary_cubit.dart';
+import 'package:skintelligent/cubit/update_patient_profile_cubit/update_patient_profile_cubit.dart';
 import 'package:skintelligent/cubit/user_appointment_cancel_cubit/user_appointment_cancel_cubit.dart';
 import 'package:skintelligent/cubit/user_booking_cubit/user_booking_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
@@ -18,6 +19,7 @@ import 'package:skintelligent/screens/forget_screen/reset_password.dart';
 import 'package:skintelligent/screens/otp/otp_screen.dart';
 import 'package:skintelligent/screens/patient_profile/patient_profile_screen.dart';
 import 'package:skintelligent/screens/summary_screen/summary_screen.dart';
+import 'package:skintelligent/screens/update_patient_profile/update_patient_profile_screen.dart';
 import 'package:skintelligent/screens/user_booking_screen/user_booking_screen.dart';
 import 'package:skintelligent/cubit/forget_cubit/forget_cubit.dart';
 import 'commons.dart';
@@ -26,6 +28,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setputServiceLocator();
   await getIt<CacheHelper>().init();
+  // await getIt<PatientProfileCubit>().getPatientProfile();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -96,6 +99,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => PatientProfileCubit(userRepository),
         ),
+        BlocProvider(
+          create: (context) => UpdatePatientProfileCubit(userRepository),
+        ),
       ],
       child: GetMaterialApp(
         routes: {
@@ -112,6 +118,8 @@ class MyApp extends StatelessWidget {
           ForgetScreen.id: (context) => const ForgetScreen(),
           SummaryScreen.id: (context) => const SummaryScreen(),
           PatientProfileScreen.id: (context) => const PatientProfileScreen(),
+          UpdatePatientProfileScreen.id: (context) =>
+              const UpdatePatientProfileScreen(),
         },
         debugShowCheckedModeBanner: false,
         // home: SplashScreen()

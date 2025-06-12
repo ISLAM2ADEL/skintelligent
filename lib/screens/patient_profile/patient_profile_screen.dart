@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_cubit.dart';
 import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.dart';
+import 'package:skintelligent/screens/update_patient_profile/update_patient_profile_screen.dart';
 
 class PatientProfileScreen extends StatefulWidget {
   const PatientProfileScreen({super.key});
@@ -30,8 +31,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
             icon: const Icon(Icons.edit),
             onPressed: () {
               // Navigate to update screen or show dialog
-              // Navigator.pushNamed(context, EditProfileScreen.id);
-              _showUpdateDialog();
+              Navigator.pushNamed(context, UpdatePatientProfileScreen.id);
+              // _showUpdateDialog();
             },
           ),
         ],

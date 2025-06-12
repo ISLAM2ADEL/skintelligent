@@ -53,10 +53,11 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
         if (state is UserBookingLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is UserBookingFailure) {
-          return const Center(child: Text("❌ No booked appointments found",style: TextStyle(
-            fontSize: 18,
-            color: Colors.grey
-          ),));
+          return const Center(
+              child: Text(
+            "❌ No booked appointments found",
+            style: TextStyle(fontSize: 18, color: Colors.grey),
+          ));
         } else if (state is UserBookingSuccess) {
           if (state.bookings.isEmpty) {
             return const Center(child: Text("No bookings yet."));
@@ -76,7 +77,7 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
               final startTime =
                   TimeOfDay.fromDateTime(startDateTime).format(context);
               final endTime =
-                  TimeOfDay.fromDateTime(startDateTime).format(context);
+                  TimeOfDay.fromDateTime(endDateTime).format(context);
 
               return Slidable(
                 endActionPane: ActionPane(
@@ -104,8 +105,8 @@ class _UserBookingScreenState extends State<UserBookingScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: ListTile(
-                          title:
-                              Text("${index + 1}.Doctor: ${booking.doctorName}"),
+                          title: Text(
+                              "${index + 1}.Doctor: ${booking.doctorName}"),
                           subtitle: Text(
                             "Date: $dayName - $date \nTime: $startTime -> $endTime\nClinic Name: ${booking.clinicName}",
                           ),

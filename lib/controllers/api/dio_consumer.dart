@@ -26,6 +26,11 @@ class DioConsumer extends ApiConsumer {
     try {
       final response = await dio.put(path,
           data: isFormData ? FormData.fromMap(data) : data,
+          options: Options(
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          ),
           queryParameters: queryParameters);
       return response.data;
     } on DioException catch (e) {
@@ -61,12 +66,12 @@ class DioConsumer extends ApiConsumer {
 
   @override
   Future post(
-      String path, {
-        dynamic data,
-        Options? options,
-        Map<String, dynamic>? queryParameters,
-        bool isFormData = false,
-      }) async {
+    String path, {
+    dynamic data,
+    Options? options,
+    Map<String, dynamic>? queryParameters,
+    bool isFormData = false,
+  }) async {
     try {
       // Prepare headers
       final headers = Map<String, dynamic>.from(options?.headers ?? {});
@@ -79,7 +84,8 @@ class DioConsumer extends ApiConsumer {
         path,
         data: data,
         queryParameters: queryParameters,
-        options: options?.copyWith(headers: headers) ?? Options(headers: headers),
+        options:
+            options?.copyWith(headers: headers) ?? Options(headers: headers),
       );
 
       return response.data;

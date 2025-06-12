@@ -1,22 +1,125 @@
+// ----------------------- Original code [download image default -----------------------
+// import 'package:jwt_decoder/jwt_decoder.dart';
 // import 'package:skintelligent/commons.dart';
 // import 'package:skintelligent/controllers/repositories/user_repository.dart';
 // import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.dart';
+// import 'dart:io';
+// import 'package:dio/dio.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:path/path.dart';
 
-// class patientProfileCubit extends Cubit<PatientProfileState> {
+// class PatientProfileCubit extends Cubit<PatientProfileState> {
 //   final UserRepository userRepository;
-//   patientProfileCubit(this.userRepository) : super(PatientProfileInitial());
 
-//   Future<void> getPatientProfile({required int userID}) async {
+//   File? cachedProfilePic;
+
+//   PatientProfileCubit(this.userRepository) : super(PatientProfileInitial());
+
+//   Future<void> getPatientProfile() async {
 //     emit(PatientProfileLoading());
-//     final response = await userRepository.getPatientProfile(userID);
+
+//     String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
+//     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+
+//     await getIt<CacheHelper>().saveData(
+//       key: ApiKey.patientId,
+//       value: int.parse(decodedToken['patientId']),
+//     );
+
+//     int patientId = await getIt<CacheHelper>().getData(key: ApiKey.patientId);
+//     final response = await userRepository.getPatientProfile(patientId);
 
 //     response.fold(
 //       (err) => emit(PatientProfileFailure(errMessage: err)),
-//       (result) => emit(PatientProfileSuccess(patientModel: result)),
+//       (result) async {
+//         if (result.profilePicture.isNotEmpty) {
+//           try {
+//             cachedProfilePic = await downloadImage(result.profilePicture);
+//           } catch (e) {
+//             print("❗ Failed to download profile picture: $e");
+//           }
+//         }
+
+//         emit(PatientProfileSuccess(patientModel: result));
+//       },
 //     );
 //   }
+
+//   Future<File> downloadImage(String url) async {
+//     final tempDir = await getTemporaryDirectory();
+//     final filePath = '${tempDir.path}/${basename(url)}';
+//     final file = File(filePath);
+//     await Dio().download(url, filePath);
+//     return file;
+//   }
 // }
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+// ----------------------- Updated code [download image and cache] -----------------------
+// import 'package:jwt_decoder/jwt_decoder.dart';
+// import 'package:skintelligent/commons.dart';
+// import 'package:skintelligent/controllers/repositories/user_repository.dart';
+// import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.dart';
+// import 'dart:io';
+// import 'package:dio/dio.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:path/path.dart';
+
+// class PatientProfileCubit extends Cubit<PatientProfileState> {
+//   final UserRepository userRepository;
+
+//   File? cachedProfilePic;
+
+//   PatientProfileCubit(this.userRepository) : super(PatientProfileInitial());
+
+//   Future<void> getPatientProfile() async {
+//     emit(PatientProfileLoading());
+
+//     try {
+//       final token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
+//       final decodedToken = JwtDecoder.decode(token);
+
+//       await getIt<CacheHelper>().saveData(
+//         key: ApiKey.patientId,
+//         value: int.parse(decodedToken['patientId']),
+//       );
+
+//       final patientId =
+//           await getIt<CacheHelper>().getData(key: ApiKey.patientId);
+//       final response = await userRepository.getPatientProfile(patientId);
+
+//       await response.fold(
+//         (err) async {
+//           emit(PatientProfileFailure(errMessage: err));
+//         },
+//         (result) async {
+//           if (result.profilePicture.isNotEmpty) {
+//             try {
+//               // Delete old image if exists
+//               if (cachedProfilePic != null &&
+//                   await cachedProfilePic!.exists()) {
+//                 await cachedProfilePic!.delete();
+//               }
+
+//               // Download and assign new image
+//               cachedProfilePic = await MethodsHelper().downloadAndCacheImage(
+//                 url: result.profilePicture,
+//                 fileName: 'cached_profile_pic.jpg',
+//               );
+//             } catch (e) {
+//               print("❗ Failed to download or replace profile picture: $e");
+//             }
+//           }
+
+//           emit(PatientProfileSuccess(patientModel: result));
+//         },
+//       );
+//     } catch (e) {
+//       emit(PatientProfileFailure(errMessage: e.toString()));
+//     }
+//   }
+// }
+
+//-----------Without download the image and cache it -----------
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/controllers/repositories/user_repository.dart';
@@ -29,17 +132,30 @@ class PatientProfileCubit extends Cubit<PatientProfileState> {
 
   Future<void> getPatientProfile() async {
     emit(PatientProfileLoading());
-    String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    await getIt<CacheHelper>().saveData(
-        key: ApiKey.patientId, value: int.parse(decodedToken['patientId']));
-    int patientId = await getIt<CacheHelper>().getData(key: ApiKey.patientId);
 
-    final response = await userRepository.getPatientProfile(patientId);
+    try {
+      final token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
+      final decodedToken = JwtDecoder.decode(token);
 
-    response.fold(
-      (err) => emit(PatientProfileFailure(errMessage: err)),
-      (result) => emit(PatientProfileSuccess(patientModel: result)),
-    );
+      await getIt<CacheHelper>().saveData(
+        key: ApiKey.patientId,
+        value: int.parse(decodedToken['patientId']),
+      );
+
+      final patientId =
+          await getIt<CacheHelper>().getData(key: ApiKey.patientId);
+      final response = await userRepository.getPatientProfile(patientId);
+
+      response.fold(
+        (err) {
+          emit(PatientProfileFailure(errMessage: err));
+        },
+        (result) {
+          emit(PatientProfileSuccess(patientModel: result));
+        },
+      );
+    } catch (e) {
+      emit(PatientProfileFailure(errMessage: e.toString()));
+    }
   }
 }
