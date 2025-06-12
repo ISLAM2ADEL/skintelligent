@@ -90,25 +90,8 @@ Future<void> pickAndUploadImage(int appointmentId, BuildContext context) async {
       },
     );
   } on DioException catch (e) {
-    Navigator.pushReplacementNamed(
-      context,
-      Chatbotscreen.id,
-      arguments: {
-        "appointmentID": appointmentId,
-        "patientID": 9
-      },
-    );
     print('❌ Dio Error: ${e.response?.statusCode} => ${e.response?.data}');
   } catch (e) {
-    Navigator.pushReplacementNamed(
-      context,
-      Chatbotscreen.id,
-      arguments: {
-        "appointmentID": appointmentId,
-        "patientID": 9
-      },
-    );
-
     print('❌ General Error: $e');
   }
 }
