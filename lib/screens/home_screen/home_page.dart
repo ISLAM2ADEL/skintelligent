@@ -34,43 +34,43 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: const CustomBottomBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomContainer(
-              height: height,
-              widget: Padding(
-                padding: EdgeInsets.only(left: width * .08, right: width * .08),
-                child: buildWidget(),
-              ),
+      //bottomNavigationBar: const CustomBottomBar(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CustomContainer(
+            height: height,
+            widget: Padding(
+              padding: EdgeInsets.only(left: width * .08, right: width * .08),
+              child: buildWidget(),
             ),
-            SizedBox(height: height * .037),
-            buildContainer(
-                context: context,
-                containerText: "Chat AI",
-                containerImage: "chat image.png",
-                containerColor: color1,
-                width: width,
-                height: height),
-            SizedBox(height: height * .037),
-            buildContainer(
-                context: context,
-                containerText: "Bookings",
-                containerImage: "bookings.png",
-                containerColor: color7,
-                width: width,
-                height: height),
-            SizedBox(height: height * .037),
-            buildContainer(
-                context: context,
-                containerText: "Appointment",
-                containerImage: "annotation.png",
-                containerColor: color3,
-                width: width,
-                height: height),
-          ],
-        ),
+          ),
+          SizedBox(height: height * .037),
+          buildContainer(
+              context: context,
+              containerText: "Chat AI",
+              containerImage: "chat image.png",
+              containerColor: color1,
+              width: width,
+              height: height),
+          SizedBox(height: height * .037),
+          buildContainer(
+              context: context,
+              containerText: "Bookings",
+              containerImage: "bookings.png",
+              containerColor: color7,
+              width: width,
+              height: height),
+          SizedBox(height: height * .037),
+          buildContainer(
+              context: context,
+              containerText: "Appointment",
+              containerImage: "annotation.png",
+              containerColor: color3,
+              width: width,
+              height: height),
+          SizedBox(height: height*.05,)
+        ],
       ),
     );
   }
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 state.patientModel.profilePicture.isNotEmpty) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, PatientProfileScreen.id);
+                  Navigator.pushNamed(context, ProfileScreen.id);
                 },
                 child: Builder(
                   builder: (context) {
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
             } else {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, PatientProfileScreen.id);
+                  Navigator.pushNamed(context, ProfileScreen.id);
                 },
                 child: const CircleAvatar(
                   radius: 30,
