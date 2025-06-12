@@ -99,39 +99,56 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      BlocBuilder<PatientProfileCubit, PatientProfileState>(
-        builder: (context, state) {
-          if (state is PatientProfileSuccess &&
-              state.patientModel.profilePicture.isNotEmpty) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, PatientProfileScreen.id);
-              },
-              child: CachedNetworkImage(
-                imageUrl: state.patientModel.profilePicture,
-                imageBuilder: (context, imageProvider) => CircleAvatar(
-                  radius: 30,
-                  backgroundImage: imageProvider,
+        BlocBuilder<PatientProfileCubit, PatientProfileState>(
+          builder: (context, state) {
+            if (state is PatientProfileSuccess &&
+                state.patientModel.profilePicture.isNotEmpty) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, PatientProfileScreen.id);
+                },
+                child: Builder(
+                  builder: (context) {
+                    final imageUrl =
+                        MethodsHelper().getPatientProfilePicture(context);
+
+                    if (imageUrl != null) {
+                      return CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          radius: 30,
+                          backgroundImage: imageProvider,
+                        ),
+                        placeholder: (context, url) => const CircleAvatar(
+                            radius: 30, child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) =>
+                            const CircleAvatar(
+                                radius: 30, child: Icon(Icons.error)),
+                      );
+                    } else {
+                      return const CircleAvatar(
+                        radius: 30,
+                        backgroundImage:
+                            AssetImage("assets/images/default_image.png"),
+                      );
+                    }
+                  },
                 ),
-                placeholder: (context, url) =>
-                    const CircleAvatar(radius: 30, child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) =>
-                    const CircleAvatar(radius: 30, child: Icon(Icons.error)),
-              ),
-            );
-          } else {
-            return GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, PatientProfileScreen.id);
-              },
-              child: const CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage("assets/images/default_image.png"),
-              ),
-            );
-          }
-        },
-      )
+              );
+            } else {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, PatientProfileScreen.id);
+                },
+                child: const CircleAvatar(
+                  radius: 30,
+                  backgroundImage:
+                      AssetImage("assets/images/default_image.png"),
+                ),
+              );
+            }
+          },
+        )
       ],
     );
   }
