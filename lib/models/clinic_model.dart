@@ -21,7 +21,7 @@ class ClinicModel {
       clinicName: json['clinicName'] ?? '',
       address: json['address'] ?? '',
       createdDate: json['createdDate'] ?? '',
-      contactNumber: json['createdDate'] ?? '',
+      contactNumber: json['contactNumber'] ?? '',
       email: json['createdDate'] ?? '',
     );
   }

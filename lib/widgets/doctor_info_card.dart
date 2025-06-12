@@ -18,8 +18,8 @@ class DoctorInfoCard extends StatelessWidget {
         const SizedBox(height: 24),
         StatsRow(
           experienceYears: doctor.experienceYears,
-          phoneNumber: doctor.phoneNumber,
-          email: doctor.email,
+          qualifications: doctor.clinics[0].contactNumber,
+          name: doctor.clinics[0].clinicName,
         ),
         const SizedBox(height: 30),
         AboutMeSection(about: doctor.aboutMe),

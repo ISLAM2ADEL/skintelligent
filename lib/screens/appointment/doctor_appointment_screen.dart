@@ -21,78 +21,46 @@ import '../../widgets/doctor_info_card.dart';
 import '../../widgets/review_buttons.dart';
 import '../../widgets/week_selector.dart';
 import '../../widgets/booking_section.dart';
-// Future<void> pickImageFromCamera() async {
-//   final picker = ImagePicker();
-//   final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-//   if (pickedFile != null) {
-//     // هنا تقدر تتعامل مع الصورة اللي اتصورت
-//     print('Image path: ${pickedFile.path}');
-//   } else {
-//     print('No image selected.');
-//   }
-// }
-// Future<void> pickAndUploadImage(int appointmentId) async {
-//   final ImagePicker picker = ImagePicker();
-//   final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
-//
-//   if (pickedFile == null) {
-//     print('❌ No image selected.');
-//     return;
-//   }
-//
-//   File imageFile = File(pickedFile.path);
-//   String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
-//   // جهز الـ FormData
-//   FormData formData = FormData.fromMap({
-//     'AppointmentId': appointmentId,
-//     'ImageFile': await MultipartFile.fromFile(
-//       imageFile.path,
-//       filename: imageFile.path.split('/').last,
-//     ),
-//   });
-//
-//   // ابعت الطلب
-//   Dio dio = Dio();
-//   try {
-//     Response response = await dio.post(
-//       'http://skintelligent.runasp.net/api/chats/upload-image',
-//       data: formData,
-//       options: Options(
-//         contentType: 'multipart/form-data',
-//         headers: {
-//           'Authorization': 'Bearer $token', // ✅ أهم خطوة
-//         },
-//       ),
-//     );
-//
-//     if (response.statusCode == 200) {
-//       print('✅ Upload successful: ${response.data}');
-//     } else {
-//       print('⚠️ Upload failed with status: ${response.statusCode}');
-//     }
-//   } catch (e) {
-//     print('❌ Error uploading image: $e');
-//   }
-// }
-Future<void> pickAndUploadImage(int appointmentId) async {
+import '../ChatbotScrean/chatbotScreen.dart';
+Future<void> pickAndUploadImage(int appointmentId, BuildContext context) async {
   final ImagePicker picker = ImagePicker();
-  final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+  XFile? pickedFile;
 
-  if (pickedFile == null) {
-    print('❌ No image selected.');
-    return;
+  while (pickedFile == null) {
+    pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile == null) {
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text("Image is REQUIRED"),
+            content: const Text("You should take the image for appointment process to succeed"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Take Image"),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   File imageFile = File(pickedFile.path);
 
   String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
   final formData = FormData.fromMap({
-    'AppointmentId': appointmentId, // ✅ لازم يكون int، مش String
+    'AppointmentId': appointmentId,
     'ImageFile': await MultipartFile.fromFile(
       imageFile.path,
       filename: imageFile.path.split('/').last,
-      contentType: MediaType('image', 'jpeg'), // ✅ أو png حسب الصورة
+      contentType: MediaType('image', 'jpeg'),
     ),
   });
 
@@ -113,9 +81,34 @@ Future<void> pickAndUploadImage(int appointmentId) async {
     );
 
     print('✅ Response: ${response.statusCode} => ${response.data}');
+    Navigator.pushReplacementNamed(
+      context,
+      Chatbotscreen.id,
+      arguments: {
+        "appointmentID": appointmentId,
+        "patientID": 9
+      },
+    );
   } on DioException catch (e) {
+    Navigator.pushReplacementNamed(
+      context,
+      Chatbotscreen.id,
+      arguments: {
+        "appointmentID": appointmentId,
+        "patientID": 9
+      },
+    );
     print('❌ Dio Error: ${e.response?.statusCode} => ${e.response?.data}');
   } catch (e) {
+    Navigator.pushReplacementNamed(
+      context,
+      Chatbotscreen.id,
+      arguments: {
+        "appointmentID": appointmentId,
+        "patientID": 9
+      },
+    );
+
     print('❌ General Error: $e');
   }
 }
@@ -216,7 +209,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                 duration: Duration(seconds: 2),
               ),
             );
-            await pickAndUploadImage(1310);
+            await pickAndUploadImage(state.appointmentId,context);
           } else if (state is BookingFailure) {
             messenger.showSnackBar(
               SnackBar(

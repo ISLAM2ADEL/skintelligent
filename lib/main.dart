@@ -27,6 +27,10 @@ void main() async {
   setputServiceLocator();
   await getIt<CacheHelper>().init();
 
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(
     MyApp(),
   );

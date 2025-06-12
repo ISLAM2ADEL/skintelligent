@@ -40,7 +40,7 @@ class _BookingSlotState extends State<BookingSlot> {
         // Trigger the booking action via the Cubit
         context
             .read<MakeBookingCubit>()
-            .makeReview(appointmentId: widget.session.id);
+            .makeBooking(appointmentId: widget.session.id);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

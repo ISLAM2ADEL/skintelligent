@@ -7,14 +7,14 @@ class MakeBookingCubit extends Cubit<MakeBookginState> {
   MakeBookingCubit(this.userRepository) : super(BookingInitial());
 
 
-  Future<void> makeReview({required int appointmentId}) async {
+  Future<void> makeBooking({required int appointmentId}) async {
     emit(BookingLoading());
     final response =
-        await userRepository.makeBooking(appointmentId: appointmentId);
+    await userRepository.makeBooking(appointmentId: appointmentId);
 
     response.fold(
-      (err) => emit(BookingFailure(errMessage: err)),
-      (result) => emit(BookingSuccess(booking: result)),
+          (err) => emit(BookingFailure(errMessage: err)),
+          (result) => emit(BookingSuccess(booking: result, appointmentId: appointmentId)),
     );
   }
 }

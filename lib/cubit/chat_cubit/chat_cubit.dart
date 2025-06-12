@@ -9,11 +9,15 @@ class ChatCubit extends Cubit<ChatState> {
   final UserRepository userRepository;
   ChatCubit(this.userRepository) : super(ChatInitial());
 
-  Future<void> sendConversation(List<Map<String, String>> messages) async {
+  Future<void> sendConversation(
+      List<Map<String, String>> messages,
+      appointmentID,
+      patientID
+      ) async {
     print("ChatCubit called with: $messages");
     emit(ChatLoading());
 
-    final result = await userRepository.sendConversation(messages);
+    final result = await userRepository.sendConversation(messages,appointmentID,patientID);
 
     result.fold(
       (failure) {

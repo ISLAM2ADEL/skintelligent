@@ -8,8 +8,9 @@ final class BookingLoading extends MakeBookginState {}
 
 final class BookingSuccess extends MakeBookginState {
   final WeeklySchedule booking;
+  final int appointmentId;
 
-  BookingSuccess({required this.booking});
+  BookingSuccess({required this.booking, required this.appointmentId});
 }
 
 final class BookingFailure extends MakeBookginState {

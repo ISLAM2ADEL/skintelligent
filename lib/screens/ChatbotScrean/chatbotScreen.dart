@@ -5,36 +5,48 @@ import 'package:skintelligent/cubit/chat_cubit/chat_cubit.dart';
 import 'package:skintelligent/screens/ChatbotScrean/presentation/chatBubble.dart';
 import 'package:skintelligent/screens/home_screen/home_page.dart';
 
-class Chatbotscreen extends StatelessWidget {
+class Chatbotscreen  extends StatelessWidget {
   static const String id = 'Chatbotscreen';
+
   final TextEditingController _messageController = TextEditingController();
 
-  Chatbotscreen({super.key});
+  Chatbotscreen ({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffD4E7EE),
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.pushNamed(context, HomePage.id),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-        title: const Text(
-          'Doctor Assistant',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int appointmentID = args['appointmentID'];
+    final int patientID = args['patientID'];
+
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
+    print(appointmentID);
+    print(patientID);
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: const Color(0xffD4E7EE),
+        body: Column(
           children: [
             // Chat header
+            Container(
+              height: height*.1,
+              width: width,
+              color: Colors.white,
+              child: const Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text("Doctor Assistant",style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),),
+                ),
+              ),
+            ),
             Container(
               height: 60,
               width: double.infinity,
@@ -52,7 +64,7 @@ class Chatbotscreen extends StatelessWidget {
                 ),
               ),
             ),
-
+      
             // BlocListener for showing error snackbar
             BlocListener<ChatCubit, ChatState>(
               listener: (context, state) {
@@ -87,7 +99,7 @@ class Chatbotscreen extends StatelessWidget {
                 ),
               ),
             ),
-
+      
             // Chat input field
             _buildChatInput(context),
           ],
@@ -125,13 +137,18 @@ class Chatbotscreen extends StatelessWidget {
   }
 
   void _sendMessage(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int appointmentID = args['appointmentID'];
+    final int patientID = args['patientID'];
+
     final text = _messageController.text.trim();
     if (text.isNotEmpty) {
       final messages = [
         {"role": "user", "content": text}
       ];
-      context.read<ChatCubit>().sendConversation(messages);
+      context.read<ChatCubit>().sendConversation(messages, appointmentID, patientID);
       _messageController.clear();
     }
   }
+
 }

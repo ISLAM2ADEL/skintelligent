@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/patient_profile_model.dart';
 import 'package:skintelligent/models/sumarize_model.dart';
@@ -11,7 +10,6 @@ import 'package:skintelligent/models/available_booking_model.dart';
 import 'package:skintelligent/models/doctor_model.dart';
 import 'package:skintelligent/models/get_review_model.dart';
 import 'package:skintelligent/models/make_review_model.dart';
-import 'package:skintelligent/models/signup_model.dart';
 import 'package:skintelligent/models/user_booking_model.dart';
 import '../../models/appointment_model.dart';
 import '../../models/chat_model.dart';
@@ -306,7 +304,7 @@ class UserRepository {
     }
   }
 
-  Future<Either<String, ChatModel>> sendConversation(dynamic messages) async {
+  Future<Either<String, ChatModel>> sendConversation(dynamic messages,int appointmentID,int patientID) async {
     try {
       final messageContent = messages[0]['content'];
       print("Sending message to API: $messageContent");
@@ -314,9 +312,9 @@ class UserRepository {
       final response = await api.post(
         Endpoint.chats,
         data: {
-          "appointmentId": 1032,
+          "appointmentId": appointmentID,
           "message": messageContent,
-          "patinetId": 9,
+          "patinetId": patientID,
         },
       );
 

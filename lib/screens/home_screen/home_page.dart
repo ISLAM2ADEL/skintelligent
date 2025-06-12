@@ -169,7 +169,24 @@ class _HomePageState extends State<HomePage> {
             ? Navigator.pushNamed(context, Appointment.id)
             : containerText == "Bookings"
                 ? Navigator.pushNamed(context, UserBookingScreen.id)
-                : Navigator.pushNamed(context, Chatbotscreen.id);
+                : _showUpdateDialog();;
+      },
+    );
+  }
+  void _showUpdateDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Chat Bot AI'),
+          content: const Text('You should book an appointment to open this feature'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close"),
+            ),
+          ],
+        );
       },
     );
   }

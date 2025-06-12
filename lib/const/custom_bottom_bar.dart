@@ -43,10 +43,10 @@ class CustomBottomBar extends StatelessWidget {
               ),
               InkWell(
                 child: buildIcon(
-                  icons: Icons.chat,
+                  icons: Icons.assignment_add,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, Chatbotscreen.id);
+                  Navigator.pushNamed(context, Appointment.id);
                 },
               ),
               InkWell(

@@ -5,14 +5,14 @@ import 'package:skintelligent/widgets/info_row.dart';
 
 class StatsRow extends StatelessWidget {
   final int experienceYears;
-  final String phoneNumber;
-  final String email;
+  final String qualifications;
+  final String name;
 
   const StatsRow({
     super.key,
     required this.experienceYears,
-    required this.phoneNumber,
-    required this.email,
+    required this.qualifications,
+    required this.name,
   });
 
   @override
@@ -22,9 +22,9 @@ class StatsRow extends StatelessWidget {
       children: [
         InfoRow(title: "Experience", value: "$experienceYears years"),
         const SizedBox(height: 10),
-        InfoRow(title: "phone number", value: phoneNumber),
+        InfoRow(title: "Clinic Contact Number", value: qualifications),
         const SizedBox(height: 10),
-        InfoRow(title: "Email", value: email),
+        InfoRow(title: "Clinic Name", value: name),
       ],
     );
   }
