@@ -28,7 +28,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setputServiceLocator();
   await getIt<CacheHelper>().init();
-  await getIt<PatientProfileCubit>().getPatientProfile();
+  // await getIt<PatientProfileCubit>().getPatientProfile();
 
   runApp(
     MyApp(),

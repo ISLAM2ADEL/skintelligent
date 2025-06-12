@@ -1,5 +1,8 @@
 import 'package:skintelligent/commons.dart';
+import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_cubit.dart';
+import 'package:skintelligent/cubit/update_patient_profile_cubit/update_patient_profile_cubit.dart';
 import 'package:skintelligent/cubit/user_cubit/user_cubit.dart';
+import 'package:skintelligent/cubit/patient_profile_cubit/patient_profile_state.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({
@@ -13,6 +16,11 @@ class LogoutButton extends StatelessWidget {
         context.read<UserCubit>().signInEmail.clear();
         context.read<UserCubit>().signInPassword.clear();
         getIt<CacheHelper>().removeData(key: ApiKey.Authorization);
+        MethodsHelper().clearCachedProfileImage();
+        final updateCubit = context.read<UpdatePatientProfileCubit>();
+        updateCubit.profilePic = null;
+        updateCubit.existingProfileImageUrl = null;
+        context.read<PatientProfileCubit>().emit(PatientProfileInitial());
         Navigator.pushReplacementNamed(context, LoginScreen.id);
       },
       child: Container(
