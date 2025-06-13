@@ -1,72 +1,93 @@
+// Auto Navigation to home page -------------------
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:skintelligent/cubit/chat_cubit/chat_cubit.dart';
 import 'package:skintelligent/screens/ChatbotScrean/presentation/chatBubble.dart';
-import 'package:skintelligent/screens/home_screen/home_page.dart';
+import 'package:skintelligent/screens/home_screen/home_page.dart'; // تأكد من استيراد الصفحة
 
-class Chatbotscreen  extends StatelessWidget {
+class Chatbotscreen extends StatefulWidget {
   static const String id = 'Chatbotscreen';
+  const Chatbotscreen({super.key});
 
+  @override
+  State<Chatbotscreen> createState() => _ChatbotscreenState();
+}
+
+class _ChatbotscreenState extends State<Chatbotscreen> {
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
-  Chatbotscreen ({super.key});
+  late int appointmentID;
+
+  bool isBotTyping = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    appointmentID = args['appointmentID'];
+
+    context.read<ChatCubit>().clearConversation();
+
+    isBotTyping = false;
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  void _sendMessage(BuildContext context) {
+    final text = _messageController.text.trim();
+    if (text.isNotEmpty) {
+      final messages = [
+        {'role': 'user', 'content': text}
+      ];
+      _messageController.clear();
+
+      // 1. أضف الرسالة فورًا
+      context.read<ChatCubit>().addLocalMessage(messages.first);
+
+      // 2. Scroll فورًا علشان نشوف الـ "الروبوت يكتب"
+      _scrollToBottom();
+
+      // 3. فعّل حالة الكتابة
+      setState(() {
+        isBotTyping = true;
+      });
+
+      // 4. أرسل للـ API
+      context
+          .read<ChatCubit>()
+          .sendConversation(messages, appointmentID)
+          .then((_) {
+        setState(() {
+          isBotTyping = false;
+        });
+        _scrollToBottom();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final int appointmentID = args['appointmentID'];
-    final int patientID = args['patientID'];
-
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-
-    print(appointmentID);
-    print(patientID);
-
     return PopScope(
       canPop: false,
       child: Scaffold(
         backgroundColor: const Color(0xffD4E7EE),
         body: Column(
           children: [
-            // Chat header
-            Container(
-              height: height*.1,
-              width: width,
-              color: Colors.white,
-              child: const Padding(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text("Doctor Assistant",style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),),
-                ),
-              ),
-            ),
-            Container(
-              height: 60,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color(0xffD4E7EE),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                child: Text(
-                  'How Can I Help You Today?',
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-      
-            // BlocListener for showing error snackbar
-            BlocListener<ChatCubit, ChatState>(
+            _buildHeader(),
+            BlocConsumer<ChatCubit, ChatState>(
               listener: (context, state) {
                 if (state is ChatFailure) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -76,39 +97,61 @@ class Chatbotscreen  extends StatelessWidget {
                     ),
                   );
                 }
+
+                if (state is ChatSuccess && state.finished) {
+                  Future.delayed(const Duration(seconds: 2), () {
+                    Navigator.pushReplacementNamed(context, HomePage.id);
+                  });
+                }
               },
-              child: Expanded(
-                child: BlocBuilder<ChatCubit, ChatState>(
-                  builder: (context, state) {
-                    if (state is ChatLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is ChatSuccess) {
-                      final chatModel = state.chatModel;
-                      return ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        itemCount: chatModel.fullConversation.length,
-                        itemBuilder: (context, index) {
-                          final message = chatModel.fullConversation[index];
-                          return ChatBubble(message: message, role: null);
-                        },
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-              ),
+              builder: (context, state) {
+                final conversation = state is ChatSuccess
+                    ? state.fullConversation
+                    : context.read<ChatCubit>().conversation;
+
+                return Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: conversation.length + (isBotTyping ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index < conversation.length) {
+                        final msg = conversation[index];
+                        return ChatBubble(
+                          message: msg['content'] ?? '',
+                          role: msg['role'] ?? '',
+                        );
+                      } else {
+                        return const ChatBubble(
+                          message: "الروبوت يكتب .... ",
+                          role: 'assistant',
+                        );
+                      }
+                    },
+                  ),
+                );
+              },
             ),
-      
-            // Chat input field
-            _buildChatInput(context),
+            _buildChatInput(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildChatInput(BuildContext context) {
+  Widget _buildHeader() {
+    return Container(
+      height: 100,
+      color: Colors.white,
+      alignment: Alignment.bottomCenter,
+      padding: const EdgeInsets.only(bottom: 10),
+      child: const Text(
+        "Doctor Assistant",
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildChatInput() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -116,39 +159,26 @@ class Chatbotscreen  extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: _messageController,
+              minLines: 1,
+              maxLines: 6,
+              textDirection: TextDirection.rtl, // ✅ اتجاه الكتابة
               decoration: InputDecoration(
-                hintText: "Ask me anything",
+                hintText: "اسألني أي شيء",
+                hintTextDirection: TextDirection.rtl, // ✅ اتجاه التلميح كمان
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
                 prefixIcon: const Icon(Icons.chat_bubble_outline),
               ),
-              onSubmitted: (text) => _sendMessage(context),
+              onSubmitted: (_) => _sendMessage(context),
             ),
           ),
-          const SizedBox(width: 5),
           IconButton(
-            onPressed: () => _sendMessage(context),
             icon: const Icon(Icons.send),
+            onPressed: () => _sendMessage(context),
           ),
         ],
       ),
     );
   }
-
-  void _sendMessage(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final int appointmentID = args['appointmentID'];
-    final int patientID = args['patientID'];
-
-    final text = _messageController.text.trim();
-    if (text.isNotEmpty) {
-      final messages = [
-        {"role": "user", "content": text}
-      ];
-      context.read<ChatCubit>().sendConversation(messages, appointmentID, patientID);
-      _messageController.clear();
-    }
-  }
-
 }

@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:skintelligent/commons.dart';
 import 'package:skintelligent/models/patient_profile_model.dart';
-import 'package:skintelligent/models/sumarize_model.dart';
 import 'package:skintelligent/models/update_patient_profile_model.dart';
 import 'package:skintelligent/models/user_appointment_cancel_model.dart';
 import 'package:skintelligent/models/available_booking_model.dart';
@@ -294,18 +293,10 @@ class UserRepository {
     }
   }
 
-  Future<Either<String, SummarizeModelResponse>> summarize(
-      dynamic messages) async {
-    try {
-      final response =
-          await api.post(Endpoint.getSummary, data: {"messages": messages});
-      return Right(SummarizeModelResponse.fromJson(response));
-    } on ServerException catch (e) {
-      return Left(e.errorModel.errorMessage);
-    }
-  }
 
-  Future<Either<String, ChatModel>> sendConversation(dynamic messages,int appointmentID,int patientID) async {
+
+  Future<Either<String, ChatModel>> sendConversation(
+      dynamic messages, int appointmentID) async {
     try {
       final messageContent = messages[0]['content'];
       print("Sending message to API: $messageContent");
@@ -315,7 +306,6 @@ class UserRepository {
         data: {
           "appointmentId": appointmentID,
           "message": messageContent,
-          "patinetId": patientID,
         },
       );
 

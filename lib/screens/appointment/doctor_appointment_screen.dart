@@ -13,6 +13,7 @@ import 'package:skintelligent/cubit/doctor_cubit/doctor_cubit_state.dart';
 import 'package:skintelligent/cubit/make_booking_cubit/make_booking_cubit.dart';
 import 'package:skintelligent/cubit/make_booking_cubit/make_booking_state.dart';
 import 'package:skintelligent/cubit/available_booking_cubit/available_booking_cubit.dart';
+import 'package:skintelligent/screens/appointment/uploading_screen.dart';
 
 import '../../controllers/api/endpoint.dart';
 import '../../controllers/cache/cache_helper.dart';
@@ -22,7 +23,7 @@ import '../../widgets/review_buttons.dart';
 import '../../widgets/week_selector.dart';
 import '../../widgets/booking_section.dart';
 import '../ChatbotScrean/chatbotScreen.dart';
-Future<void> pickAndUploadImage(int appointmentId, BuildContext context) async {
+Future<void> pickImageAndNavigate(int appointmentId, BuildContext context) async {
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
 
@@ -36,14 +37,12 @@ Future<void> pickAndUploadImage(int appointmentId, BuildContext context) async {
         builder: (context) => PopScope(
           canPop: false,
           child: AlertDialog(
-            title: const Text("Image is REQUIRED"),
-            content: const Text("You should take the image for appointment process to succeed"),
+            title: const Text("مطلوب صورة"),
+            content: const Text("يجب التقاط صورة لإكمال عملية الحجز"),
             actions: [
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Take Image"),
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("التقاط صورة"),
               ),
             ],
           ),
@@ -54,47 +53,17 @@ Future<void> pickAndUploadImage(int appointmentId, BuildContext context) async {
 
   File imageFile = File(pickedFile.path);
 
-  String token = getIt<CacheHelper>().getData(key: ApiKey.Authorization);
-  final formData = FormData.fromMap({
-    'AppointmentId': appointmentId,
-    'ImageFile': await MultipartFile.fromFile(
-      imageFile.path,
-      filename: imageFile.path.split('/').last,
-      contentType: MediaType('image', 'jpeg'),
-    ),
-  });
-
-  final dio = Dio();
-  print('📦 Uploading with appointmentId: $appointmentId');
-  print('📦 Image file path: ${imageFile.path}');
-
-  try {
-    final response = await dio.post(
-      'http://skintelligent.runasp.net/api/chats/upload-image',
-      data: formData,
-      options: Options(
-        contentType: 'multipart/form-data',
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => UploadingScreen(
+        imageFile: imageFile,
+        appointmentId: appointmentId,
       ),
-    );
-
-    print('✅ Response: ${response.statusCode} => ${response.data}');
-    Navigator.pushReplacementNamed(
-      context,
-      Chatbotscreen.id,
-      arguments: {
-        "appointmentID": appointmentId,
-        "patientID": 9
-      },
-    );
-  } on DioException catch (e) {
-    print('❌ Dio Error: ${e.response?.statusCode} => ${e.response?.data}');
-  } catch (e) {
-    print('❌ General Error: $e');
-  }
+    ),
+  );
 }
+
 
 class DoctorAppointmentScreen extends StatefulWidget {
   const DoctorAppointmentScreen({
@@ -192,7 +161,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                 duration: Duration(seconds: 2),
               ),
             );
-            await pickAndUploadImage(state.appointmentId,context);
+            await pickImageAndNavigate(state.appointmentId , context);
           } else if (state is BookingFailure) {
             messenger.showSnackBar(
               SnackBar(
