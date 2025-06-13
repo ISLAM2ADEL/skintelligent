@@ -1,19 +1,19 @@
 part of 'chat_cubit.dart';
 
-
 abstract class ChatState {}
 
-final class ChatInitial extends ChatState {}
+class ChatInitial extends ChatState {}
 
-final class ChatLoading extends ChatState {}
+class ChatLoading extends ChatState {}
 
-final class ChatSuccess extends ChatState {
-  final ChatModel chatModel;
+class ChatSuccess extends ChatState {
+  final List<Map<String, String>> fullConversation;
+  final bool finished;
 
-  ChatSuccess(this.chatModel);
+  ChatSuccess(this.fullConversation, {this.finished = false});
 }
 
-final class ChatFailure extends ChatState {
+class ChatFailure extends ChatState {
   final String error;
 
   ChatFailure(this.error);

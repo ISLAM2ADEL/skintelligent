@@ -1,39 +1,23 @@
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
-  final dynamic message;
-  final dynamic role;
+  final String message;
+  final String role;
 
   const ChatBubble({
     super.key,
     required this.message,
-    this.role,
+    required this.role,
   });
 
   @override
   Widget build(BuildContext context) {
-    bool isUser = false;
-    String content = '';
-
-    try {
-      if (message is String) {
-        isUser = role == 'user';
-        content = message;
-      } else if (message is Map) {
-        isUser = message['role'] == 'user';
-        content = message['content'] ?? '';
-      } else {
-        isUser = message.role == 'user';
-        content = message.content ?? '';
-      }
-    } catch (e) {
-      content = 'حدث خطأ في عرض الرسالة';
-      isUser = false;
-    }
+    final isUser = role == 'user';
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.7,
         padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
@@ -41,9 +25,11 @@ class ChatBubble extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
-          content,
+          message,
+          textDirection: TextDirection.rtl, // ✅ اتجاه النص داخل البابل
           style: TextStyle(
             color: isUser ? Colors.white : Colors.black,
+            fontSize: 16,
           ),
         ),
       ),
