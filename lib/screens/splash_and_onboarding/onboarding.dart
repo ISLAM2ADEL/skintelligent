@@ -18,7 +18,7 @@ class Onboarding extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: height * .08,
+        toolbarHeight: height * .1,
         backgroundColor: Colors.white,
         actions: [
           Padding(
