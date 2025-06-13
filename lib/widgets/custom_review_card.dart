@@ -31,7 +31,7 @@ class CustomReviewCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage("imageUrl"),
+                  backgroundImage: NetworkImage(imageUrl),
                   onBackgroundImageError: (_, __) {},
                 ),
                 const SizedBox(width: 8),
@@ -65,7 +65,9 @@ class CustomReviewCard extends StatelessWidget {
             const SizedBox(height: 8),
 
             // Review text
-            Text(reviewText),
+            Text(
+              reviewText,
+            ),
           ],
         ),
       ),
