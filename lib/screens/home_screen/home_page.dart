@@ -35,42 +35,46 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       //bottomNavigationBar: const CustomBottomBar(),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CustomContainer(
-            height: height,
-            widget: Padding(
-              padding: EdgeInsets.only(left: width * .08, right: width * .08),
-              child: buildWidget(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomContainer(
+              height: height,
+              widget: Padding(
+                padding: EdgeInsets.only(left: width * .08, right: width * .08),
+                child: buildWidget(),
+              ),
             ),
-          ),
-          SizedBox(height: height * .037),
-          buildContainer(
-              context: context,
-              containerText: "Chat AI",
-              containerImage: "chat image.png",
-              containerColor: color1,
-              width: width,
-              height: height),
-          SizedBox(height: height * .037),
-          buildContainer(
-              context: context,
-              containerText: "Bookings",
-              containerImage: "bookings.png",
-              containerColor: color7,
-              width: width,
-              height: height),
-          SizedBox(height: height * .037),
-          buildContainer(
-              context: context,
-              containerText: "Appointment",
-              containerImage: "annotation.png",
-              containerColor: color3,
-              width: width,
-              height: height),
-          SizedBox(height: height*.05,)
-        ],
+            SizedBox(height: height * .037),
+            buildContainer(
+                context: context,
+                containerText: "Chat AI",
+                containerImage: "chat image.png",
+                containerColor: color1,
+                width: width,
+                height: height),
+            SizedBox(height: height * .037),
+            buildContainer(
+                context: context,
+                containerText: "Bookings",
+                containerImage: "bookings.png",
+                containerColor: color7,
+                width: width,
+                height: height),
+            SizedBox(height: height * .037),
+            buildContainer(
+                context: context,
+                containerText: "Appointment",
+                containerImage: "annotation.png",
+                containerColor: color3,
+                width: width,
+                height: height),
+            SizedBox(
+              height: height * .05,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -193,17 +197,20 @@ class _HomePageState extends State<HomePage> {
             ? Navigator.pushNamed(context, Appointment.id)
             : containerText == "Bookings"
                 ? Navigator.pushNamed(context, UserBookingScreen.id)
-                : _showUpdateDialog();;
+                : _showUpdateDialog();
+        ;
       },
     );
   }
+
   void _showUpdateDialog() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Chat Bot AI'),
-          content: const Text('You should book an appointment to open this feature'),
+          content:
+              const Text('You should book an appointment to open this feature'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

@@ -21,9 +21,8 @@ class PickImageWidget extends StatelessWidget {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {},
       builder: (context, state) {
-        final updatedProfilePic = state is UploadProfilePic
-            ? state.profilePic
-            : currentProfilePic;
+        final updatedProfilePic =
+            state is UploadProfilePic ? state.profilePic : currentProfilePic;
 
         return SizedBox(
           width: 130,
@@ -42,20 +41,26 @@ class PickImageWidget extends StatelessWidget {
                 right: 5,
                 child: GestureDetector(
                   onTap: () async {
-                    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (pickedFile != null) {
-        final file = File(pickedFile.path);
-        final extension = pickedFile.path.split('.').last.toLowerCase();
+                    final pickedFile = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    if (pickedFile != null) {
+                      final file = File(pickedFile.path);
+                      final extension =
+                          pickedFile.path.split('.').last.toLowerCase();
 
-        if (extension == 'jpg' || extension == 'jpeg' || extension == 'png') {
-        userCubit.uploadProfilePic(file); // الصيغة مدعومة، كمل
-        } else {
-        // اعرض رسالة للمستخدم إن الصيغة غير مدعومة
-        ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('يرجى اختيار صورة بصيغة JPG أو PNG فقط')),
-        );
-        }
-        }
+                      if (extension == 'jpg' ||
+                          extension == 'jpeg' ||
+                          extension == 'png') {
+                        userCubit.uploadProfilePic(file); // الصيغة مدعومة، كمل
+                      } else {
+                        // اعرض رسالة للمستخدم إن الصيغة غير مدعومة
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'يرجى اختيار صورة بصيغة JPG أو PNG فقط')),
+                        );
+                      }
+                    }
                   },
                   child: Container(
                     height: 50,

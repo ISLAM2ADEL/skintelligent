@@ -57,10 +57,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen> {
                 child: ListView(
                   children: [
                     if (patient.profilePicture.isNotEmpty)
-                      // CircleAvatar(
-                      //   radius: 100,
-                      //   backgroundImage: NetworkImage(patient.profilePicture),
-                      // ),
+
                       Center(
                         child: SizedBox(
                           width: 200,
