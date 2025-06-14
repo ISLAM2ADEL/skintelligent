@@ -23,12 +23,14 @@ import '../../widgets/review_buttons.dart';
 import '../../widgets/week_selector.dart';
 import '../../widgets/booking_section.dart';
 import '../ChatbotScrean/chatbotScreen.dart';
-Future<void> pickImageAndNavigate(int appointmentId, BuildContext context) async {
+
+Future<void> pickImageAndNavigate(
+    int appointmentId, BuildContext context) async {
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
 
   while (pickedFile == null) {
-    pickedFile = await picker.pickImage(source: ImageSource.camera);
+    pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile == null) {
       await showDialog(
@@ -63,7 +65,6 @@ Future<void> pickImageAndNavigate(int appointmentId, BuildContext context) async
     ),
   );
 }
-
 
 class DoctorAppointmentScreen extends StatefulWidget {
   const DoctorAppointmentScreen({
@@ -161,7 +162,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                 duration: Duration(seconds: 2),
               ),
             );
-            await pickImageAndNavigate(state.appointmentId , context);
+            await pickImageAndNavigate(state.appointmentId, context);
           } else if (state is BookingFailure) {
             messenger.showSnackBar(
               SnackBar(
